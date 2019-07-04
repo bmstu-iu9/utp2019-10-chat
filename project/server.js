@@ -5,21 +5,22 @@ const url = require('url')
 const fs = require('fs')
 const path = require('path')
 const core = require('./scripts/core')
+const consts = require('./scripts/consts')
 const querystring = require('querystring')
-const port = 80;
 
 //тестовая версия на убой
+
 
 const requestHandler = (request, response) => {
 	const urlObject = url.parse(request.url);
 	
 	if (request.method == 'GET') {
-		const pth1 = path.resolve(__dirname, "scripts", path.relative("/", urlObject.pathname));
+		const pth1 = path.resolve(consts.SCRIPTS_PATH, path.relative("/", urlObject.pathname));
 		fs.stat(pth1, (err1, stats1) => {
 		
 			//если не скрипт
 			if (err1 || stats1.isDirectory()) {
-				let pth2 = path.resolve(__dirname, path.relative("/", urlObject.pathname));
+				let pth2 = path.resolve(consts.SERVER_PATH, path.relative("/", urlObject.pathname));
 				fs.stat(pth2, (err2, stats2) => {
 					//если его вообще нет
 					if (err2) {
@@ -57,6 +58,6 @@ const requestHandler = (request, response) => {
 }
 
 const server = http.createServer(requestHandler)
-server.listen(port, (err) => {
-    console.log(`server is listening on ${port}`)
+server.listen(consts.PORT, (err) => {
+    console.log(`server is listening on ${consts.PORT}`)
 })
