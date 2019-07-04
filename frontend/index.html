@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>QuickChat</title>
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,800'>
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+	<div class="container" id="container">
+		<div class="form-container sign-up-container">
+			<!-- Проверка с базой данных -->
+			<form action="base.txt">
+				<h1>QuickChat</h1>
+				<h2>Регистрация</h2>
+				<input type="text" placeholder="Ник" />
+				<input type="email" placeholder="Email" />
+				<input type="password" placeholder="Пароль" />
+				<button>Зарегистроваться</button>
+			</form>
+		</div>
+		<div class="form-container sign-in-container">
+			<form action="base.txt">
+				<h1>QuickChat</h1>
+				<h2>Авторизация</h2>
+				<input type="email" placeholder="Email" />
+				<input type="password" placeholder="Пароль" />
+				<!-- Необходимо добавить ссылку на модальное окно -->
+				<a href="#">Забыли пароль?</a>
+				<button>Войти</button>
+			</form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Есть аккаунт?</h1>
+					<p>Авторизуйся!</p>
+					<button class="ghost" id="signIn">Войти</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Привет!</h1>
+					<p>Заполни форму для регистрации!</p>
+					<button class="ghost" id="signUp">Зарегистроваться</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="./script.js"></script>
+
+</body>
+
+</html>
