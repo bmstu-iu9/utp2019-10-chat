@@ -1,63 +1,71 @@
-﻿'use strict';
-
-const http = require('http');
-const url = require('url')
 const fs = require('fs')
-const path = require('path')
-const core = require('./scripts/core')
+const pathModule = require('path')
 const consts = require('./scripts/consts')
+const core = require('./scripts/core')
+const http = require('http')
+const urlModule = require('url')
 const querystring = require('querystring')
 
-//тестовая версия на убой
+const isDir = (path) => {
+	return new Promise((resolve, reject) => {
+		fs.stat(path, (err, stats) => {
+			if (err)
+				reject(err)
+			else
+				resolve(stats.isDirectory())
+		})
+	})
+}
 
+const route = (routPath, urlPath, indexName) => {
+	return new Promise((resolve, reject) => {
+		let fullPath = pathModule.resolve(routPath, pathModule.relative('/', urlPath))
+		isDir(fullPath)
+			.then((dirFlag) => {
+				return dirFlag && isDir(fullPath = pathModule.resolve(fullPath, indexName))
+			}).then((dirFlag) => {
+				if (dirFlag)
+					reject()
+				else
+					resolve(fullPath)
+			}, (err) => {
+				reject(err)
+			})
+	})
+}
+
+const parseArguments = (urlObject) => {
+	return querystring.parse(urlObject.query)
+}
 
 const requestHandler = (request, response) => {
-	const urlObject = url.parse(request.url);
+	if (request.method == "GET"){
+		const urlObject = urlModule.parse(request.url)
 	
-	if (request.method == 'GET') {
-		const pth1 = path.resolve(consts.SCRIPTS_PATH, path.relative("/", urlObject.pathname));
-		fs.stat(pth1, (err1, stats1) => {
-		
-			//если не скрипт
-			if (err1 || stats1.isDirectory()) {
-				let pth2 = path.resolve(consts.SERVER_PATH, path.relative("/", urlObject.pathname));
-				fs.stat(pth2, (err2, stats2) => {
-					//если его вообще нет
-					if (err2) {
-						core.notFound(response);
-					}
-					else {
-						//если папка то читаем index.html
-						if (stats2.isDirectory()) {
-							pth2 = path.resolve(pth2, "index.html")
-							response.setHeader('Content-Type', 'text/html; charset=utf-8');
-						}
-						
-						fs.readFile(pth2, (err3, data3) => {
-							if (err3)
-								core.notFound(response);
-							else {
-								if (path.extname == "html")
-									response.setHeader('Content-Type', 'text/html; charset=utf-8');
-								response.write(data3);
-							}
-							response.end();
-						});
-					}
-				});
-			} else {
-				//проверяем можно ли такой скрипт читать, если нет, то 404 
-				try {
-					require(pth1)(request, response, querystring.parse(urlObject.query));
-				} catch (e) {
-					core.notFound(response);
-				}
-			}
-		});
-	}
+		route(consts.SCRIPTS_PATH, urlObject.pathname, 'index.js')
+			.then((path) => {
+				require(path).invoke(request, response, parseArguments(urlObject))
+			}, (err) => {
+				route(consts.DATA_PATH, urlObject.pathname, 'index.html')
+					.then((path) => {
+						core.sendFullFile(response, path);
+					}, (err) => {
+						core.notFound(response)
+					})
+			}).catch((err) => {
+			core.sendError(response, err)
+		})} else {
+			response.statusCode = 501
+			response.statusMessage = http.STATUS_CODES[response.statusCode]
+			response.setHeader('Allow', 'GET')
+			response.end()
+		}
 }
 
 const server = http.createServer(requestHandler)
 server.listen(consts.PORT, (err) => {
+    if (err) {
+        console.log(err)
+    }
     console.log(`server is listening on ${consts.PORT}`)
 })

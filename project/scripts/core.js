@@ -1,9 +1,8 @@
 'use strict'
 
 const fs = require('fs')
-const path = require('path')
+const pathModule = require('path')
 const http = require('http')
-const querystring = require('querystring')
 
 const notFound = (response) => {
 	response.statusCode = 404;
@@ -34,8 +33,26 @@ const getCookies = (request) => {
 	return retVal;
 }
 
+const sendFullFile = (response, path) => {
+	fs.readFile(path, (err, data) => {
+	if (err)
+		notFound(response)
+	else {
+		if (path.extname == "html")
+			response.setHeader('Content-Type', 'text/html; charset=utf-8')
+		response.end(data)
+	}})
+}
+ 	 
+const sendError = (response, err) => {
+	response.statusCode = 500
+	response.statusMessage = http.STATUS_CODES[response.statusCode]
+	response.end(err.toString())
+}
 
 exports.notFound = notFound
 exports.redirect = redirect
 exports.createSession = createSession
 exports.getCookies = getCookies
+exports.sendFullFile = sendFullFile
+exports.sendError = sendError
