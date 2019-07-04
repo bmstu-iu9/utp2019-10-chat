@@ -38,7 +38,7 @@ const sendFullFile = (response, path) => {
 	if (err)
 		notFound(response)
 	else {
-		if (path.extname == "html")
+		if (pathModule.extname(path) == ".html")
 			response.setHeader('Content-Type', 'text/html; charset=utf-8')
 		response.end(data)
 	}})
