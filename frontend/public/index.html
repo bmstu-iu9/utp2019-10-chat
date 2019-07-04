@@ -12,7 +12,7 @@
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
 			<!-- Проверка с базой данных -->
-			<form action="base.txt">
+			<form action="#">
 				<h1>QuickChat</h1>
 				<h2>Регистрация</h2>
 				<input type="text" placeholder="Ник" />
@@ -22,13 +22,13 @@
 			</form>
 		</div>
 		<div class="form-container sign-in-container">
-			<form action="base.txt">
+			<form action="#">
 				<h1>QuickChat</h1>
 				<h2>Авторизация</h2>
 				<input type="email" placeholder="Email" />
 				<input type="password" placeholder="Пароль" />
-				<!-- Необходимо добавить ссылку на модальное окно -->
-				<a href="#">Забыли пароль?</a>
+				<a href="#openModal">Забыли пароль?</a>
+
 				<button>Войти</button>
 			</form>
 		</div>
@@ -47,9 +47,23 @@
 			</div>
 		</div>
 	</div>
+	<div id="openModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Закрыть" class="close">X</a>
+			<h2>Восстановление аккаунта</h2>
+			<p>Введите Email, на который зарегистрирован аккаунт. Мы отправим на него ваш пароль</p>
+			<form action="#">
+				<input type="email" placeholder="Email" />
+			</form>
+			<p>
+				<button class="restore">Восстановить</button>
+			</p>
+		</div>
+	</div>
 
 	<script src="./script.js"></script>
 
 </body>
+
 
 </html>
