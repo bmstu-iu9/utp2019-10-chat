@@ -1,3 +1,6 @@
+'use strict'
+exports.invoke = null
+
 const path = require('path')
 
 exports.PORT = 3000;
