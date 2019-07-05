@@ -48,8 +48,12 @@ const scriptInvoke = (path, request, response, urlObject) => {
 		})
 
 		request.on('end', () => {
-			response.setHeader('Content-Type', 'text/html; charset=utf-8')
-			script.invoke(request, response, body)
+			try {
+				response.setHeader('Content-Type', 'text/html; charset=utf-8')
+				script.invoke(request, response, body)
+			} catch (e) {
+				core.sendError(response, err)
+			}
 		})
 	} else if (request.method == "GET" || request.method == "HEAD") {
 		response.setHeader('Content-Type', 'text/html; charset=utf-8')

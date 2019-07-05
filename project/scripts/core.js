@@ -4,6 +4,7 @@ exports.invoke = null
 const fs = require('fs')
 const pathModule = require('path')
 const http = require('http')
+const querystring = require('querystring')
 
 exports.notFound = (response) => {
 	response.statusCode = 404;
@@ -72,4 +73,8 @@ exports.sendError = (response, err) => {
 	response.write('</h1>')
 	response.write(err.toString())
 	response.end('</body></html>')
+}
+
+exports.getQueryParams = (data) => {
+	return querystring.parse(data)
 }
