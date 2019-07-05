@@ -5,30 +5,29 @@
 	<meta charset="UTF-8">
 	<title>QuickChat</title>
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,800'>
-	<link rel="stylesheet" href="./style.css">
+	<link rel="stylesheet" href="/auth/style.css">
 </head>
 
 <body>
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
 			<!-- Проверка с базой данных -->
-			<form action="#">
-				<h1>QuickChat</h1>
-				<h2>Регистрация</h2>
-				<input type="text" placeholder="Ник" />
-				<input type="email" placeholder="Email" />
-				<input type="password" placeholder="Пароль" />
-				<button>Зарегистроваться</button>
-			</form>
+			<form action="/registration.js"> 
+				<h1>QuickChat</h1> 
+				<h2>Регистрация</h2> 
+				<input type="text" name="username" placeholder="Ник" /> 
+				<input type="email" name="email" placeholder="Email" /> 
+				<input type="password" name="password" placeholder="Пароль" /> 
+				<button>Зарегистроваться</button> 
+				</form>
 		</div>
 		<div class="form-container sign-in-container">
-			<form action="#">
+			<form action="/login.js">
 				<h1>QuickChat</h1>
 				<h2>Авторизация</h2>
-				<input type="email" placeholder="Email" />
-				<input type="password" placeholder="Пароль" />
+				<input type="email" name="email" placeholder="Email" />
+				<input type="password" name="password" placeholder="Пароль" />
 				<a href="#openModal">Забыли пароль?</a>
-
 				<button>Войти</button>
 			</form>
 		</div>
@@ -49,17 +48,17 @@
 	</div>
 	<div id="openModal" class="modalDialog">
 		<div>
-			<form id="mail" action="#">
+			<form action="/forgotpassword.js">
 				<a href="#close" title="Закрыть" class="close">X</a>
 				<h2>Восстановление аккаунта</h2>
 				<a>Введите Email, на который зарегистрирован аккаунт. Мы отправим на него Ваш пароль</a>
-				<input type="email" placeholder="Email" />
+				<input type="email" name="email" placeholder="Email" />
 					<p><button>Восстановить</button></p>
 			</form>
 		</div>
 	</div>
 
-	<script src="./script.js"></script>
+	<script src="/auth/script.js"></script> 
 
 </body>
 

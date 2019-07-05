@@ -193,6 +193,10 @@ input {
 
 
 .modalDialog {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 	position: absolute;
 	font-family: Arial, Helvetica, sans-serif;
 	top: 0;
