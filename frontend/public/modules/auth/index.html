@@ -15,9 +15,9 @@
 			<form action="/registration.js"> 
 				<h1>QuickChat</h1> 
 				<h2>Регистрация</h2> 
-				<input type="text" name="username" placeholder="Ник" /> 
-				<input type="email" name="email" placeholder="Email" /> 
-				<input type="password" name="password" placeholder="Пароль" /> 
+				<input type="text" name="username" placeholder="Ник" required/> 
+				<input type="email" name="email" placeholder="Email" required/> 
+				<input type="password" name="password" placeholder="Пароль" required/> 
 				<button>Зарегистроваться</button> 
 				</form>
 		</div>
@@ -25,8 +25,8 @@
 			<form action="/login.js">
 				<h1>QuickChat</h1>
 				<h2>Авторизация</h2>
-				<input type="email" name="email" placeholder="Email" />
-				<input type="password" name="password" placeholder="Пароль" />
+				<input type="email" name="email" placeholder="Email" required/>
+				<input type="password" name="password" placeholder="Пароль" required/>
 				<a href="#openModal">Забыли пароль?</a>
 				<button>Войти</button>
 			</form>
@@ -52,7 +52,7 @@
 				<a href="#close" title="Закрыть" class="close">X</a>
 				<h2>Восстановление аккаунта</h2>
 				<a>Введите Email, на который зарегистрирован аккаунт. Мы отправим на него Ваш пароль</a>
-				<input type="email" name="email" placeholder="Email" />
+				<input type="email" name="email" placeholder="Email" required/>
 					<p><button>Восстановить</button></p>
 			</form>
 		</div>
