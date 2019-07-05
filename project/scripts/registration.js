@@ -1,11 +1,11 @@
 const fs = require('fs');
 const core = require('./core');
 const consts = require('./consts');
-const urlModule = require('url');
+const path = require('path');
 
 const reg = (request, response, data) => {
     const args = core.getQueryParams(data);
-    fs.readFile(consts.SERVER_PATH + '/users.json', 'utf-8', (err, data) => {
+    fs.readFile(path.join(consts.SERVER_PATH, '/users.json'), 'utf-8', (err, data) => {
         if (err) {
             console.log("JSON with user data not found, lol");
             throw err;
@@ -24,6 +24,7 @@ const reg = (request, response, data) => {
                     throw err;
                 }
             })
+            core.redirect(response, "/passed.html");
         }
     });
 }
