@@ -1,0 +1,19 @@
+{
+  "name": "quick-chat-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:frontend": "chmod +x bin/build-frontend && ./bin/build-frontend",
+    "build:frontend:win10": "chmod +x bin/build-frontend && bash bin/build-frontend",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "api",
+    "socket.io",
+    "backend"
+  ],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+echo "[BUILD] Building frontend"
+rm -rf public
+
+echo "[BUILD] Coping frontend dir"
+cp -r ../frontend/public .
+
+echo "[BUILD] Done"
