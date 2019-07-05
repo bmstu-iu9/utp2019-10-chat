@@ -77,11 +77,13 @@ form {
 
 input {
 	background-color: #eee;
-	border: none;
 	padding: 12px 20px;
 	margin: 8px 0;
 	width: 280px;
 }
+
+input:invalid:not(:placeholder-shown) {border-color: red;}
+input:valid:not(:placeholder-shown) {border-color: green;}
 
 .container {
 	background-color: #fff;
