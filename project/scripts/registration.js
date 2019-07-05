@@ -8,7 +8,7 @@ const reg = (request, response, data) => {
     fs.readFile(path.join(consts.SERVER_PATH, '/users.json'), 'utf-8', (err, data) => {
         if (err) {
             console.log("JSON with user data not found, lol");
-            throw err;
+            core.sendError(response, err);
         }
         let array = JSON.parse(data);
         if (array.filter(user => {
@@ -21,7 +21,7 @@ const reg = (request, response, data) => {
             fs.writeFile(consts.SERVER_PATH + '/users.json', JSON.stringify(array), 'utf8', (err) => {
                 if (err) {
                     console.log("JSON with user data not found, lol");
-                    throw err;
+                    core.sendError(response, err);
                 }
             })
             core.redirect(response, "/passed.html");
