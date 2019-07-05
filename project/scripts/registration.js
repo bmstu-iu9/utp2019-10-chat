@@ -1,6 +1,7 @@
 const fs = require('fs');
 const core = require('./core');
-const consts = require('./consts')
+const consts = require('./consts');
+const urlModule = require('url');
 
 const reg = (request, response, data) => {
     const args = core.getQueryParams(data);
@@ -9,14 +10,21 @@ const reg = (request, response, data) => {
             console.log("JSON with user data not found, lol");
             throw err;
         }
-        var array = JSON.parse(data);
-        array.push(args);
-        fs.writeFile(consts.SERVER_PATH + '/users.json', JSON.stringify(array), 'utf8', (err) => {
-            if (err) {
-                console.log("JSON with user data not found, lol");
-                throw err;
-            }
-        })
+        let array = JSON.parse(data);
+        if (array.filter(user => {
+            return user.email == args.email;
+        }).length !== 0){
+            core.redirect(response, "/failed.html");
+        }
+        else {
+            array.push(args);
+            fs.writeFile(consts.SERVER_PATH + '/users.json', JSON.stringify(array), 'utf8', (err) => {
+                if (err) {
+                    console.log("JSON with user data not found, lol");
+                    throw err;
+                }
+            })
+        }
     });
 }
 
