@@ -2,7 +2,8 @@
 
 const core = require('./core')
 
-exports.invoke = (request, response, args) => {
+exports.invoke = (request, response, data) => {
+	const args = core.getQueryParams(data)
 	response.write(args.user)
 	if (args.check == "on")
 		response.end("<br>ЖОПА")

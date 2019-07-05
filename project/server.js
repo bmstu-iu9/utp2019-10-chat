@@ -4,7 +4,6 @@ const consts = require('./scripts/consts')
 const core = require('./scripts/core')
 const http = require('http')
 const urlModule = require('url')
-const querystring = require('querystring')
 
 const isDir = (path) => {
 	return new Promise((resolve, reject) => {
@@ -50,11 +49,11 @@ const scriptInvoke = (path, request, response, urlObject) => {
 
 		request.on('end', () => {
 			response.setHeader('Content-Type', 'text/html; charset=utf-8')
-			script.invoke(request, response, querystring.parse(body))
+			script.invoke(request, response, body)
 		})
 	} else if (request.method == "GET" || request.method == "HEAD") {
 		response.setHeader('Content-Type', 'text/html; charset=utf-8')
-		script.invoke(request, response, querystring.parse(urlObject.query))
+		script.invoke(request, response, urlObject.query)
 	}
 	 else {
 		response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
