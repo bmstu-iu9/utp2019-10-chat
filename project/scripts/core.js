@@ -41,14 +41,14 @@ exports.forbidden = (response) => {
 }
 
 exports.createSession = (response, id, date) => {
-	response.setHeader('Set-Cookie=', ['sessionId=' + id, 'expires=' + date.toString(), 'path=/']);
+	response.setHeader('Set-Cookie', 'sessionId=' + id + ';expires=' + date.toUTCString())
 }
 
 exports.getCookies = (request) => {
 	let retVal = {};
 	if (request.headers.cookie)
 		request.headers.cookie.split(';').forEach((c) => {
-			const arr = cookie.match(/(.*?)=(.*)$/)
+			const arr = c.match(/(.*?)=(.*)$/)
 			retVal[arr[1].trim()] = (arr[2] || '').trim();
 	});
 	return retVal;
@@ -71,7 +71,7 @@ exports.sendError = (response, err) => {
 	response.write('<!DOCTYPE html><html><head><title>500</title></head><body><h1>500 ')
 	response.write(response.statusMessage)
 	response.write('</h1>')
-	response.write(err.toString())
+	response.write(err.toString() + '<br>' + err.fileName + '<br>' + err.lineNumber)
 	response.end('</body></html>')
 }
 

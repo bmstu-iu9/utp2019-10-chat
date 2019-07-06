@@ -107,6 +107,7 @@ const requestHandler = (request, response) => {
 }
 
 require('./scripts/sessions').init()
+require('./scripts/users').init()
 const server = http.createServer(requestHandler)
 server.listen(consts.PORT, (err) => {
     if (err) {

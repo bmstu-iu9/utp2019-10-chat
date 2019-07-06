@@ -15,7 +15,6 @@ exports.init = () => {
 
 exports.addSession = (email, expires) => {
 	return new Promise((resolve, reject) => {
-		fs.readFile(exports.SESSIONS_PATH, (errReadFile, data) => {
 		const sessionIdRec = (errSessionIdRec, buf) => {
 			if (errSessionIdRec)
 				reject(errSessionIdRec)
@@ -36,7 +35,6 @@ exports.addSession = (email, expires) => {
 			}
 		
 			crypto.randomBytes(16, sessionIdRec)
-		})
 	})
 }
 
