@@ -34,7 +34,7 @@ const approve = (request, response, data) => {
             })
             approveUser(findedUser)
             //<-----------------Тут путь к странице с успешным подтверждением регистрации ------------------------>
-            core.redirect(response, "/passed.html")
+            core.redirect(response, "passed.html")
         }
     })
 }
