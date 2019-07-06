@@ -46,7 +46,9 @@ const reg = (request, response, data) => {
                     //<-----------------Тут путь к странице с не успешной регистрацией ------------------------>
                     core.redirect(response, "/failed.html")
                 } else {
-                    addUserInUnconfirmed(response,args)
+                    addUserInUnconfirmed(response,args)        
+                    //<----------------Тут путь к странице успешной регистрации----------------------->
+                    core.redirect(response, "/passed.html")
                 }
             });
         }
@@ -70,8 +72,6 @@ const addUserInUnconfirmed = (response,args) => {
             }
         })
 
-        //<----------------Тут путь к странице успешной регистрации----------------------->
-        core.redirect(response, "/passed.html")
     })
 } 
 
