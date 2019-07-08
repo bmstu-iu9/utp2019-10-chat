@@ -16,25 +16,27 @@ exports.init = () => {
 exports.addSession = (email, expires) => {
 	return new Promise((resolve, reject) => {
 		const sessionIdRec = (errSessionIdRec, buf) => {
-			if (errSessionIdRec)
+			if (errSessionIdRec) {
 				reject(errSessionIdRec)
-
-				const sessionId = buf.toString('hex')
-				if (sessions[sessionId] !== undefined)
-					crypto.randomBytes(16, sessionIdRec)
-				else {
-					sessions[sessionId] = {email: email, expires: expires.toUTCString()}
-					fs.writeFile(exports.SESSIONS_PATH, JSON.stringify(sessions), 'utf8', (errWriteFile) => {
-						if (errWriteFile) {
-							delete sessions[sessionId]
-							reject(errWriteFile)
-						} else
-							resolve(sessionId)
-					})
-				}
+				return
 			}
+
+			const sessionId = buf.toString('hex')
+			if (sessions[sessionId] !== undefined)
+				crypto.randomBytes(16, sessionIdRec)
+			else {
+				sessions[sessionId] = {email: email, expires: expires.toUTCString()}
+				fs.writeFile(exports.SESSIONS_PATH, JSON.stringify(sessions), 'utf8', (errWriteFile) => {
+					if (errWriteFile) {
+						delete sessions[sessionId]
+						reject(errWriteFile)
+					} else
+						resolve(sessionId)
+				})
+			}
+		}
 		
-			crypto.randomBytes(16, sessionIdRec)
+		crypto.randomBytes(16, sessionIdRec)
 	})
 }
 

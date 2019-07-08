@@ -35,8 +35,9 @@ exports.addUser = (email, name, password) => {
 							if (errWriteFile) {
 								delete users[email]
 								reject(errWriteFile)
-							} else
-								resolve()
+								return
+							}
+							resolve()
 						})
 					}
 				})
