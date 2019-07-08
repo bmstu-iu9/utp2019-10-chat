@@ -51,7 +51,6 @@ exports.getCookies = (request) => {
 			const arr = c.match(/(.*?)=(.*)$/)
 			retVal[arr[1].trim()] = (arr[2] || '').trim();
 	});
-	console.log(retVal)
 	return retVal;
 }
 
