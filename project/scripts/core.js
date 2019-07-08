@@ -66,13 +66,21 @@ exports.sendFullFile = (response, path) => {
 }
  	 
 exports.sendError = (response, err) => {
+	//console.log(err)
 	response.statusCode = 500
 	response.statusMessage = http.STATUS_CODES[response.statusCode]
 	response.write('<!DOCTYPE html><html><head><title>500</title></head><body><h1>500 ')
 	response.write(response.statusMessage)
 	response.write('</h1>')
-	response.write(err.toString() + '<br>' + err.fileName + '<br>' + err.lineNumber)
+	response.write(err.stack.replace(/\n/g, '<br>'))
 	response.end('</body></html>')
+}
+
+exports.sendJSON = (response, code, object) => {
+	response.statusCode = code
+	response.statusMessage = http.STATUS_CODES[response.statusCode]
+	response.setHeader('Content-Type', 'application/json; charset=utf-8')
+	response.end(JSON.stringify(object))
 }
 
 exports.getQueryParams = (data) => {

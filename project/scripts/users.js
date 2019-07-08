@@ -23,6 +23,7 @@ exports.addUser = (email, name, password) => {
 		users[email] = {}
 		users[email].name = name
 		users[email].salt = crypto.randomBytes(16).toString('hex')
+		users[email].notapproved = true
 		crypto.pbkdf2(password, users[email].salt,
 				exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
 				(errPbkdf2, derivedKey) => {
@@ -41,6 +42,20 @@ exports.addUser = (email, name, password) => {
 						})
 					}
 				})
+	})
+}
+
+exports.approveUser = (email) => {
+	return new Promise((resolve, reject) => {
+		delete users[email].notapproved
+		fs.writeFile(exports.USERS_PATH, JSON.stringify(users), 'utf8', (errWriteFile) => {
+			if (errWriteFile) {
+				users[email].notapproved = true
+				reject(errWriteFile)
+				return
+			}
+			resolve()
+		})
 	})
 }
 
