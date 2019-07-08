@@ -9,7 +9,5 @@ exports.invoke = (request, response, data) => {
 		core.redirect(response, '/auth')
 		return
 	}
-	
-	response.end('<!DOCTYPE html><html><head><title>УРАААА</title></head><body><h1>Вы авторизовались как ' + curUser.name +
-			'</h1></body></html>')
+	core.redirect(response, "/authsuccess.html")
 }
