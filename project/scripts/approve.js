@@ -6,8 +6,9 @@ const path = require('path')
 const unconfirmed = require('./unconfirmed')
 
 const approve = async (request, response, data) => {
+	let hash
 	try {
-		let hash = core.getQueryParams(data).hash
+		hash = core.getQueryParams(data).hash
 	} catch (err) {
 		core.notFound(response)
 	}
@@ -17,7 +18,7 @@ const approve = async (request, response, data) => {
     	return
     }
     
-    if (await unconfirmed.deleteUserFromUnconfirmed(hash)) {
+    if (await unconfirmed.approveUnconfirmedUser(hash)) {
     	core.redirect(response, '/')
     } else {
     	core.notFound(response)

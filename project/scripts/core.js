@@ -76,7 +76,7 @@ exports.sendError = (response, err) => {
 	response.end('</body></html>')
 }
 
-exports.sendJSON = (response, code, object) => {
+exports.sendJSON = (response, object) => {
 	response.setHeader('Content-Type', 'application/json; charset=utf-8')
 	response.end(JSON.stringify(object))
 }

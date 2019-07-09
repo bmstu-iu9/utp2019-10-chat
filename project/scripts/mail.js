@@ -19,7 +19,7 @@ exports.sendMail = (email, subject, content) => {
 	
 	    let mailOptions = {
 	        from: exports.user,
-	        to: args.email,
+	        to: email,
 	        subject: subject,
 	        text: content
 	    };

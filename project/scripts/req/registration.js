@@ -1,16 +1,16 @@
 'use strict'
 const fs = require('fs')
-const core = require('./core')
-const consts = require('./consts')
+const core = require('../core')
+const consts = require('../consts')
 const path = require('path')
 const crypto = require('crypto')
-const users = require('./users')
-const unconfirmed = require('./unconfirmed')
-const mail = require('./mail')
+const users = require('../users')
+const unconfirmed = require('../unconfirmed')
+const mail = require('../mail')
 const rcodes = require(consts.RCODES_PATH)
             
 const reg = async (request, response, data) => {
-	const args
+	let args
 	
 	try {
 		args = JSON.parse(data)
@@ -19,6 +19,8 @@ const reg = async (request, response, data) => {
 		return
 	}
    
+	
+	
 	if (!args.email || !args.username || !args.password) {
 		core.sendJSON(response, {err: rcodes.JSON_SYNTAX_ERROR})
 		return
@@ -28,7 +30,7 @@ const reg = async (request, response, data) => {
     	if (await users.getUserMail(args.username))
     		core.sendJSON(response, {err: rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS})
     	else
-    		core.sendJSON(response, {err: rcodes.EMAIL_AND_ALREADY_EXISTS})
+    		core.sendJSON(response, {err: rcodes.EMAIL_ALREADY_EXISTS})
     	return
     }
     
@@ -37,11 +39,11 @@ const reg = async (request, response, data) => {
 		return
     }
     
-    const hash = await unconfirmed.addUserInUnconfirmed(args.email)
+    const hash = await unconfirmed.addUserInUnconfirmed(args.email, args.username, args.password)
     
     try {
     	await mail.sendMail(args.email, 'QuickChat registration!',
-     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve.js?hash="+hash))
+     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve.js?hash="+hash)
     } catch (err) {
     	await unconfirmed.deleteUserFromUnconfirmed(hash)
     	core.sendJSON(response, {err: rcodes.FAILED_TO_SEND_EMAIL})

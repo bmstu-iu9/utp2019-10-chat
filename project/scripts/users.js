@@ -22,13 +22,13 @@ const passwordHash = (password, salt) => {
 				if (err) {
 					reject(errPbkdf2)
 				} else {
-					resolve(derivedKey)
+					resolve(derivedKey.toString('hex'))
 				}
 			})
 	})
 }
 
-exports.addUser = async (email, name, password) => {
+exports.addUser = async (email, name, password, approveHash) => {
 	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
 	let usermail = await jsonfile.read(exports.USERMAIL_PATH)
 	
@@ -36,7 +36,7 @@ exports.addUser = async (email, name, password) => {
 	userlogin[email] = {}
 	userlogin[email].name = name
 	userlogin[email].salt = crypto.randomBytes(16).toString('hex')
-	userlogin[email].notapproved = true
+	userlogin[email].approveHash = approveHash
 	userlogin[email].passwordHash = await passwordHash(password, userlogin[email].salt)
 	
 	await jsonfile.write(exports.USERMAIL_PATH, usermail)
@@ -45,13 +45,13 @@ exports.addUser = async (email, name, password) => {
 	} catch (err) {
 		delete usermail[name]
 		await jsonfile.write(exports.USERMAIL_PATH, usermail)
-		throw
+		throw err
 	}
 }
 
 exports.approveUser = async (email) => {
 	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
-	delete userlogin[email].notapproved
+	delete userlogin[email].approveHash
 	await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
 }
 
@@ -79,7 +79,7 @@ exports.deleteUser = async (email) => {
 	} catch (err) {
 		usermail[username] = email
 		await jsonfile.write(exports.USERMAIL_PATH, usermail)
-		throw
+		throw err
 	}
 }
 
