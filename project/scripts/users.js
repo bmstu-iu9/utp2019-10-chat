@@ -4,77 +4,83 @@ exports.invoke = null
 const core = require('./core')
 const sessions = require('./sessions')
 const consts = require('./consts')
-const fs = require('fs')
+const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const crypto = require('crypto')
 
-exports.USERS_PATH = pathModule.join(consts.SERVER_PATH, 'users.json')
+exports.USERLOGIN_PATH = pathModule.join(consts.SERVER_PATH, 'userlogin.json')
+exports.USERMAIL_PATH = pathModule.join(consts.SERVER_PATH, 'usermail.json')
 exports.SALT_LENGTH = 16
 exports.PASSWORD_ITERATIONS_COUNT = 1000
 exports.PASSWORD_HASH_LENGTH = 32
 
-let users;
-exports.init = () => {
-	users = JSON.parse(fs.readFileSync(exports.USERS_PATH))
-}
-
-exports.addUser = (email, name, password) => {
+const passwordHash = (password, salt) => {
 	return new Promise((resolve, reject) => {
-		users[email] = {}
-		users[email].name = name
-		users[email].salt = crypto.randomBytes(16).toString('hex')
-		users[email].notapproved = true
-		crypto.pbkdf2(password, users[email].salt,
-				exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
-				(errPbkdf2, derivedKey) => {
-					if (errPbkdf2) {
-						delete users[email]
-						reject(errPbkdf2)
-					} else {
-						users[email].passwordHash = derivedKey.toString('hex')
-						fs.writeFile(exports.USERS_PATH, JSON.stringify(users), 'utf8', (errWriteFile) => {
-							if (errWriteFile) {
-								delete users[email]
-								reject(errWriteFile)
-								return
-							}
-							resolve()
-						})
-					}
-				})
+		crypto.pbkdf2(password, salt,
+			exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
+			(err, derivedKey) => {
+				if (err) {
+					reject(errPbkdf2)
+				} else {
+					resolve(derivedKey)
+				}
+			})
 	})
 }
 
-exports.approveUser = (email) => {
-	return new Promise((resolve, reject) => {
-		delete users[email].notapproved
-		fs.writeFile(exports.USERS_PATH, JSON.stringify(users), 'utf8', (errWriteFile) => {
-			if (errWriteFile) {
-				users[email].notapproved = true
-				reject(errWriteFile)
-				return
-			}
-			resolve()
-		})
-	})
+exports.addUser = async (email, name, password) => {
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
+	let usermail = await jsonfile.read(exports.USERMAIL_PATH)
+	
+	usermail[name] = email
+	userlogin[email] = {}
+	userlogin[email].name = name
+	userlogin[email].salt = crypto.randomBytes(16).toString('hex')
+	userlogin[email].notapproved = true
+	userlogin[email].passwordHash = await passwordHash(password, userlogin[email].salt)
+	
+	await jsonfile.write(exports.USERMAIL_PATH, usermail)
+	try {
+		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
+	} catch (err) {
+		delete usermail[name]
+		await jsonfile.write(exports.USERMAIL_PATH, usermail)
+		throw
+	}
 }
 
-exports.getUser = (email) => {
-	return users[email]
+exports.approveUser = async (email) => {
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
+	delete userlogin[email].notapproved
+	await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
 }
 
-exports.deleteUser = (email) => {
-	return new Promise((resolve, reject) => {
-		const deleteableUser = users[email]
-		delete users[email]
-		fs.writeFile(exports.USERS_PATH, JSON.stringify(users), 'utf8', (errWriteFile) => {
-			if (errWriteFile) {
-				users[email] = deleteableUser
-				reject(errWriteFile)
-			} else
-				resolve()
-		})
-	})
+exports.getUserLoginData = async (email) => {
+	const userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
+	return userlogin[email]
+}
+
+exports.getUserMail = async (username) => {
+	const usermail = await jsonfile.read(exports.USERMAIL_PATH)
+	return usermail[username]
+}
+
+exports.deleteUser = async (email) => {
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
+	let usermail = await jsonfile.read(exports.USERMAIL_PATH)
+	
+	const username = userlogin[email].name
+	delete usermail[username]
+	delete userlogin[email]
+	
+	await jsonfile.write(exports.USERMAIL_PATH, usermail)
+	try {
+		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
+	} catch (err) {
+		usermail[username] = email
+		await jsonfile.write(exports.USERMAIL_PATH, usermail)
+		throw
+	}
 }
 
 exports.getCurrentUser = (request) => {
@@ -87,33 +93,22 @@ exports.getCurrentUser = (request) => {
 	}
 }
 
-exports.comparePasswords = (password, email) => {
-	return new Promise((resolve, reject) => {
-		if (users[email] === undefined)
-			resolve(false)
-		else {
-			crypto.pbkdf2(password, users[email].salt,
-					exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
-					(errPbkdf2, derivedKey) => {
-						if (errPbkdf2)
-							reject(errPbkdf2)
-						else
-							resolve(derivedKey.toString('hex') === users[email].passwordHash)
-			})
-		}
-	})
+exports.comparePasswords = async (password, email) => {
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
+	if (userlogin[email] === undefined)
+		return false
+		
+	return await passwordHash(password, userlogin[email].salt) == userlogin[email].passwordHash
 }
 
-exports.setCurrentUser = (response, email) => {
-	return new Promise((resolve, reject) => {
-		let expires = new Date()
-		expires.setMonth(expires.getMonth() + 2)
-		sessions.addSession(email, expires)
-		.then((sessionId) => {
-			core.createSession(response, sessionId, expires)
-			resolve()
-		}, (err) => {
-			reject(err)
-		})
-	})
+exports.setCurrentUser = async (response, email) => {
+	let expires = new Date()
+	expires.setMonth(expires.getMonth() + 2)
+	const sessionId = await sessions.addSession(email, expires)
+	core.createSession(response, sessionId, expires)
+}
+
+exports.deleteCurrentUser = async (request, response) => {
+	const sessionId = getCurrentUser(request)
+	core.createSession(response, sessionId, new Date())
 }

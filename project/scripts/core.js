@@ -77,8 +77,6 @@ exports.sendError = (response, err) => {
 }
 
 exports.sendJSON = (response, code, object) => {
-	response.statusCode = code
-	response.statusMessage = http.STATUS_CODES[response.statusCode]
 	response.setHeader('Content-Type', 'application/json; charset=utf-8')
 	response.end(JSON.stringify(object))
 }

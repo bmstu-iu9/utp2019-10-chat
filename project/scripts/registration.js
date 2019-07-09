@@ -5,54 +5,50 @@ const consts = require('./consts')
 const path = require('path')
 const crypto = require('crypto')
 const users = require('./users')
-const UNCONFIRMED_PATH = path.join(consts.SERVER_PATH, 'unconfirmed.json')
+const unconfirmed = require('./unconfirmed')
 const mail = require('./mail')
+const rcodes = require(consts.RCODES_PATH)
             
-const reg = (request, response, data) => {
+const reg = async (request, response, data) => {
+	const args
+	
 	try {
-		const args = JSON.parse(data)
+		args = JSON.parse(data)
 	} catch (err) {
-		core.sendJSON(response, 400, {'errorMessage': 'JSON corrupted'})
+		core.sendJSON(response, {err: rcodes.JSON_SYNTAX_ERROR})
 		return
 	}
    
-    if (users.getUser(args.email)) {
-    	core.sendJSON(response, 400, {'errorMessage': 'email already exists'})
+	if (!args.email || !args.username || !args.password) {
+		core.sendJSON(response, {err: rcodes.JSON_SYNTAX_ERROR})
+		return
+	}
+		
+    if (await users.getUserLoginData(args.email)) {
+    	if (await users.getUserMail(args.username))
+    		core.sendJSON(response, {err: rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS})
+    	else
+    		core.sendJSON(response, {err: rcodes.EMAIL_AND_ALREADY_EXISTS})
     	return
     }
     
-    const hash = crypto.randomBytes(256).toString('hex')
-    users.addUser(args.email, args.username, args.password)
-    	.then(() => {
-    		return addUserInUnconfirmed(args.email, hash)
-    	}).then(() => {
-    		return mail.sendMail(args.email, 'QuickChat registration!',
-    		   'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve.js?hash="+hash)
-    	}).then(() => {
-    		core.sendJSON(response, 201, {'email' : args.email, 'username' : args.username})
-    	}).catch((err) => {
-    		core.sendJSON(response, 400, {'errorMessage': 'unconfirment adding error', 'error' : err})
-    	})
+    if (await users.getUserMail(args.username)) {
+		core.sendJSON(response, {err: rcodes.USERNAME_ALREADY_EXISTS})
+		return
+    }
+    
+    const hash = await unconfirmed.addUserInUnconfirmed(args.email)
+    
+    try {
+    	await mail.sendMail(args.email, 'QuickChat registration!',
+     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve.js?hash="+hash))
+    } catch (err) {
+    	await unconfirmed.deleteUserFromUnconfirmed(hash)
+    	core.sendJSON(response, {err: rcodes.FAILED_TO_SEND_EMAIL})
+    	return
+    }
+    
+	core.sendJSON(response, {err: rcodes.SUCCESS})
 }
 
-const addUserInUnconfirmed = (email, hash) => {
-	return new Promise((resolve, reject) => {
-	    fs.readFile(UNCONFIRMED_PATH, 'utf-8', (err, objects) => {
-	        if (err) {
-	            reject(err)
-	            return
-	        }
-	
-	        let newConfirmed = JSON.parse(objects)
-	        newConfirmed[hash] = email
-	        fs.writeFile(UNCONFIRMED_PATH, JSON.stringify(newConfirmed), 'utf-8', (err) => {
-	            if (err) {
-	                reject(err)
-	            } else  
-	            	resolve()
-	        })
-	    })
-	})
-} 
-
-exports.invoke = reg
+exports.invoke = reg 

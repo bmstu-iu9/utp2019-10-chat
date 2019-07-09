@@ -3,47 +3,25 @@ const fs = require('fs')
 const core = require('./core')
 const consts = require('./consts')
 const path = require('path')
-const users = require('./users')
-const UNCONFIRMED_PATH = path.join(consts.SERVER_PATH, 'unconfirmed.json')
+const unconfirmed = require('./unconfirmed')
 
-const approve = (request, response, data) => {
-    let hash = core.getQueryParams(data).hash
+const approve = async (request, response, data) => {
+	try {
+		let hash = core.getQueryParams(data).hash
+	} catch (err) {
+		core.notFound(response)
+	}
+	
     if (!hash) {
     	core.redirect(response, '/')
     	return
     }
     
-    fs.readFile(UNCONFIRMED_PATH, 'utf-8', (err, objects) => {
-        if (err) {
-            console.log("JSON with user data not found, lol")
-            core.sendError(response, err)
-            return
-        }
-        
-        let array = JSON.parse(objects)
-        let findedUser = array.filter(user => {
-            return user.hash === hash
-        }).find(user => true)      
-
-        if (findedUser == undefined){
-            core.redirect(response, "/auth")
-        }
-        else{
-            array = array.filter(user => user != findedUser)
-
-            fs.writeFile(UNCONFIRMED_PATH, JSON.stringify(array), 'utf8', (err) => {
-                if (err) {
-                    console.log("JSON with user data not found, lol")
-                    core.sendError(response, err)
-                    return
-                }
-
-                users.addUser(findedUser.email, findedUser.username, findedUser.password)
-                	.then(() => {core.redirect(response, "/approvesuccess.html")},
-                			(err) => {core.sendError(response, err)})
-            })
-        }
-    })
+    if (await unconfirmed.deleteUserFromUnconfirmed(hash)) {
+    	core.redirect(response, '/')
+    } else {
+    	core.notFound(response)
+    }
 }
 
 exports.invoke = approve
