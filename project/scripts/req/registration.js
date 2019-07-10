@@ -10,6 +10,11 @@ const mail = require('../mail')
 const rcodes = require(consts.RCODES_PATH)
             
 const reg = async (request, response, data) => {
+	if (users.getCurrentUser(request)) {
+		core.sendJSON(response, {err: rcodes.AUTHORIZED_ALREADY})
+		return
+	}
+	
 	let args
 	
 	try {
@@ -18,8 +23,6 @@ const reg = async (request, response, data) => {
 		core.sendJSON(response, {err: rcodes.JSON_SYNTAX_ERROR})
 		return
 	}
-   
-	
 	
 	if (!args.email || !args.username || !args.password) {
 		core.sendJSON(response, {err: rcodes.JSON_SYNTAX_ERROR})
@@ -50,6 +53,7 @@ const reg = async (request, response, data) => {
     	return
     }
     
+    await users.setCurrentUser(response, args.username)
 	core.sendJSON(response, {err: rcodes.SUCCESS})
 }
 

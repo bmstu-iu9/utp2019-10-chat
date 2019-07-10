@@ -13,7 +13,7 @@ exports.init = () => {
 	sessions = JSON.parse(fs.readFileSync(exports.SESSIONS_PATH))
 }
 
-exports.addSession = (email, expires) => {
+exports.addSession = (username, expires) => {
 	return new Promise((resolve, reject) => {
 		const sessionIdRec = (errSessionIdRec, buf) => {
 			if (errSessionIdRec) {
@@ -25,13 +25,14 @@ exports.addSession = (email, expires) => {
 			if (sessions[sessionId] !== undefined)
 				crypto.randomBytes(16, sessionIdRec)
 			else {
-				sessions[sessionId] = {email: email, expires: expires.toUTCString()}
+				sessions[sessionId] = {username: username, expires: expires.toUTCString()}
 				fs.writeFile(exports.SESSIONS_PATH, JSON.stringify(sessions), 'utf8', (errWriteFile) => {
 					if (errWriteFile) {
 						delete sessions[sessionId]
 						reject(errWriteFile)
-					} else
+					} else {
 						resolve(sessionId)
+					}
 				})
 			}
 		}

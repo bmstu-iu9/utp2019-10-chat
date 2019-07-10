@@ -89,7 +89,7 @@ exports.getCurrentUser = (request) => {
 	if (cookies !== undefined && cookies.sessionId !== undefined) {
 		const session = sessions.getUser(cookies.sessionId)
 		if (session !== undefined && (new Date()) < (new Date(session.expires)))
-			return users[session.email]
+			return session.username
 	}
 }
 
@@ -101,14 +101,15 @@ exports.comparePasswords = async (password, email) => {
 	return await passwordHash(password, userlogin[email].salt) == userlogin[email].passwordHash
 }
 
-exports.setCurrentUser = async (response, email) => {
+exports.setCurrentUser = async (response, username) => {
 	let expires = new Date()
 	expires.setMonth(expires.getMonth() + 2)
-	const sessionId = await sessions.addSession(email, expires)
+	const sessionId = await sessions.addSession(username, expires)
 	core.createSession(response, sessionId, expires)
 }
 
 exports.deleteCurrentUser = async (request, response) => {
-	const sessionId = getCurrentUser(request)
+	const sessionId = exports.getCurrentUser(request)
 	core.createSession(response, sessionId, new Date())
+	await sessions.deleteSession(sessionId)
 }

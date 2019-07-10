@@ -41,7 +41,7 @@ exports.forbidden = (response) => {
 }
 
 exports.createSession = (response, id, date) => {
-	response.setHeader('Set-Cookie', 'sessionId=' + id + ';expires=' + date.toUTCString())
+	response.setHeader('Set-Cookie', 'sessionId=' + id + ';path=/;expires=' + date.toUTCString())
 }
 
 exports.getCookies = (request) => {
