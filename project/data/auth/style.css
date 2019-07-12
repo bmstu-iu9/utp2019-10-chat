@@ -31,12 +31,12 @@ p {
 	margin: 20px 0 30px;
 }
 
-
 a {
 	color: #333;
 	font-size: 14px;
 	margin: 15px 0;
 }
+
 
 button {
 	border-radius: 20px;
@@ -64,6 +64,11 @@ button.ghost {
 	border-color: #FFFFFF;
 }
 
+button:disabled {
+	background-color: grey; 
+	border: 1px solid grey;
+}
+
 form {
 	background-color: #FFFFFF;
 	display: flex;
@@ -75,12 +80,34 @@ form {
 	text-align: center;
 }
 
-input {
+input,#regError,#loginError {
 	background-color: #eee;
 	border: none;
 	padding: 12px 20px;
 	margin: 8px 0;
 	width: 280px;
+	outline: none;
+}
+
+input:focus {
+	outline: none;
+	border: 1.5px solid #2d81ee
+}
+
+.errorInput {
+	border: 1.5px solid red;
+}
+
+#regError {
+	display: none;
+	background-color: #ffffff;
+	color: red;
+}
+
+#loginError {
+	display: none;
+	background-color: #ffffff;
+	color: red;
 }
 
 .container {
