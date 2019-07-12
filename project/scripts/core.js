@@ -60,7 +60,7 @@ exports.sendFullFile = (response, path) => {
 		exports.notFound(response)
 	else {
 		if (pathModule.extname(path) == ".html")
-			response.setHeader('Content-Type', 'text/html; charset=utf-8')
+			response.setHeader('Content-Type', 'text/html; charset=utf8')
 		response.end(data)
 	}})
 }

@@ -114,3 +114,5 @@ server.listen(consts.PORT, (err) => {
     }
     console.log(`server is listening on ${consts.PORT}`)
 })
+
+exports.server = server
