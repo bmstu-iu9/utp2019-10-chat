@@ -160,7 +160,7 @@ function modalClose() {
 }
 
 // Handle ESC key (key code 27)
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keydown', function(e) {
     if (e.keyCode == 27) {
         modalClose();
     }
