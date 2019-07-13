@@ -32,6 +32,6 @@ exports.invoke = async (request, response, data) => {
 		return
 	}
 	
-	await users.setCurrentUser(response, (await users.getUserLoginData(args.email)).name)
+	await users.setCurrentUser(response, (await users.getUserLogin(args.email)).name)
 	core.sendJSON(response, {err: rcodes.SUCCESS})
 }

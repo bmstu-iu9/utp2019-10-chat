@@ -29,15 +29,15 @@ const reg = async (request, response, data) => {
 		return
 	}
 		
-    if (await users.getUserLoginData(args.email)) {
-    	if (await users.getUserMail(args.username))
+    if (await users.getUserLogin(args.email)) {
+    	if (await users.getUserAccept(args.username))
     		core.sendJSON(response, {err: rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS})
     	else
     		core.sendJSON(response, {err: rcodes.EMAIL_ALREADY_EXISTS})
     	return
     }
     
-    if (await users.getUserMail(args.username)) {
+    if (await users.getUserAccept(args.username)) {
 		core.sendJSON(response, {err: rcodes.USERNAME_ALREADY_EXISTS})
 		return
     }

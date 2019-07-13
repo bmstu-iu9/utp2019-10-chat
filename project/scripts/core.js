@@ -40,7 +40,7 @@ exports.forbidden = (response) => {
 	response.end();
 }
 
-exports.createSession = (response, id, date) => {
+exports.sendSessionId = (response, id, date) => {
 	response.setHeader('Set-Cookie', 'sessionId=' + id + ';path=/;expires=' + date.toUTCString())
 }
 
@@ -60,13 +60,12 @@ exports.sendFullFile = (response, path) => {
 		exports.notFound(response)
 	else {
 		if (pathModule.extname(path) == ".html")
-			response.setHeader('Content-Type', 'text/html; charset=utf8')
+			response.setHeader('Content-Type', 'text/html; charset=utf-8')
 		response.end(data)
 	}})
 }
  	 
 exports.sendError = (response, err) => {
-	//console.log(err)
 	response.statusCode = 500
 	response.statusMessage = http.STATUS_CODES[response.statusCode]
 	response.write('<!DOCTYPE html><html><head><title>500</title></head><body><h1>500 ')

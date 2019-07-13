@@ -8,8 +8,8 @@ const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const crypto = require('crypto')
 
-exports.USERLOGIN_PATH = pathModule.join(consts.SERVER_PATH, 'userlogin.json')
-exports.USERMAIL_PATH = pathModule.join(consts.SERVER_PATH, 'usermail.json')
+exports.USERLOGIN_PATH = pathModule.join(consts.USERS_PATH, 'login.json')
+exports.USERACCEPT_PATH = pathModule.join(consts.USERS_PATH, 'accept.json')
 exports.SALT_LENGTH = 16
 exports.PASSWORD_ITERATIONS_COUNT = 1000
 exports.PASSWORD_HASH_LENGTH = 32
@@ -28,68 +28,67 @@ const passwordHash = (password, salt) => {
 	})
 }
 
-exports.addUser = async (email, name, password, approveHash) => {
+exports.addUser = async (email, name, password) => {
 	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
-	let usermail = await jsonfile.read(exports.USERMAIL_PATH)
+	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	
-	usermail[name] = email
+	useraccept[name] = email
 	userlogin[email] = {}
 	userlogin[email].name = name
 	userlogin[email].salt = crypto.randomBytes(16).toString('hex')
-	userlogin[email].approveHash = approveHash
+	useraccept[name].notApproved = true
 	userlogin[email].passwordHash = await passwordHash(password, userlogin[email].salt)
 	
-	await jsonfile.write(exports.USERMAIL_PATH, usermail)
+	await jsonfile.write(exports.USERACCEPT_PATH, usermail)
 	try {
 		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
 	} catch (err) {
-		delete usermail[name]
-		await jsonfile.write(exports.USERMAIL_PATH, usermail)
+		delete useraccept[name]
+		await jsonfile.write(exports.USERACCEPT_PATH, usermail)
 		throw err
 	}
 }
 
-exports.approveUser = async (email) => {
-	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
-	delete userlogin[email].approveHash
-	await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
+exports.approveUser = async (name) => {
+	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
+	delete useraccept[name].notApproved
+	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 }
 
-exports.getUserLoginData = async (email) => {
+exports.getUserLogin = async (email) => {
 	const userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
 	return userlogin[email]
 }
 
-exports.getUserMail = async (username) => {
-	const usermail = await jsonfile.read(exports.USERMAIL_PATH)
-	return usermail[username]
+exports.getUserAccept = async (username) => {
+	const useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
+	return useraccept[username]
 }
 
-exports.deleteUser = async (email) => {
-	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
-	let usermail = await jsonfile.read(exports.USERMAIL_PATH)
+exports.deleteUser = async (username) => {
+	let userlogin = await jsonfile.read(exports.USERACCEPT_PATH)
+	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	
-	const username = userlogin[email].name
-	delete usermail[username]
+	const email = useraccept[username].email
+	delete useraccept[username]
 	delete userlogin[email]
 	
-	await jsonfile.write(exports.USERMAIL_PATH, usermail)
+	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 	try {
 		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
 	} catch (err) {
-		usermail[username] = email
-		await jsonfile.write(exports.USERMAIL_PATH, usermail)
+		useraccept[username] = email
+		await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 		throw err
 	}
 }
 
 exports.getCurrentUser = (request) => {
 	const cookies = core.getCookies(request)
-	console.log(cookies)
 	if (cookies !== undefined && cookies.sessionId !== undefined) {
-		const session = sessions.getUser(cookies.sessionId)
-		if (session !== undefined && (new Date()) < (new Date(session.expires)))
-			return session.username
+		const username = sessions.getUser(cookies.sessionId)
+		if (username !== undefined)
+			return username
 	}
 }
 
@@ -105,11 +104,11 @@ exports.setCurrentUser = async (response, username) => {
 	let expires = new Date()
 	expires.setMonth(expires.getMonth() + 2)
 	const sessionId = await sessions.addSession(username, expires)
-	core.createSession(response, sessionId, expires)
+	core.sendSessionId(response, sessionId, expires)
 }
 
 exports.deleteCurrentUser = async (request, response) => {
 	const sessionId = exports.getCurrentUser(request)
-	core.createSession(response, sessionId, new Date())
+	core.sendSessionId(response, sessionId, new Date())
 	await sessions.deleteSession(sessionId)
 }

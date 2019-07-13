@@ -5,7 +5,7 @@ const pathModule = require('path')
 const users = require('../users')
 const consts = require('../consts')
 
-exports.invoke = (request, response, data) => {
+exports.invoke = async (request, response, data) => {
 	const curUser = users.getCurrentUser(request)
 	if (curUser) {
 		core.redirect(response, '/')
