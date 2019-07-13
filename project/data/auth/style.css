@@ -82,7 +82,6 @@ form {
 
 input,#regError,#loginError {
 	background-color: #eee;
-	border: none;
 	padding: 12px 20px;
 	margin: 8px 0;
 	width: 280px;
@@ -109,6 +108,9 @@ input:focus {
 	background-color: #ffffff;
 	color: red;
 }
+
+input:invalid:not(:placeholder-shown) {border-color: red;}
+input:valid:not(:placeholder-shown) {border-color: green;}
 
 .container {
 	background-color: #fff;
@@ -220,7 +222,6 @@ input:focus {
 
 
 .modalDialog {
-	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
@@ -237,7 +238,7 @@ input:focus {
 }
 
 .modalDialog:target {
-	display: block;
+	display: flex;
 	pointer-events: auto;
 }
 

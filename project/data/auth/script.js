@@ -151,3 +151,17 @@ loginPassword.addEventListener("keydown", () => {
 	loginPassword.classList.remove("errorInput");
 	loginError.style.display = "none";
 });
+
+//закрытие модального окна по клавише Esc
+function modalClose() {
+    if (location.hash == '#openModal') {
+        location.hash = '';
+    }
+}
+
+// Handle ESC key (key code 27)
+document.addEventListener('keyup', function(e) {
+    if (e.keyCode == 27) {
+        modalClose();
+    }
+});
