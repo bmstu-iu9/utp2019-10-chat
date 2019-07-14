@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head><meta charset="UTF-8"></head>
+	<body>
+		<p id="userdata">Вы вошли как </p>
+		<button id="exit">Выйти</button><br>
+		<table id="chatTable"></table>
+		<textarea id="messageText"></textarea>
+		<button id="submit">Отправить</button>
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			const req = new XMLHttpRequest()
+			
+			req.open('GET', '/req/curuser.js', true)
+			req.onreadystatechange = () => {
+				if (req.readyState != 4) return;
+				const curUser = JSON.parse(req.responseText).user
+				userdata.textContent += curUser
+	  			const socket = io()
+	  			socket.on('message', (data) => {
+	  				chatTable.innerHTML += "<tr><td>" + data.user + '</td><td>' + data.message + '</td></tr>';
+	  			})
+	  			
+	  			submit.onclick = () => {
+	  				socket.emit('message', {message: messageText.value})
+	  				chatTable.innerHTML += "<tr><td>" + curUser + '</td><td>' + messageText.value + '</td></tr>';
+	  				messageText.value = ''
+	  			}
+			}
+			req.send()
+			exit.onclick = () => {
+				const ereq = new XMLHttpRequest()
+				ereq.open('GET', '/req/exit.js', true)
+				ereq.onreadystatechange = () => {
+					if (ereq.readyState != 4) return;
+					
+					state.textContent = ereq.status
+					rcode.textContent = ereq.responseText
+				}
+				ereq.send()
+			}
+		</script>
+	</body>
+</html>
