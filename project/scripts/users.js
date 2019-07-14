@@ -31,19 +31,20 @@ exports.addUser = async (email, name, password) => {
 	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
 	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	
-	useraccept[name] = email
+	useraccept[name] = {}
+	useraccept[name].email = email
 	userlogin[email] = {}
 	userlogin[email].name = name
 	userlogin[email].salt = crypto.randomBytes(16).toString('hex')
 	useraccept[name].notApproved = true
 	userlogin[email].passwordHash = await passwordHash(password, userlogin[email].salt)
 	
-	await jsonfile.write(exports.USERACCEPT_PATH, usermail)
+	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 	try {
 		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
 	} catch (err) {
 		delete useraccept[name]
-		await jsonfile.write(exports.USERACCEPT_PATH, usermail)
+		await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 		throw err
 	}
 }

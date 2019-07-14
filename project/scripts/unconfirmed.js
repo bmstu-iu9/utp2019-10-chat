@@ -27,7 +27,7 @@ exports.addUserInUnconfirmed = async (email, username, password) => {
 
 exports.deleteUserFromUnconfirmed = async (hash) => {
 	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
-	const username = newConfirmed[username]
+	const username = newConfirmed[hash]
 	if (!username) {
 		return false;
 	}
