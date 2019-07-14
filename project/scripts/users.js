@@ -1,5 +1,4 @@
 'use strict'
-exports.invoke = null
 
 const core = require('./core')
 const sessions = require('./sessions')

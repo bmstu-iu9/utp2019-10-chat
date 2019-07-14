@@ -1,9 +1,8 @@
 'use strict'
-
-const core = require('../core')
+const core = require('../../scripts/core')
 const pathModule = require('path')
-const users = require('../users')
-const consts = require('../consts')
+const users = require('../../scripts/users')
+const consts = require('../../scripts/consts')
 
 exports.invoke = async (request, response, data) => {
 	const curUser = users.getCurrentUser(request)

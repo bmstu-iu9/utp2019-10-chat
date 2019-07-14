@@ -1,5 +1,4 @@
 'use strict'
-exports.invoke = null
 
 const core = require('./core.js')
 const consts = require('./consts.js')

@@ -1,8 +1,7 @@
 ﻿'use strict'
-
-const core = require('../core')
-const users = require('../users')
-const consts = require('../consts')
+const core = require('../../scripts/core')
+const users = require('../../scripts/users')
+const consts = require('../../scripts/consts')
 const rcodes = require(consts.RCODES_PATH)
 
 exports.invoke = async (request, response, data) => {

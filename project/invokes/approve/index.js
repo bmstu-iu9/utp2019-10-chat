@@ -1,9 +1,9 @@
 'use strict'
 const fs = require('fs')
-const core = require('./core')
-const consts = require('./consts')
+const core = require('../../scripts/core')
+const consts = require('../../scripts/consts')
 const path = require('path')
-const unconfirmed = require('./unconfirmed')
+const unconfirmed = require('../../scripts/unconfirmed')
 
 const approve = async (request, response, data) => {
 	let hash

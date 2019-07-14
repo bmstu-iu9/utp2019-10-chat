@@ -1,12 +1,12 @@
 'use strict'
 const fs = require('fs')
-const core = require('../core')
-const consts = require('../consts')
+const core = require('../../scripts/core')
+const consts = require('../../scripts/consts')
 const path = require('path')
 const crypto = require('crypto')
-const users = require('../users')
-const unconfirmed = require('../unconfirmed')
-const mail = require('../mail')
+const users = require('../../scripts/users')
+const unconfirmed = require('../../scripts/unconfirmed')
+const mail = require('../../scripts/mail')
 const rcodes = require(consts.RCODES_PATH)
             
 const reg = async (request, response, data) => {
@@ -46,7 +46,7 @@ const reg = async (request, response, data) => {
     
     try {
     	await mail.sendMail(args.email, 'QuickChat registration!',
-     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve.js?hash="+hash)
+     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve?hash="+hash)
     } catch (err) {
     	await unconfirmed.deleteUserFromUnconfirmed(hash)
     	core.sendJSON(response, {err: rcodes.FAILED_TO_SEND_EMAIL})

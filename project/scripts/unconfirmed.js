@@ -1,5 +1,4 @@
 'use strict'
-exports.invoke = null
 
 const jsonfile = require('./jsonfile')
 const users = require('./users')

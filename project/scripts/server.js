@@ -1,7 +1,8 @@
+'use strict'
 const fs = require('fs')
 const pathModule = require('path')
-const consts = require('./scripts/consts')
-const core = require('./scripts/core')
+const consts = require('./consts')
+const core = require('./core')
 const http = require('http')
 const urlModule = require('url')
 
@@ -16,24 +17,22 @@ const isDir = (path) => {
 	})
 }
 
-const route = (routPath, urlPath, indexName) => {
-	return new Promise((resolve, reject) => {
+const route = async (routPath, urlPath, indexName) => {
+	try {
 		let fullPath = pathModule.join(routPath,  urlPath)
-		isDir(fullPath)
-			.then((dirFlag) => {
-				return dirFlag && isDir(fullPath = pathModule.join(fullPath, indexName))
-			}).then((dirFlag) => {
-				if (dirFlag)
-					reject(new Error('index is folder, path: ' + fullPath))
-				else
-					resolve(fullPath)
-			}, (err) => {
-				reject(err)
-			}).catch((err) => {
-				err.message = 'Routing error, caused by ' + err.message
-				core.sendError(err)
-			})
-	})
+		if (!await isDir(fullPath))
+			return fullPath
+		
+		fullPath = pathModule.join(fullPath, indexName)
+		
+		if (!await isDir(fullPath))
+			return fullPath
+	} catch (err) {
+		if (err.code == ENOENT)
+			return null
+		throw err
+	}
+	return null
 }
 
 const scriptInvoke = (path, request, response, urlObject) => {
@@ -48,16 +47,17 @@ const scriptInvoke = (path, request, response, urlObject) => {
 		})
 
 		request.on('end', () => {
-			try {
-				response.setHeader('Content-Type', 'text/html; charset=utf-8')
-				script.invoke(request, response, body)
-			} catch (e) {
-				core.sendError(response, err)
-			}
+			script.invoke(request, response, body)
+				.catch((err) => {
+					core.sendError(response, err)
+				})
 		})
 	} else if (request.method == "GET" || request.method == "HEAD") {
 		response.setHeader('Content-Type', 'text/html; charset=utf-8')
 		script.invoke(request, response, urlObject.query)
+			.catch((err) => {
+				core.sendError(response, err)
+			})
 	}
 	 else {
 		response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
@@ -77,7 +77,7 @@ const dataInvoke = (path, request, response) => {
 	}
 }
 
-const requestHandler = (request, response) => {
+const requestHandler = async (request, response) => {
 	if (request.method != 'GET' && request.method != 'POST' &&
 			request.method != 'HEAD' && request.method != 'OPTIONS') {
 		response.statusCode = 501;
@@ -87,32 +87,35 @@ const requestHandler = (request, response) => {
 	} else {		
 		const urlObject = urlModule.parse(request.url)
 	
-		route(consts.SCRIPTS_PATH, urlObject.pathname, 'index.js')
-			.then((path) => {
+		let path = await route(consts.INVOKES_PATH, urlObject.pathname, 'index.js')
+		if (path) {
+			try {
 				scriptInvoke(path, request, response, urlObject)
-			}, (err) => {
-				route(consts.DATA_PATH, urlObject.pathname, 'index.html')
-					.then((path) => {
-						dataInvoke(path, request, response)
-					}, (err) => {
-						if (urlObject.pathname == '*' && request.method == "OPTIONS")
-							response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
-						else
-							core.notFound(response)
-					})
-			}).catch((err) => {
+			} catch (err) {
 				core.sendError(response, err)
-			})
+			}
+			return
+		}
+		
+		path = await route(consts.DATA_PATH, urlObject.pathname, 'index.html')
+		if (path) {
+			dataInvoke(path, request, response)
+			return
+		}
+		
+		if (urlObject.pathname == '*' && request.method == "OPTIONS")
+			response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
+		else
+			core.notFound(response)
 	}
 }
 
-require('./scripts/sessions').init()
-const server = http.createServer(requestHandler)
-server.listen(consts.PORT, (err) => {
-    if (err) {
-        console.log(err)
-    }
-    console.log(`server is listening on ${consts.PORT}`)
-})
-
-exports.server = server
+exports.init = () => {
+	exports.server = http.createServer(requestHandler)
+	exports.server.listen(consts.PORT, (err) => {
+	    if (err) {
+	        console.log(err)
+	    }
+	    console.log(`server is listening on ${consts.PORT}`)
+	})
+}
