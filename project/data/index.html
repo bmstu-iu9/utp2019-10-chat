@@ -7,6 +7,8 @@
 		<table id="chatTable"></table>
 		<textarea id="messageText"></textarea>
 		<button id="submit">Отправить</button>
+		<div id="state"></div>
+		<div id="rcode"></div>
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			const req = new XMLHttpRequest()
@@ -28,7 +30,17 @@
 	  			}
 			}
 			req.send()
-			
+			exit.onclick = () => {
+				const ereq = new XMLHttpRequest()
+				ereq.open('GET', '/req/exit.js', true)
+				ereq.onreadystatechange = () => {
+					if (ereq.readyState != 4) return;
+					
+					state.textContent = ereq.status
+					rcode.textContent = ereq.responseText
+				}
+				ereq.send()
+			}
 		</script>
 	</body>
 </html>

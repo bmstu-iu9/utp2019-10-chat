@@ -37,9 +37,7 @@ const route = async (routPath, urlPath, indexName) => {
 
 const scriptInvoke = (path, request, response, urlObject) => {
 	const script = require(path)
-	if (script.invoke === null)
-		core.forbidden(response)
-	else if (request.method == "POST") {
+	if (request.method == "POST") {
 		let body = '';
 
 		request.on('data', (data) => {
