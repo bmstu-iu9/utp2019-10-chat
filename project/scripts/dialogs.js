@@ -41,3 +41,9 @@ exports.userExitDialog = async (user,id) => {
 exports.getDialogUsers = async (id) => {
     return dialogs[id].users
 }
+
+exports.addMessage = async (id,name,message) =>{
+    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
+    dialogs[id].messages.push({name : name, message : message})
+	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+}
