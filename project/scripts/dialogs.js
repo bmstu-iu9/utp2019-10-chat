@@ -12,7 +12,7 @@ exports.addDialog = async (name,peoples) => {
 	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
     let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
 
-    dialogs[dialogs.size] = {id : dialogs.size, name : name, users : peoples}
+    dialogs[dialogs.size] = {id : dialogs.size, name : name, users : peoples, messages : {}}
 
     useraccept.forEach(element => {
         useraccept[element.name].dialogs[id] = {}
@@ -46,4 +46,9 @@ exports.addMessage = async (id,name,message) =>{
     let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
     dialogs[id].messages.push({name : name, message : message})
 	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+}
+
+exports.getMessages = async (id) => {
+    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
+    return dialogs[id].messages
 }
