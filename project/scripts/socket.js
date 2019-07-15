@@ -13,8 +13,12 @@ exports.init = () => {
 	
 	exports.io.on('connection', (socket) => {
 		const user = sessions.getUser(core.getCookies(socket.request).sessionId)
+		console.log('connect')
 		socket.on('message', (data) => {
 			socket.broadcast.emit('message', {user: user, message: data.message})
+		})
+		socket.on('disconnect', (data) => {
+			console.log('disconnect')
 		})
 	})
 }
