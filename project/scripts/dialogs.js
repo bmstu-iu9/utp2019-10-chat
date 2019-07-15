@@ -3,19 +3,24 @@
 const consts = require('./consts')
 const jsonfile = require('./jsonfile')
 const pathModule = require('path')
-const crypto = require('crypto')
-const users = require('users')
+const fs = require('fs')
+const users = require('./users')
 
 exports.DIALOGS_PATH = pathModule.join(consts.DIALOGS_PATH, 'dialogs.json')
 
 exports.addDialog = async (name,peoples) => {
-	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
+    
+	let dialogs = await JSON.parse(fs.readFileSync(exports.DIALOGS_PATH))
+    let useraccept = await JSON.parse(fs.readFileSync(users.USERACCEPT_PATH))
+    
+    let id = Object.keys(dialogs).length
 
-    dialogs[dialogs.size] = {id : dialogs.size, name : name, users : peoples, messages : {}}
+    dialogs[id] = {id : id, name : name, users : peoples, messages : {}}
 
-    useraccept.forEach(element => {
-        useraccept[element.name].dialogs[id] = {}
+    console.log(useraccept)
+    Object.keys(useraccept).forEach(element => {
+        console.log( useraccept[element])
+        useraccept[element].dialogs[id] = {}
     });
 
 	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
@@ -52,3 +57,5 @@ exports.getMessages = async (id) => {
     let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
     return dialogs[id].messages
 }
+
+exports.addDialog("Test", ["dron","dorn"])
