@@ -1,55 +1,43 @@
 'use strict'
 
-const core = require('./core')
-const sessions = require('./sessions')
 const consts = require('./consts')
 const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const crypto = require('crypto')
+const users = require('users')
 
 exports.DIALOGS_PATH = pathModule.join(consts.DIALOGS_PATH, 'dialogs.json')
-exports.USERACCEPT_PATH = pathModule.join(consts.USERS_PATH, 'accept.json')
 
-exports.addDialog = async (name,users) => {
+exports.addDialog = async (name,peoples) => {
 	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
+    let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
 
-    let salt
-    while(dialogs[salt] != undefined)
-        salt =  crypto.randomBytes(16).toString('hex')
+    dialogs[dialogs.size] = {id : dialogs.size, name : name, users : peoples}
 
-    dialogs[salt] = {}
-    dialogs[salt].name = name
-    dialogs[salt].users = users
-
-    users.array.forEach(element => {
-        useraccept[element.name].dialogs[salt] = {}
+    useraccept.forEach(element => {
+        useraccept[element.name].dialogs[id] = {}
     });
 
 	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
-	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
+	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
 
 exports.getUserDialogs = async (user) => {
-    return user.dialogs.map(element => getDialog(element.salt))
+    return user.dialogs.map(element => getDialog(element.id))
 }
 
-exports.getDialog = async (salt) => {
+exports.getDialog = async (id) => {
 	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    return dialogs[salt]
+    return dialogs[id]
 }
 
-exports.userExitDialog = async (user,salt) => {
+exports.userExitDialog = async (user,id) => {
     let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    delete dialogs[salt].users[user]
-    delete user.dialogs[salt]
+    delete dialogs[id].users[user]
+    delete user.dialogs[id]
 	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
 }
 
-exports.deleteDialog = async (salt) => {
-    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    if (dialogs[salt].users.length == 0 ){
-        delete dialogs[salt]
-    }
-	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+exports.getDialogUsers = async (id) => {
+    return dialogs[id].users
 }
