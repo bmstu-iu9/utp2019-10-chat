@@ -4,6 +4,12 @@
 	<body>
 		<p id="userdata">Вы вошли как </p>
 		<button id="exit">Выйти</button><br>
+		<p>Введите название чата: <input id="dialogName"></p>
+		<p>Введите имена пользователей через перевод строки:</p>
+		<textarea id="users"></textarea>
+		<button id="create">Создать чат</button><br><br>
+		<select id = "listdialogs"></select>
+
 		<table id="chatTable"></table>
 		<textarea id="messageText"></textarea>
 		<button id="submit">Отправить</button>
@@ -18,18 +24,64 @@
 				if (req.readyState != 4) return;
 				const curUser = JSON.parse(req.responseText).user
 				userdata.textContent += curUser
+				
 	  			const socket = io()
+	  			
+	  			socket.on('connect', () => {
+	  				socket.emit('dialogs', {begin: -1, end: -1})
+	  				if (listdialogs.value)
+	  					socket.emit('messages', {dialogId: listdialogs.value})
+	  			})
+	  			
+	  			socket.on('dialogs', (data) => {
+	  				listdialogs.innerHTML = ''
+	  				data.ids.forEach((element) => {
+	  					listdialogs.options[listdialogs.options.length] = new Option("id " + element,element)
+	  				})
+	  			})
+	  			
+	  			socket.on('dialog', (data) => {
+	  				listdialogs.options[listdialogs.options.length] = new Option("id " + data.id,data.id)
+	  			})
+	  			
 	  			socket.on('message', (data) => {
-	  				chatTable.innerHTML += "<tr><td>" + data.user + '</td><td>' + data.message + '</td></tr>';
+					if (listdialogs.value == data.dialogId)
+						chatTable.innerHTML += '</td><td>' + data.name +'</td><td>'+'</td><td>' + data.message+'</td><td>' +'</td><td>'+ data.date + '</td></tr>'
+	  			})
+	  			
+	  			socket.on('messages', (data) => {
+					if (listdialogs.value == data.dialogId)
+						chatTable.innerHTML = ''
+						data.messages.forEach((mes) => {
+							chatTable.innerHTML += '</td><td>' + mes.name +'</td><td>'+'</td><td>' +
+								mes.message+'</td><td>' +'</td><td>'+ mes.date + '</td></tr>'
+						})
 	  			})
 	  			
 	  			submit.onclick = () => {
-	  				socket.emit('message', {message: messageText.value})
-	  				chatTable.innerHTML += "<tr><td>" + curUser + '</td><td>' + messageText.value + '</td></tr>';
+					if(messageText.value == '') return 
+
+					let select = document.getElementById("listdialogs")
+					let value = select.options[select.selectedIndex].value;
+	  				socket.emit('message', {dialogId : value, message: messageText.value})
+	  				messageText.value = ''
+				}
+	  			
+	  			create.onclick = () => {
+	  				socket.emit('dialog', {name: dialogName.value, users: users.value.split('\n')})
+	  				dialogName.value = ''
+	  				users.value = ''
+	  			}
+	  			
+	  			listdialogs.onchange = () => {
+	  				if (listdialogs.value)
+	  					socket.emit('messages', {dialogId: listdialogs.value})
+	  				
 	  				messageText.value = ''
 	  			}
 			}
 			req.send()
+
 			exit.onclick = () => {
 				const ereq = new XMLHttpRequest()
 				ereq.open('GET', '/req/exit.js', true)
