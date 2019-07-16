@@ -6,24 +6,22 @@ const pathModule = require('path')
 const fs = require('fs')
 const users = require('./users')
 
-exports.DIALOGS_PATH = pathModule.join(consts.DIALOGS_PATH, 'dialogs.json')
+exports.EXTENTION =  '.json'
 
 exports.addDialog = async (name,peoples) => {
     
-	let dialogs = await JSON.parse(fs.readFileSync(exports.DIALOGS_PATH))
-    let useraccept = await JSON.parse(fs.readFileSync(users.USERACCEPT_PATH))
+    let dialogDirectory = await fs.readdirSync(consts.DIALOGS_PATH)
+    let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
     
-    let id = Object.keys(dialogs).length
+    let id = dialogDirectory.length
+    let dialog = {id : id, name : name, users : peoples, messages : {}}
 
-    dialogs[id] = {id : id, name : name, users : peoples, messages : {}}
-
-    console.log(useraccept)
     Object.keys(useraccept).forEach(element => {
-        console.log( useraccept[element])
         useraccept[element].dialogs[id] = {}
     });
 
-	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+    console.log(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION))
+	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
 
@@ -32,30 +30,27 @@ exports.getUserDialogs = async (user) => {
 }
 
 exports.getDialog = async (id) => {
-	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    return dialogs[id]
+    return await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + this.EXTENTION ))
 }
 
 exports.userExitDialog = async (user,id) => {
-    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    delete dialogs[id].users[user]
+    let dialog = this.getDialog(id)
+    delete dialog.users[user]
     delete user.dialogs[id]
-	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 }
 
 exports.getDialogUsers = async (id) => {
-    return dialogs[id].users
+    return this.getDialog(id).users
 }
 
-exports.addMessage = async (id,name,message) =>{
-    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    dialogs[id].messages.push({name : name, message : message})
-	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
+exports.addMessage = async (id,name,message) => {
+    let dialog = await this.getDialog(id)
+    dialog.messages[Object.keys(dialog.messages).length] = {name : name, message : message}
+	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 }
 
 exports.getMessages = async (id) => {
-    let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
-    return dialogs[id].messages
+    let dialog = await this.getDialog(id)
+    return dialog.messages
 }
-
-exports.addDialog("Test", ["dron","dorn"])
