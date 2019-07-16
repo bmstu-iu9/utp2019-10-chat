@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head><meta charset="UTF-8"></head>
+	<body>
+		<p id="userdata">Вы вошли как </p>
+		<button id="exit">Выйти</button><br>
+		<p>Введите название чата: <input id="dialogName"></p>
+		<p>Введите имена пользователей через перевод строки:</p>
+		<textarea id="users"></textarea>
+		<button id="create">Создать чат</button>
+		<div id="dialogsList"></div>		
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			const req = new XMLHttpRequest()
+			
+			req.open('GET', '/req/curuser.js', true)
+			req.onreadystatechange = () => {
+				 
+				
+				if (req.readyState != 4) return;
+				const curUser = JSON.parse(req.responseText).user
+				userdata.textContent += curUser
+	  			const socket = io.connect('/')
+	  			
+	  			socket.on('connect', () => {
+	  				socket.emit('dialogs', {begin: -1, end: -1})
+	  			})
+	  			
+	  			socket.on('dialogs', (data) => {
+	  				dialogsList.innerHTML = ''
+	  				data.ids.forEach((c) => {
+	  					dialogsList.innerHTML += "<h2><a href=\"/?id=" + data.id + '\"">' + data.name +
+		  				'</a></h2>';
+	  				})
+	  			})
+	  			
+	  			socket.on('dialog', (data) => {
+	  				dialogsList.innerHTML += "<h2><a href=\"/?id=" + data.id + '\"">' + data.name +
+	  				'</a></h2>';
+	  			})
+	  			
+	  			create.onclick = () => {
+	  				socket.emit('dialog', {name: dialogName.value, users: users.value.split('\n')})
+	  				dialogName.value = ''
+	  				users.value = ''
+	  			}
+			}
+			req.send()
+			exit.onclick = () => {
+				const ereq = new XMLHttpRequest()
+				ereq.open('GET', '/req/exit.js', true)
+				ereq.onreadystatechange = () => {
+					if (ereq.readyState != 4) return;
+					
+					state.textContent = ereq.status
+					rcode.textContent = ereq.responseText
+				}
+				ereq.send()
+			}
+		</script>
+	</body>
+</html>

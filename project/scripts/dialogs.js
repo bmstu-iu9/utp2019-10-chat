@@ -9,15 +9,13 @@ const users = require('./users')
 exports.DIALOGS_PATH = pathModule.join(consts.DIALOGS_PATH, 'dialogs.json')
 
 exports.addDialog = async (name,peoples) => {
-    
-	let dialogs = await JSON.parse(fs.readFileSync(exports.DIALOGS_PATH))
-    let useraccept = await JSON.parse(fs.readFileSync(users.USERACCEPT_PATH))
+	let dialogs = await jsonfile.read(exports.DIALOGS_PATH)
+    let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
     
     let id = Object.keys(dialogs).length
 
     dialogs[id] = {id : id, name : name, users : peoples, messages : {}}
 
-    console.log(useraccept)
     Object.keys(useraccept).forEach(element => {
         console.log( useraccept[element])
         useraccept[element].dialogs[id] = {}
@@ -25,10 +23,12 @@ exports.addDialog = async (name,peoples) => {
 
 	await jsonfile.write(exports.DIALOGS_PATH, dialogs)
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
+	return id
 }
 
 exports.getUserDialogs = async (user) => {
-    return user.dialogs.map(element => getDialog(element.id))
+	let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
+    return useraccept[user].dialogs
 }
 
 exports.getDialog = async (id) => {

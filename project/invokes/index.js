@@ -12,5 +12,5 @@ exports.invoke = async (request, response, data) => {
 		return
 	}
 	
-	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'index.html'))
+	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'dialogs.html'))
 }
