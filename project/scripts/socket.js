@@ -14,13 +14,15 @@ exports.init = () => {
 	exports.io.on('connection', (socket) => {
 		const user = sessions.getUser(core.getCookies(socket.request).sessionId)
 
-		socket.on('message', (data) => {
-			socket.broadcast.emit('message', {user: user, message: data.message})
+		socket.on('message', async (data) => {
+			await dialogs.addMessage(data.idDialog,user,data.message)
+			const messages = await dialogs.getMessages(data.idDialog,20)
+			socket.emit('message', {message: messages})
 		})
 
 		socket.on('dialogListServer', async (data) => {
 			const userDialogs = await dialogs.getUserDialogs (user)
-			const list = userDialogs.map(async (element) => dialogs.getDialog(element).name)
+			const list = userDialogs.map(async (element) => await dialogs.getDialog(element).name)
 			socket.emit('dialogListClient',list)
 		})
 	})

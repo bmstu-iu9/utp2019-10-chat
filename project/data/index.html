@@ -5,7 +5,7 @@
 		<p id="userdata">Вы вошли как </p>
 		<button id="exit">Выйти</button><br>
 
-		<table id="dialogOl"></table>		
+		<select id = "listdialogs"></select>
 
 		<table id="chatTable"></table>
 		<textarea id="messageText"></textarea>
@@ -23,14 +23,19 @@
 				userdata.textContent += curUser
 	  			const socket = io()
 	  			socket.on('message', (data) => {
-	  				chatTable.innerHTML += "<tr><td>" + data.user + '</td><td>' + data.message + '</td></tr>';
+					chatTable.innerHTML = 'Диалог'
+					data.message.forEach(mes => chatTable.innerHTML += '</td><td>' + mes.name +'</td><td>'+'</td><td>' + mes.message+'</td><td>' +'</td><td>'+ mes.date + '</td></tr>')
 	  			})
 	  			
 	  			submit.onclick = () => {
-	  				socket.emit('message', {message: messageText.value})
-	  				chatTable.innerHTML += "<tr><td>" + curUser + '</td><td>' + messageText.value + '</td></tr>';
+					if(messageText.value == '') return 
+
+					let select = document.getElementById("listdialogs")  
+					let value = select.options[select.selectedIndex].value;
+	  				socket.emit('message', {idDialog : value, message: messageText.value})
 	  				messageText.value = ''
-	  			}
+				  }
+				  
 			}
 			req.send()
 
@@ -45,8 +50,8 @@
 
 				const socket = io()
 				socket.on('dialogListClient', (data) => {
-					document.getElementById("dialogOl").innerHTML = "<tr><td>" + Object.keys(data).length + '</td><td>'
-					Object.keys(data).forEach(element => document.getElementById("dialogOl").innerHTML+= "<tr><td>" +"id " + element + '</td><td>')
+					let select = document.getElementById("listdialogs")
+					Object.keys(data).forEach(element => select.options[select.options.length] = new Option("id " + element,element))
 				})
 				  
 				socket.emit('dialogListServer')

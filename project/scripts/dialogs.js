@@ -49,13 +49,13 @@ exports.getDialogUsers = async (id) => {
 
 exports.addMessage = async (id,name,message) => {
     let dialog = await this.getDialog(id)
-    dialog.messages[dialog.messages.length] = {name : name, message : message}
+    dialog.messages[dialog.messages.length] = {name : name, message : message, date : new Date()}
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 }
 
-exports.getMessages = async (id) => {
-    let dialog = await this.getDialog(id)
-    return dialog.messages
+exports.getMessages = async (id,count) => {
+    const dialog = await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + this.EXTENTION ))
+    return dialog.messages.reverse().slice(0,count).reverse()
 }
 
 exports.containsUserByDialog = async (name,id) => {
