@@ -32,7 +32,11 @@ exports.getDialog = async (id) => {
 }
 
 exports.userExitDialog = async (user,id) => {
+    if(!this.containsUserByDialog(user.name,id))
+        return;   
+
     let dialog = this.getDialog(id)
+        
     delete dialog.users[user]
     delete user.dialogs[id]
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
@@ -51,4 +55,22 @@ exports.addMessage = async (id,name,message) => {
 exports.getMessages = async (id) => {
     let dialog = await this.getDialog(id)
     return dialog.messages
+}
+
+exports.containsUserByDialog = async (name,id) => {
+    return this.getDialogUsers(id)[name] != undefined
+}
+
+exports.addUserInDialog = async (user,id) => {
+    let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
+    let dialog = await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + this.EXTENTION ))
+
+    if(this.containsUserByDialog(user.name,id))
+        return;
+
+    useraccept[user.name].dialogs[id] = {}
+    dialog.users[dialog.users.length]= user.name
+    
+	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
+	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
