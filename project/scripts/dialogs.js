@@ -9,7 +9,6 @@ const users = require('./users')
 exports.EXTENTION =  '.json'
 
 exports.addDialog = async (name,peoples) => {
-    
     let dialogDirectory = await fs.readdirSync(consts.DIALOGS_PATH)
     let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
     
@@ -20,7 +19,6 @@ exports.addDialog = async (name,peoples) => {
         useraccept[element].dialogs[id] = {}
     });
 
-    console.log(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION))
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
