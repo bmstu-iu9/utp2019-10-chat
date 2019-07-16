@@ -13,10 +13,10 @@ exports.addDialog = async (name,peoples) => {
     let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
     
     let id = dialogDirectory.length
-    let dialog = {id : id, name : name, users : peoples, messages : {}}
+    let dialog = {id : id, name : name, users : peoples, messages : []}
 
     Object.keys(useraccept).forEach(element => {
-        useraccept[element].dialogs[id] = {}
+        useraccept[element].dialogs[dialog.length] = id
     });
 
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
@@ -29,7 +29,7 @@ exports.getDialog = async (id) => {
 
 exports.getUserDialogs = async (user) => {
     const useraccept = await jsonfile.read(users.USERACCEPT_PATH)
-    return Object.keys(useraccept[user].dialogs)
+    return useraccept[user].dialogs
 }
 
 exports.userExitDialog = async (user,id) => {
@@ -49,7 +49,7 @@ exports.getDialogUsers = async (id) => {
 
 exports.addMessage = async (id,name,message) => {
     let dialog = await this.getDialog(id)
-    dialog.messages[Object.keys(dialog.messages).length] = {name : name, message : message}
+    dialog.messages[dialog.messages.length] = {name : name, message : message}
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 }
 
@@ -75,5 +75,3 @@ exports.addUserInDialog = async (user,id) => {
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
-
-//exports.addDialog("УРА", ["dorn","dron"])
