@@ -29,7 +29,7 @@ exports.getDialog = async (id) => {
 
 exports.getUserDialogs = async (user) => {
     const useraccept = await jsonfile.read(users.USERACCEPT_PATH)
-    return await Object.keys(useraccept[user].dialogs)
+    return Object.keys(useraccept[user].dialogs)
 }
 
 exports.userExitDialog = async (user,id) => {
