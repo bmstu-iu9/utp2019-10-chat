@@ -4,6 +4,9 @@
 	<body>
 		<p id="userdata">Вы вошли как </p>
 		<button id="exit">Выйти</button><br>
+
+		<table id="dialogOl"></table>		
+
 		<table id="chatTable"></table>
 		<textarea id="messageText"></textarea>
 		<button id="submit">Отправить</button>
@@ -30,6 +33,27 @@
 	  			}
 			}
 			req.send()
+
+			const dialogList = new XMLHttpRequest()
+
+			dialogList.open('GET','/req/dialogList.js',true) 
+			dialogList.onreadystatechange = () => {
+				
+				if (dialogList.readyState != 4) return;
+				const curUser = JSON.parse(dialogList.responseText).user
+				userdata.textContent += curUser
+
+				const socket = io()
+				socket.on('dialogListClient', (data) => {
+					document.getElementById("dialogOl").innerHTML = "<tr><td>" + Object.keys(data).length + '</td><td>'
+					Object.keys(data).forEach(element => document.getElementById("dialogOl").innerHTML+= "<tr><td>" +"id " + element + '</td><td>')
+				})
+				  
+				socket.emit('dialogListServer')
+			}
+			dialogList.send()
+
+
 			exit.onclick = () => {
 				const ereq = new XMLHttpRequest()
 				ereq.open('GET', '/req/exit.js', true)

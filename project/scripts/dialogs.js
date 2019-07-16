@@ -23,12 +23,13 @@ exports.addDialog = async (name,peoples) => {
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
 
-exports.getUserDialogs = async (user) => {
-    return user.dialogs.map(element => getDialog(element.id))
-}
-
 exports.getDialog = async (id) => {
     return await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + this.EXTENTION ))
+}
+
+exports.getUserDialogs = async (user) => {
+    const useraccept = await jsonfile.read(users.USERACCEPT_PATH)
+    return await Object.keys(useraccept[user].dialogs)
 }
 
 exports.userExitDialog = async (user,id) => {
@@ -74,3 +75,5 @@ exports.addUserInDialog = async (user,id) => {
 	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+this.EXTENTION), dialog)
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 }
+
+//exports.addDialog("УРА", ["dorn","dron"])
