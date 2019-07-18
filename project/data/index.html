@@ -7,15 +7,18 @@
 		<p>Введите название чата: <input id="dialogName"></p>
 		<p>Введите имена пользователей через перевод строки:</p>
 		<textarea id="users"></textarea>
-		<button id="create">Создать чат</button><br><br>
+		<button id="create">Создать чат</button><br>
+		<div id="chat" hidden="true">
 		<select id = "listdialogs"></select>
 
 		<table id="chatTable"></table>
 		<textarea id="messageText"></textarea>
 		<button id="submit">Отправить</button>
+		</div>
 		<div id="state"></div>
 		<div id="rcode"></div>
 		<script src="/socket.io/socket.io.js"></script>
+		<script src="/responsecodes.js"></script>
 		<script>
 			const req = new XMLHttpRequest()
 			
@@ -28,20 +31,35 @@
 	  			const socket = io()
 	  			
 	  			socket.on('connect', () => {
-	  				socket.emit('dialogs', {begin: -1, end: -1})
+	  				socket.emit('dialogs', {})
 	  				if (listdialogs.value)
 	  					socket.emit('messages', {dialogId: listdialogs.value})
 	  			})
 	  			
 	  			socket.on('dialogs', (data) => {
+	  				const prevValue = listdialogs.value
+	  				
 	  				listdialogs.innerHTML = ''
-	  				data.ids.forEach((element) => {
-	  					listdialogs.options[listdialogs.options.length] = new Option("id " + element,element)
+	  				data.dialogs.forEach((element) => {
+	  					listdialogs.options[listdialogs.options.length] = new Option(element.name,element.id)
+	  					if (element.id == prevValue)
+	  						listdialogs.value = prevValue
 	  				})
+	  				
+	  				if (prevValue != listdialogs.value) {
+	  					if (!listdialogs.value) {
+	  						chat.hidden = true
+	  						return
+	  					}
+	  					
+	  					chat.hidden = false
+	  					listdialogs.dispatchEvent(new Event('change'))
+	  				}
 	  			})
 	  			
 	  			socket.on('dialog', (data) => {
-	  				listdialogs.options[listdialogs.options.length] = new Option("id " + data.id,data.id)
+	  				listdialogs.options[listdialogs.options.length] = new Option(data.name,data.id)
+	  				chat.hidden = false
 	  			})
 	  			
 	  			socket.on('message', (data) => {
@@ -50,12 +68,13 @@
 	  			})
 	  			
 	  			socket.on('messages', (data) => {
-					if (listdialogs.value == data.dialogId)
+					if (listdialogs.value == data.dialogId) {
 						chatTable.innerHTML = ''
 						data.messages.forEach((mes) => {
 							chatTable.innerHTML += '</td><td>' + mes.name +'</td><td>'+'</td><td>' +
 								mes.message+'</td><td>' +'</td><td>'+ mes.date + '</td></tr>'
 						})
+					}
 	  			})
 	  			
 	  			submit.onclick = () => {
@@ -79,7 +98,8 @@
 	  				
 	  				messageText.value = ''
 	  			}
-			}
+	  		}
+			
 			req.send()
 
 			exit.onclick = () => {

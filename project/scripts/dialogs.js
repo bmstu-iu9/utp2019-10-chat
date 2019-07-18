@@ -14,6 +14,7 @@ exports.addDialog = async (name,peoples) => {
     
     let id = dialogs.length
     dialogs.length++
+    dialogs[id] = name
     let dialog = {id : id, name : name, users : peoples, messages : []}
 
     for (let element in useraccept) {
@@ -30,9 +31,12 @@ exports.getDialog = async (id) => {
     return await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + '.json' ))
 }
 
-exports.getUserDialogs = async (user) => {
+exports.getUserDialogs = async (user, begin, end) => {
     const useraccept = await jsonfile.read(users.USERACCEPT_PATH)
-    return useraccept[user].dialogs
+    const dialogs = await jsonfile.read(exports.USERDIALOGS_PATH)
+    return useraccept[user].dialogs.slice(begin, end).map((id) => {
+    	return {id: id, name: dialogs[id]}
+    })
 }
 
 exports.userExitDialog = async (user,id) => {
@@ -51,14 +55,33 @@ exports.getDialogUsers = async (id) => {
 }
 
 exports.addMessage = async (id,name,message,date) => {
-    let dialog = await this.getDialog(id)
+	let dialog 
+	try {
+		dialog = await this.getDialog(id)
+	} catch (err) {
+		return null
+	}
+	
+    if (!dialog.users.includes(name))
+    	return null
+    	
     dialog.messages[dialog.messages.length] = {name : name, message : message, date : date}
-	await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+'.json'), dialog)
+	await jsonfile.write(pathModule.join(consts.DIALOGS_PATH,id+'.json'), dialog)
+	return true
 }
 
-exports.getMessages = async (id,count) => {
-    const dialog = await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + '.json' ))
-    return dialog.messages.reverse().slice(0,count).reverse()
+exports.getMessages = async (id,name,begin, end) => {
+    let dialog
+    try {
+    	dialog = await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + '.json' ))
+    } catch (err) {
+    	return null
+    }
+    
+    if (!dialog.users.includes(name))
+    	return null
+    
+    return dialog.messages.reverse().slice(begin,end).reverse()
 }
 
 exports.containsUserByDialog = async (name,id) => {
