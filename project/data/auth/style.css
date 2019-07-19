@@ -81,7 +81,6 @@ form {
 }
 
 input,#regError,#loginError {
-	background-color: #eee;
 	padding: 12px 20px;
 	margin: 8px 0;
 	width: 280px;
@@ -109,8 +108,31 @@ input:focus {
 	color: red;
 }
 
-input:invalid:not(:placeholder-shown) {border-color: red;}
-input:valid:not(:placeholder-shown) {border-color: green;}
+.flexTmp {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#tmpEmail {
+	display: none;
+	color: red;
+	font-size: 13px;
+}
+
+.logEm {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#lgEm {
+	display: none;
+	color: red;
+	font-size: 13px;
+}
+
 
 .container {
 	background-color: #fff;
