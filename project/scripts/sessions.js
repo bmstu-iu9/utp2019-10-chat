@@ -41,10 +41,11 @@ exports.addSession = (username, expires) => {
 }
 
 exports.getUser = (sessionId) => {
-	if ((new Date()) < (new Date(sessions[sessionId].expires)))
-		return sessions[sessionId].username
-	else 
-		delete sessions[sessionId]
+	if (sessions[sessionId])
+		if ((new Date()) < (new Date(sessions[sessionId].expires)))
+			return sessions[sessionId].username
+		else 
+			delete sessions[sessionId]
 }
 
 exports.deleteSession = async (sessionId) => {

@@ -27,8 +27,8 @@ const route = async (routPath, urlPath, indexName) => {
 		
 		if (!await isDir(fullPath))
 			return fullPath
-	} catch (err) {
-		if (err.code == ENOENT)
+	} catch (err) {	
+		if (err.code == 'ENOENT')
 			return null
 		throw err
 	}

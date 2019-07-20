@@ -52,6 +52,7 @@ exports.addUser = async (email, name, password) => {
 exports.approveUser = async (name) => {
 	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	delete useraccept[name].notApproved
+	useraccept[name].dialogs = []
 	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 }
 
@@ -63,6 +64,11 @@ exports.getUserLogin = async (email) => {
 exports.getUserAccept = async (username) => {
 	const useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	return useraccept[username]
+}
+
+exports.getFullUserAccept = async () => {
+	const useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
+	return useraccept
 }
 
 exports.deleteUser = async (username) => {
