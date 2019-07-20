@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>QuickChat</title>
+	<title>Добро пожаловать | QuickChat!</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,800'>
 	<link rel="stylesheet" href="/auth/style.css">
@@ -18,7 +18,7 @@
 				<h2>Регистрация</h2>
 				<input id="regUserName" type="text" name="username" placeholder="Ник" />
 				<div class="flexTmp">
-				<input id="regEmail" type="email" name="email" placeholder="Email" />
+				<input id="regEmail" type="text" name="email" placeholder="Email" />
 				<span id="tmpEmail"></span>
 				</div>
 				<input id="regPassword" type="password" name="password" placeholder="Пароль" />
@@ -32,7 +32,7 @@
 				<h1>QuickChat</h1>
 				<h2>Авторизация</h2>
 				<div class="logEm">
-				<input id="loginEmail" type="email" name="email" placeholder="Email" />
+				<input id="loginEmail" type="text" name="email" placeholder="Email" />
 				<span id="lgEm"></span>
 				</div>
 				<input id="loginPassword" type="password" name="password" placeholder="Пароль" />
@@ -62,7 +62,7 @@
 				<a href="#close" title="Закрыть" class="close">X</a>
 				<h2>Восстановление аккаунта</h2>
 				<a>Введите Email, на который зарегистрирован аккаунт. Мы отправим на него Ваш пароль</a>
-				<input if="forgotEmail" type="email" name="email" placeholder="Email" />
+				<input id="forgotEmail" type="text" name="email" placeholder="Email" />
 				<p><button id ="forgotButton">Восстановить</button></p>
 				<span id="forgotEr"></span>
 			</form>

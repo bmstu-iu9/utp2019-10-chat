@@ -45,11 +45,9 @@ regButton.addEventListener('click', (e) => {
 	regButton.disabled = true;
 	if (!regUserName.value) {
 		regUserName.classList.add("errorInput");
-		return;
 	}
 		if (!regEmail.value) {
 		regEmail.classList.add("errorInput");
-		return;
 	}
 	if (regEmail.value.indexOf("@") === -1 && regEmail.value.length !== 0) {
 		tmpEmail.textContent = "Адрес электронной почты должен содержать символ @"
@@ -60,7 +58,6 @@ regButton.addEventListener('click', (e) => {
 
 	if (!regPassword.value) {
 		regPassword.classList.add("errorInput");
-		return;
 	}
 	const req = new XMLHttpRequest()
 	req.open('POST', '/req/registration.js', true)
@@ -87,9 +84,10 @@ regButton.addEventListener('click', (e) => {
 			case rcodes.FAILED_TO_SEND_EMAIL:
 				regError.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
 				regError.style.display = "block";
+				regButton.disabled = false;
 				setTimeout(() => {
 					regError.style.display = "none";
-				}, 3500);
+				}, 5000);
 				break;
 			case rcodes.SUCCESS:
 				regError.style.color = "green";
@@ -117,6 +115,7 @@ regEmail.addEventListener("input", () => {
 	regButton.disabled = false;
 	tmpEmail.style.display = "none";
 	switch (data.err) {
+		case rcodes.FAILED_TO_SEND_EMAIL:
 		case rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS:
 		case rcodes.EMAIL_ALREADY_EXISTS:
 			regError.style.display = "none";
@@ -142,17 +141,24 @@ loginButton.addEventListener('click', (e) => {
 	loginButton.disabled = true;
 	if (!loginEmail.value) {
 		loginEmail.classList.add("errorInput");
-		return;
+		setTimeout(() => {
+			loginEmail.classList.remove("errorInput");
+		}, 1000);
 	}
 	if (loginEmail.value.indexOf("@") === -1 && loginEmail.value.length !== 0) {
 		lgEm.textContent = "Адрес электронной почты должен содержать символ @"
 		lgEm.style.display = "block";
 		loginEmail.classList.add("errorInput");
+		setTimeout(() => {
+			loginEmail.classList.remove("errorInput");
+		}, 1000);
 		return;
 	}
 	if (!loginPassword.value) {
 		loginPassword.classList.add("errorInput");
-		return;
+		setTimeout(() => {
+			loginPassword.classList.remove("errorInput");
+		}, 1000);
 	}
 	const req = new XMLHttpRequest()
 	req.open('POST', '/req/login.js', true)
@@ -202,15 +208,21 @@ loginPassword.addEventListener("input", () => {
 forgotButton.addEventListener("click", (e) => {
 	e.preventDefault();
 	forgotButton.disabled = true;
-	if (!forgotEmail.value || forgotEmail.value.indexOf("@") === -1) {
+	if (!forgotEmail.value) {
 		forgotEmail.classList.add("errorInput");
+		return;
+	}
+	if (forgotEmail.value.indexOf("@") === -1 && forgotEmail.value.length !== 0) {
+		forgotEr.textContent = "Адрес электронной почты должен содержать символ @"
+		forgotEr.style.display = "block";
+		forgotEmail.classList.add("errorInput");
+		return;
 	}
 	const req = new XMLHttpRequest()
 	req.open('POST', '/req/forgotPassword.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
 		data = JSON.parse(req.responseText);
-		debugger;
 		switch (data.err) {
 			case rcodes.EMAIL_INCORRECT:
 				forgotEr.textContent = "Аккаунта с такой электронной почтой не существует";

@@ -80,7 +80,7 @@ form {
 	text-align: center;
 }
 
-input,#regError,#loginError {
+input,#regError,#loginError,#forgotEr {
 	padding: 12px 20px;
 	margin: 8px 0;
 	width: 280px;
@@ -103,6 +103,12 @@ input:focus {
 }
 
 #loginError {
+	display: none;
+	background-color: #ffffff;
+	color: red;
+}
+
+#forgotEr {
 	display: none;
 	background-color: #ffffff;
 	color: red;
