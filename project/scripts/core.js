@@ -1,5 +1,4 @@
 'use strict'
-exports.invoke = null
 
 const fs = require('fs')
 const pathModule = require('path')
@@ -40,7 +39,7 @@ exports.forbidden = (response) => {
 	response.end();
 }
 
-exports.createSession = (response, id, date) => {
+exports.sendSessionId = (response, id, date) => {
 	response.setHeader('Set-Cookie', 'sessionId=' + id + ';path=/;expires=' + date.toUTCString())
 }
 
@@ -66,9 +65,9 @@ exports.sendFullFile = (response, path) => {
 }
  	 
 exports.sendError = (response, err) => {
-	//console.log(err)
 	response.statusCode = 500
 	response.statusMessage = http.STATUS_CODES[response.statusCode]
+	response.setHeader('Content-Type', 'text/html; charset=utf-8')
 	response.write('<!DOCTYPE html><html><head><title>500</title></head><body><h1>500 ')
 	response.write(response.statusMessage)
 	response.write('</h1>')

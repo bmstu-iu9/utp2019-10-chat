@@ -1,5 +1,4 @@
 'use strict'
-exports.invoke = null
 
 const fs = require('fs')
 
