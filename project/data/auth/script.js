@@ -43,6 +43,10 @@ signInButton.addEventListener('click', () => {
 regButton.addEventListener('click', (e) => {
 	e.preventDefault();
 	regButton.disabled = true;
+	if (!regUserName.value) {
+		regUserName.classList.add("errorInput");
+		return;
+	}
 		if (!regEmail.value) {
 		regEmail.classList.add("errorInput");
 		return;
@@ -53,10 +57,7 @@ regButton.addEventListener('click', (e) => {
 		regEmail.classList.add("errorInput");
 		return;
 	}
-	if (!regUserName.value) {
-		regUserName.classList.add("errorInput");
-		return;
-	}
+
 	if (!regPassword.value) {
 		regPassword.classList.add("errorInput");
 		return;
@@ -82,6 +83,13 @@ regButton.addEventListener('click', (e) => {
 				regError.style.display = "block";
 				regEmail.classList.add("errorInput");
 				regUserName.classList.add("errorInput");
+				break;
+			case rcodes.FAILED_TO_SEND_EMAIL:
+				regError.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
+				regError.style.display = "block";
+				setTimeout(() => {
+					regError.style.display = "none";
+				}, 3500);
 				break;
 			case rcodes.SUCCESS:
 				regError.style.color = "green";
@@ -191,49 +199,48 @@ loginPassword.addEventListener("input", () => {
 	loginError.style.display = "none";
 });
 
-// forgotButton.addEventListener("click", (e) => {
-// 	e.preventDefault();
-// 	forgotButton.disabled = true;
-// 	if (!forgotEmail.value || forgotEmail.value.indexOf("@") === -1) {
-// 		forgotEmail.classList.add("errorInput");
-// 	}
-// 	const req = new XMLHttpRequest()
-// 	req.open('POST', '/req/forgotPassword.js', true)
-// 	req.onreadystatechange = () => {
-// 		if (req.readyState != 4) return;
-// 		data = JSON.parse(req.responseText);
-// 		debugger;
-// 		switch (data.err) {
-// 			case rcodes.EMAIL_INCORRECT:
-// 				forgotEr.textContent = "Неверный Email или пароль";
-// 				forgotEr.style.display = "block";
-// 				forgotEmail.classList.add("errorInput");
-// 				break;
+forgotButton.addEventListener("click", (e) => {
+	e.preventDefault();
+	forgotButton.disabled = true;
+	if (!forgotEmail.value || forgotEmail.value.indexOf("@") === -1) {
+		forgotEmail.classList.add("errorInput");
+	}
+	const req = new XMLHttpRequest()
+	req.open('POST', '/req/forgotPassword.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		data = JSON.parse(req.responseText);
+		debugger;
+		switch (data.err) {
+			case rcodes.EMAIL_INCORRECT:
+				forgotEr.textContent = "Аккаунта с такой электронной почтой не существует";
+				forgotEr.style.display = "block";
+				forgotEmail.classList.add("errorInput");
+				break;
 
-// 		}
-// 	}
-// 	req.send(JSON.stringify({
-// 		email: forgotEmail.value
-// 	}));
-// });
+		}
+	}
+	req.send(JSON.stringify({
+		email: forgotEmail.value
+	}));
+});
 
-// forgotEmail.addEventListener("input", () => {
-// 	forgotEmail.classList.remove("errorInput");
-// 	forgotButton.disabled = false;
-// 	switch (data.err) {
-// 		case rcodes.EMAIL_INCORRECT:
-// 			regError.style.display = "none";
-// 	}
-// })
+forgotEmail.addEventListener("input", () => {
+	forgotEmail.classList.remove("errorInput");
+	forgotButton.disabled = false;
+	switch (data.err) {
+		case rcodes.EMAIL_INCORRECT:
+			regError.style.display = "none";
+	}
+})
 
-//закрытие модального окна по клавише Esc
 function modalClose() {
 	if (location.hash == '#openModal') {
 		location.hash = '';
 	}
 }
 
-// Handle ESC key (key code 27)
+
 document.addEventListener('keydown', function (e) {
 	if (e.keyCode == 27) {
 		modalClose();
