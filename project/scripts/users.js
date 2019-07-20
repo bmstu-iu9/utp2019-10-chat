@@ -52,7 +52,7 @@ exports.addUser = async (email, name, password) => {
 exports.approveUser = async (name) => {
 	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	delete useraccept[name].notApproved
-	useraccept[name].dialogs = {}
+	useraccept[name].dialogs = []
 	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 }
 

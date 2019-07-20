@@ -4,19 +4,42 @@
 	<body>
 		<p id="userdata">Вы вошли как </p>
 		<button id="exit">Выйти</button><br>
-		<p>Введите название чата: <input id="dialogName"></p>
+		<p>Введите название чата: <input id="dialogName">
+		<span id="errorField"></span></p>
 		<p>Введите имена пользователей через перевод строки:</p>
 		<textarea id="users"></textarea>
 		<button id="create">Создать чат</button><br>
-		<div id="chat" hidden="true">
-		<select id = "listdialogs"></select>
-
-		<table id="chatTable"></table>
-		<textarea id="messageText"></textarea>
-		<button id="submit">Отправить</button>
-		</div>
-		<div id="state"></div>
-		<div id="rcode"></div>
+		<table>
+			<tr>
+				<td>
+					<div id="chat" hidden="true">
+						<select id = "listdialogs"></select>
+						<table id="chatTable"></table>
+						<textarea id="messageText"></textarea>
+						<button id="submit">Отправить</button>
+					</div>
+					<div id="state"></div>
+					<div id="rcode"></div>
+				</td>
+				<td>
+					<p>Информация о пользователе:</p><br><input id="userName">
+					<button id="userButton">User</button>
+					<div id="userInfo"></div>
+					<p>dialog user</p><br>
+					<button id="dialogUserButton">Users</button>
+					<div id="dialogUserInfo"></div>
+					<p>add</p><br><input id="addInput">
+					<button id="addButton">Add</button>
+					<div id="addInfo"></div>
+					<p>delete</p><br>
+					<button id="deleteButton">Delete</button>
+					<div id="deleteInfo"></div>
+					<p>rm</p><br><input id="rmInput">
+					<button id="rmButton">Rm</button>
+					<div id="rmInfo"></div>
+				</td>
+			</tr>
+		</table>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/responsecodes.js"></script>
 		<script>
@@ -42,9 +65,13 @@
 	  				listdialogs.innerHTML = ''
 	  				data.dialogs.forEach((element) => {
 	  					listdialogs.options[listdialogs.options.length] = new Option(element.name,element.id)
+	  					
 	  					if (element.id == prevValue)
 	  						listdialogs.value = prevValue
 	  				})
+	  				
+	  				if (!prevValue && data.dialogs.length)
+	  					listdialogs.value = data.dialogs[0].id
 	  				
 	  				if (prevValue != listdialogs.value) {
 	  					if (!listdialogs.value) {
@@ -64,7 +91,8 @@
 	  			
 	  			socket.on('message', (data) => {
 					if (listdialogs.value == data.dialogId)
-						chatTable.innerHTML += '</td><td>' + data.name +'</td><td>'+'</td><td>' + data.message+'</td><td>' +'</td><td>'+ data.date + '</td></tr>'
+						chatTable.innerHTML += '</td><td>' + data.name +'</td><td>'+'</td><td>'
+							+ data.message.replace(/\n/g, '<br>')+'</td><td>' +'</td><td>'+ (new Date(data.date)).toLocaleString() + '</td></tr>'
 	  			})
 	  			
 	  			socket.on('messages', (data) => {
@@ -72,10 +100,54 @@
 						chatTable.innerHTML = ''
 						data.messages.forEach((mes) => {
 							chatTable.innerHTML += '</td><td>' + mes.name +'</td><td>'+'</td><td>' +
-								mes.message+'</td><td>' +'</td><td>'+ mes.date + '</td></tr>'
+								mes.message.replace(/\n/g, '<br>')+'</td><td>' +'</td><td>'+ (new Date(mes.date)).toLocaleString() + '</td></tr>'
 						})
 					}
 	  			})
+	  			
+	  			socket.on('user', (data) => {
+	  				userInfo.textContent = JSON.stringify(data).replace(/\n/g, '<br>')
+	  			})
+	  			
+	  			socket.on('users', (data) => {
+	  				dialogUserInfo.textContent = JSON.stringify(data)
+	  			})
+	  			
+	  			socket.on('add', (data) => {
+	  				addInfo.textContent = JSON.stringify(data)
+	  			})
+	  			
+	  			socket.on('delete', (data) => {
+	  				deleteInfo.textContent = JSON.stringify(data)
+	  			})
+	  			
+	  			socket.on('rm', (data) => {
+	  				rmInfo.textContent = JSON.stringify(data)
+	  			})
+	  			
+	  			socket.on('err', (data) => {
+	  				errorField.textContent = JSON.stringify(data).replace(/\n/g, '<br>')
+	  			})
+	  			
+	  			userButton.onclick = () => {
+	  				socket.emit('user', {name: userName.value})
+	  			}
+	  			
+	  			dialogUserButton.onclick = () => {
+	  				socket.emit('users', {dialogId: listdialogs.value})
+	  			}
+	  			
+	  			addButton.onclick = () => {
+	  				socket.emit('add', {dialogId: listdialogs.value, user: addInput.value})
+	  			}
+	  			
+	  			deleteButton.onclick = () => {
+	  				socket.emit('delete', {dialogId: listdialogs.value})
+	  			}
+	  			
+	  			rmButton.onclick = () => {
+	  				socket.emit('rm', {dialogId: listdialogs.value, user: rmInput.value})
+	  			}
 	  			
 	  			submit.onclick = () => {
 					if(messageText.value == '') return 
@@ -87,7 +159,7 @@
 				}
 	  			
 	  			create.onclick = () => {
-	  				socket.emit('dialog', {name: dialogName.value, users: users.value.split('\n')})
+	  				socket.emit('dialog', {name: dialogName.value, users: users.value === '' ? [] : users.value.split('\n')})
 	  				dialogName.value = ''
 	  				users.value = ''
 	  			}
