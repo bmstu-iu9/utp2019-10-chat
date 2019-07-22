@@ -115,7 +115,7 @@ exports.init = (port) => {
 		exports.PORT = port
 		
 	exports.server = http.createServer(requestHandler)
-	exports.server.listen(consts.PORT, (err) => {
+	exports.server.listen(exports.PORT, (err) => {
 	    if (err) {
 	        console.log(err)
 	    }
