@@ -5,16 +5,16 @@
 	</head>
 	<body>
 		<p>Логин</p>
-		<input id="loginEmail"><br>
-		<input type="password" id="loginPassword"><br>
+		<input id="loginEmail">email<br>
+		<input type="password" id="loginPassword">password<br>
 		<button id="loginButton">LOGIN</button><br><br>
 		<p>Регистрация</p>
-		<input id="regEmail"><br>
-		<input id="regUserName"><br>
-		<input type="password" id="regPassword"><br>
+		<input id="regEmail">email<br>
+		<input id="regUserName">username<br>
+		<input type="password" id="regPassword">password<br>
 		<button id="regButton">REGISTRATION</button><br><br>
 		<p>Восстановление пароля</p>
-		<input id="forgotPassword"><br>
+		<input id="forgotEmail">email<br>
 		<button id="forgotButton">FORGOT PASSWORD</button><br><br>
 		<div id="state"></div>
 		<div id="rcode"></div>
@@ -27,6 +27,8 @@
 					
 					state.textContent = req.status
 					rcode.textContent = req.responseText
+					if (!JSON.parse(req.responseText).errcode)
+						window.location.reload()
 				}
 				req.send(JSON.stringify({email: regEmail.value, username: regUserName.value, password: regPassword.value}))
 			}
@@ -39,6 +41,8 @@
 					
 					state.textContent = req.status
 					rcode.textContent = req.responseText
+					if (!JSON.parse(req.responseText).errcode)
+						window.location.reload()
 				}
 				req.send(JSON.stringify({email: loginEmail.value, password: loginPassword.value}))
 			}

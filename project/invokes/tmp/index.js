@@ -1,15 +1,16 @@
 'use strict'
+
 const core = require('../../scripts/core')
-const pathModule = require('path')
 const users = require('../../scripts/users')
 const consts = require('../../scripts/consts')
+const pathModule = require('path')
 
 exports.invoke = async (request, response, data) => {
 	const curUser = users.getCurrentUser(request)
-	if (curUser) {
-		core.redirect(response, '/')
+	if (!curUser) {
+		core.sendFullFile(response, pathModule.join(consts.HTML_PATH, 'tmp/auth.html'))
 		return
 	}
 	
-	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'auth/index.html'))
+	core.sendFullFile(response, pathModule.join(consts.HTML_PATH, 'tmp/chat.html'))
 }
