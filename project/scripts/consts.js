@@ -2,7 +2,6 @@
 
 const path = require('path')
 
-exports.PORT = 8080
 exports.SCRIPTS_PATH = path.dirname(module.filename)
 exports.SERVER_PATH = path.join(exports.SCRIPTS_PATH, '..')
 exports.DATA_PATH = path.join(exports.SERVER_PATH, 'data')

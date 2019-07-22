@@ -108,12 +108,17 @@ const requestHandler = async (request, response) => {
 	}
 }
 
-exports.init = () => {
+exports.init = (port) => {
+	if (port === undefined)
+		exports.PORT = 80
+	else
+		exports.PORT = port
+		
 	exports.server = http.createServer(requestHandler)
 	exports.server.listen(consts.PORT, (err) => {
 	    if (err) {
 	        console.log(err)
 	    }
-	    console.log(`server is listening on ${consts.PORT}`)
+	    console.log(`server is listening on ${exports.PORT}`)
 	})
 }
