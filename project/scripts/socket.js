@@ -36,6 +36,7 @@ exports.init = () => {
 						exports.io.to('user ' + u).emit('dialog', {name: data.name, id: a.id})
 					})
 				} catch (err) {
+					console.log(err)
 					socket.emit('err', {err: err.toString(), event: 'dialog', data: data})
 				}
 			})
