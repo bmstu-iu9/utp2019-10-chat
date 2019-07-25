@@ -1,0 +1,34 @@
+{
+  "name": "quickchat",
+  "version": "1.0.0",
+  "description": "Quick chat",
+  "main": "run.js",
+  "private": true,
+  "dependencies": {
+    "nodemailer": "^6.3.0",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "reset": "node reset.js",
+    "start": "node run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmstu-iu9/utp2019-10-chat.git"
+  },
+  "contributors": [
+    "don-dron",
+    "2wendex2 <2wendex2@mail.ru>",
+    "amaguma",
+    "personalfebus",
+    "Aliev2000",
+    "AndVl1",
+    "VillKoi"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmstu-iu9/utp2019-10-chat/issues"
+  },
+  "homepage": "https://github.com/bmstu-iu9/utp2019-10-chat#readme"
+}
