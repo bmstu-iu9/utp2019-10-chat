@@ -13,7 +13,7 @@ exports.SALT_LENGTH = 16
 exports.PASSWORD_ITERATIONS_COUNT = 1000
 exports.PASSWORD_HASH_LENGTH = 32
 
-const passwordHash = (password, salt) => {
+exports.passwordHash = (password, salt) => {
 	return new Promise((resolve, reject) => {
 		crypto.pbkdf2(password, salt,
 			exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
