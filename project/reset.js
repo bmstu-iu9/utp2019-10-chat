@@ -15,7 +15,7 @@ const resetDir = (dirPath) => {
 		fs.mkdirSync(dirPath)
 	} catch (err) {
 		if (err.code == 'ENOENT')
-			fs.mkDirSync(dirPath)
+			fs.mkdirSync(dirPath)
 		else
 			throw err
 	}
@@ -45,5 +45,4 @@ resetJSON(users.USERLOGIN_PATH)
 resetJSON(users.USERACCEPT_PATH)
 resetJSON(unconfirmed.UNCONFIRMED_PATH)
 fs.writeFileSync(dialogs.USERDIALOGS_PATH, JSON.stringify({length: 0}))
-fs.mkDirSync(dialogs.USERDIALOGS_PATH)
 resetJSON(sessions.SESSIONS_PATH)
