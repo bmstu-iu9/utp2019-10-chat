@@ -11,7 +11,7 @@ exports.USERACCEPT_PATH = pathModule.join(consts.USERS_PATH, 'accept.json')
 
 exports.setPassword = async (request, response, data) => {
 	let args
-	
+	  
 	try {
 		args = JSON.parse(data)
 	} catch (err) {
