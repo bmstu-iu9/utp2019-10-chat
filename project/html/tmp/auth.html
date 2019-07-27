@@ -49,7 +49,7 @@
 			
 			forgotButton.onclick = () => {
 				const req = new XMLHttpRequest()
-				req.open('POST', '/req/forgotpassword.js', true)
+				req.open('POST', '/req/passwordreset.js', true)
 				req.onreadystatechange = () => {
 					if (req.readyState != 4) return;
 					

@@ -25,7 +25,7 @@ const approve = async (request, response, data) => {
 		return
 	}
 
-	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'reset.html')
+	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'reset.html'))
 }
 
 exports.invoke = approve
