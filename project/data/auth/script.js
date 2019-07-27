@@ -181,7 +181,7 @@ loginButton.addEventListener('click', (e) => {
 				loginButton.disabled = false;
 				break;
 				case rcodes.SUCCESS:
-					window.location.href="/auth/chat.html"
+					window.location.href="/chat.html"
 
 
 
