@@ -29,7 +29,7 @@ const reset = async (request, response, data) => {
 
 	try {
 		await mail.sendMail(args.email, 'Password reset!',
-			'Please follow the link below \n\n'+"http://"+request.headers.host+"/approvereset?hash="+hash)
+			'Please follow the link below \n\n'+"http://"+request.headers.host+"/req/approvereset.js?hash="+hash)
 	} catch (err) {
 		await resetmethods.deleteHash(hash)
 		core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: "can not send email"})

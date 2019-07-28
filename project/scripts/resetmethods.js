@@ -11,7 +11,7 @@ exports.getHash = async (email) => {
 	let RESETPATH = await jsonfile.read(exports.RESET_PATH);
 	const hash = crypto.randomBytes(256).toString('hex')
 
-	for (key in RESETPATH) {
+	for (let key in RESETPATH) {
 		if (RESETPATH[key] == email)
 			delete RESETPATH[key]
 	}
