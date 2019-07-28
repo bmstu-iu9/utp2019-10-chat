@@ -7,8 +7,12 @@
     height: 42px;
     font-size: 12.5px;
     color: white;
+    padding: 5px;
 }
 
+body {
+    margin: -8px;
+}
 .name {
     margin: 1px 800px 1px 100px;
     font-size: 30px;
@@ -22,6 +26,7 @@
     background-color: rgb(45, 129, 238);
     color: white;
     font-size: 30px;
+    margin: 6px -4px;
 }
 
 button:active {
@@ -36,7 +41,7 @@ button:active {
     padding: 40px;
     position: absolute;
     left: 996px;
-    margin: 2px;
+    margin: 12px 2px;
 }
 
 .menuBut {
@@ -45,4 +50,21 @@ button:active {
     color: black;
     font-size: 15px;
     padding: 5px;
+}
+
+.conteiner {
+    display: flex;
+    flex-direction: column;
+}
+
+.windowChat {
+    margin: 52px 213px 0px 213px;
+    background: #f6f5f7;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+            0 10px 10px rgba(0,0,0,0.22);
+    
 }
