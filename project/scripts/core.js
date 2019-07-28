@@ -8,7 +8,8 @@ const querystring = require('querystring')
 exports.notFound = (response) => {
 	response.statusCode = 404;
 	response.statusMessage = http.STATUS_CODES[response.statusCode];
-	response.end();
+	response.setHeader('Content-Type', 'text/html; charset=utf-8');
+	response.end(exports.httpInfoHtml(response))
 }
 
 const redirectNote = (response, url) => {
@@ -34,9 +35,10 @@ exports.redirectLikewise = (response, url) => {
 }
 
 exports.forbidden = (response) => {
-	response.statusCode = 403;
-	response.statusMessage = http.STATUS_CODES[response.statusCode];
-	response.end();
+	response.statusCode = 403
+	response.statusMessage = http.STATUS_CODES[response.statusCode]
+	response.setHeader('Content-Type', 'text/html; charset=utf-8')
+	response.end(exports.httpInfoHtml(response));
 }
 
 exports.sendSessionId = (response, id, date) => {
@@ -64,6 +66,11 @@ exports.sendFullFile = (response, path) => {
 	}})
 }
  	 
+exports.httpInfoHtml = (response) => {
+	return '<!DOCTYPE html><html><head><title>' + response.statusCode + '</title></head><body><h1>'
+	+ response.statusCode + ' ' + response.statusMessage + '</h1></body></html>';
+}
+
 exports.sendError = (response, err) => {
 	response.statusCode = 500
 	response.statusMessage = http.STATUS_CODES[response.statusCode]

@@ -51,7 +51,6 @@ const scriptInvoke = (path, request, response, urlObject) => {
 				})
 		})
 	} else if (request.method == "GET" || request.method == "HEAD") {
-		response.setHeader('Content-Type', 'text/html; charset=utf-8')
 		script.invoke(request, response, urlObject.query)
 			.catch((err) => {
 				core.sendError(response, err)
@@ -71,7 +70,8 @@ const dataInvoke = (path, request, response) => {
 		if (request.method == "POST")
 			response.statusCode = 405;
 		response.statusMessage = http.STATUS_CODES[response.statusCode];
-		response.end();
+		response.setHeader('Content-Type', 'text/html; charset=utf-8')
+		response.end(core.httpInfoHtml(response));
 	}
 }
 
@@ -81,7 +81,8 @@ const requestHandler = async (request, response) => {
 		response.statusCode = 501;
 		response.statusMessage = http.STATUS_CODES[response.statusCode];
 		response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
-		response.end();
+		response.setHeader('Content-Type', 'text/html; charset=utf-8')
+		response.end(core.httpInfoHtml(response));
 	} else {		
 		const urlObject = urlModule.parse(request.url)
 	
@@ -101,8 +102,10 @@ const requestHandler = async (request, response) => {
 			return
 		}
 		
-		if (urlObject.pathname == '*' && request.method == "OPTIONS")
+		if (urlObject.pathname == '*' && request.method == "OPTIONS") {
 			response.setHeader('Allow', 'GET, HEAD, POST, OPTIONS')
+			response.end()
+		}
 		else
 			core.notFound(response)
 	}
