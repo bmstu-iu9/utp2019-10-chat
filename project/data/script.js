@@ -83,12 +83,18 @@ socket.on('dialogs', (data) => {
     if (div.innerHTML === '') {
         groupChat.style.display = 'none';
     }
-    data.dialogs.forEach((element) => {
-        let div2 = div.cloneNode(true);
-        div2.innerHTML = element.name;
-        groupChat.appendChild(div2);
-        groupChat.parentNode.insertBefore(div2, div.firstChild);
-    })
+    for (let i = data.dialogs.length - 1; i >= 0; i--) { 
+        let div2 = div.cloneNode(true); 
+        div2.innerHTML = data.dialogs[i].name; 
+        groupChat.appendChild(div2); 
+        groupChat.parentNode.insertBefore(div2, div.firstChild); 
+        }
+    // data.dialogs.forEach((element) => {
+    //     let div2 = div.cloneNode(true);
+    //     div2.innerHTML = element.name;
+    //     groupChat.appendChild(div2);
+    //     groupChat.parentNode.insertBefore(div2, div.firstChild);
+    // })
 });
 
 socket.on('dialog', (data) => {
