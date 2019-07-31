@@ -7,7 +7,11 @@ const windowSet = document.getElementById('windowSet');
 const profile = document.getElementById('profile');
 const exit = document.getElementById('exit');
 const setting = document.getElementById('setting');
+const nameChat = document.getElementById('nameChat');
+const nameDialog = document.getElementById('nameDialog');
+const groupChat = document.getElementById('groupChat');
 let data = -1;
+
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -54,4 +58,40 @@ exit.addEventListener('click', (e) => {
         }
     }
     ereq.send()
+});
+
+const req = new XMLHttpRequest()
+
+req.open('GET', '/req/curuser.js', true)
+req.onreadystatechange = (e) => {
+    if (req.readyState != 4) return;
+    const curUser = JSON.parse(req.responseText).user
+    setting.textContent = curUser
+}
+req.send()
+
+const socket = io();
+
+socket.on('connect', () => {
+    socket.emit('dialogs', {})
+})
+
+socket.on('dialogs', (data) => {
+    let div = document.createElement('div');
+    div.className = 'nameDialog';		
+    div.innerHTML = '';	
+    if (div.innerHTML === '') {
+        groupChat.style.display = 'none';
+    }
+    data.dialogs.forEach((element) => {
+        let div2 = div.cloneNode(true);
+        div2.innerHTML = element.name;
+        groupChat.appendChild(div2);
+        groupChat.parentNode.insertBefore(div2, div.firstChild);
+    })
+});
+
+socket.on('dialog', (data) => {
+    listdialogs.options[listdialogs.options.length] = new Option(data.name,data.id)
+    chat.hidden = false
 });
