@@ -2,9 +2,9 @@
 const core = require('../../scripts/core')
 const consts = require('../../scripts/consts')
 const pathModule = require('path')
-const resetmethods = require('../../scripts/resetmethods')
+const passwordreset = require('../../scripts/passwordreset')
 
-const approve = async (request, response, data) => {
+exports.invoke = async (request, response, data) => {
 	let hash
 	try {
 		hash = core.getQueryParams(data).hash
@@ -18,7 +18,7 @@ const approve = async (request, response, data) => {
 		return
 	}
 
-	let email = await resetmethods.getMail(hash)
+	let email = await passwordreset.getMailByHash(hash)
 
 	if (!email) {
 		core.notFound(response)
@@ -27,5 +27,3 @@ const approve = async (request, response, data) => {
 
 	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'reset.html'))
 }
-
-exports.invoke = approve

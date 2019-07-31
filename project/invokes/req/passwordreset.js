@@ -3,40 +3,42 @@
 const core = require('../../scripts/core')
 const users = require('../../scripts/users')
 const mail = require('../../scripts/mail')
-const resetmethods = require('../../scripts/resetmethods')
+const passwordreset = require('../../scripts/passwordreset')
             
-const reset = async (request, response, data) => {
-	let args
-	
+exports.invoke = async (request, response, data) => {
 	try {
-		args = JSON.parse(data)
+		let args
+		
+		try {
+			args = JSON.parse(data)
+		} catch (err) {
+			core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: 'JSON syntax error'})
+			return
+		}
+		
+		if (!args.email) {
+			core.sendJSON(response, {errcode: 'RCODE_INCORRECT_ARGUMENT', errmessage: 'Incorrect argument'})
+			return
+		}
+
+		if (!(await users.getUserLogin(args.email))) {
+			core.sendJSON(response, {errcode: 'RCODE_INCORRECT_EMAIL', errmessage: 'Incorrect email'})
+			return
+		}
+
+		const hash = await passwordreset.addUserInResetList(args.email)
+
+		try {
+			await mail.sendMail(args.email, 'Password reset!',
+				'Please follow the link below \n\n'+"http://"+request.headers.host+"/approvereset?hash="+hash)
+		} catch (err) {
+			await passwordreset.deleteUserFromResetList(hash)
+			core.sendJSON(response, {errcode: 'RCODE_FAILED_TO_SEND_EMAIL', errmessage: 'Failed to send email'})
+			return
+		}
+
+		core.sendJSON(response, {errcode: null})
 	} catch (err) {
-		core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: "data has systax error"})
-		return
+		core.sendJSON(response, {errcode: err.code, errmessage: err.message})
 	}
-	
-	if (!args.email) {
-		core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: "data has systax error"})
-		return
-	}
-
-	if (!(await users.getUserLogin(args.email))) {
-		core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: "incorrect email"})
-		return
-	}
-
-	const hash = await resetmethods.getHash(args.email)
-
-	try {
-		await mail.sendMail(args.email, 'Password reset!',
-			'Please follow the link below \n\n'+"http://"+request.headers.host+"/req/approvereset.js?hash="+hash)
-	} catch (err) {
-		await resetmethods.deleteHash(hash)
-		core.sendJSON(response, {errcode: 'RCODE_JSON_SYNTAX_ERROR', errmessage: "can not send email"})
-		return
-	}
-
-	core.sendJSON(response, {errcode: null})
 }
-
-exports.invoke = reset
