@@ -12,21 +12,23 @@
 <body>
     <div class="container" id="container">
         <form>
-            <img src="">
+            <img src="default.png">
             <h1>Nickname (V/X)</h1>
-            <a href="#openModal">Сменить пароль</a>
-            <a href="#openModal2">Сменить адрес почты</a>
+            <div><a href="#openModal">Сменить пароль</a></div>
+            <div><a href="#openModal2">Сменить адрес почты</a></div>
         </form>
     </div>
+
     <div id="openModal" class="modalDialog">
         <div>
             <form action="/changePwd.js">
                 <a href="#close" title="Закрыть" class="close">X</a>
                 <h2>Смена пароля</h2>
-                <a>Введите старый пароль</a>
-                <input id="oldPwd" type="password" name="Old Password" placeholder="password" />
-                <a>Введите новый пароль</a>
-                <input id="newPwd" type="password" name="New Password" placeholder="password" />
+                <div><a>Введите старый пароль</a></div>
+                <div><input id="oldPwd" type="password" name="Old Password" placeholder="password" /></div>
+                <div><a>Введите новый пароль</a></div>
+                <div><input id="newPwd" type="password" name="New Password" placeholder="password" /></div>
+                <p><button id ="changePassBtn">Поменять</button></p>
                 <span id="changePwdErr"></span>
             </form>
         </div>
@@ -37,14 +39,16 @@
             <form action="/changePwd.js">
                 <a href="#close" title="Закрыть" class="close">X</a>
                 <h2>Смена электронной почты</h2>
-                <a>Введите ваш пароль</a>
-                <input id="currentPwd" type="password" name="Password" placeholder="password" />
-                <a>Введите новый адрес электронной почты</a>
-                <input id="newMail" type="email" name="New Email" placeholder="email" />
+                <div><a>Введите ваш пароль</a></div>
+                <div><input id="currentPwd" type="password" name="Password" placeholder="password" /></div>
+                <div><a>Введите новый адрес электронной почты</a></div>
+                <div><input id="newMail" type="email" name="New Email" placeholder="email" /></div>
+                <p><button id ="changeMailBtn">Поменять</button></p>
                 <span id="changeMailErr"></span>
             </form>
         </div>
     </div>
+
 </body>
 
 </html>
