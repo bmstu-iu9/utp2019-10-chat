@@ -12,10 +12,15 @@
 <body>
     <div class="container" id="container">
         <form>
-            <img src="default.png">
-            <h1>Nickname (V/X)</h1>
+            <img src="default.png" id="profileImg">
+            <h1>Nickname</h1>
+            <a id="verified">(V/X)</a>
             <div><a href="#openModal">Сменить пароль</a></div>
             <div><a href="#openModal2">Сменить адрес почты</a></div>
+            <a id="resetPwd">Сбросить пароль</a>
+            <div><a>    .</a></div>
+            <div><a href="#openModalExitSesseions">Завершить все сессии</a></div>
+            <p><button id="exit">Выйти</button></p>
         </form>
     </div>
 
@@ -45,6 +50,17 @@
                 <div><input id="newMail" type="email" name="New Email" placeholder="email" /></div>
                 <p><button id ="changeMailBtn">Поменять</button></p>
                 <span id="changeMailErr"></span>
+            </form>
+        </div>
+    </div>
+
+    <div id="openModalExitSessions" class="modalDialog">
+        <div>
+            <form action="/exitSessions.js">
+                <a href="#close" title="Закрыть" class="close">X</a>
+                <div><a>Введите пароль</a></div>
+                <div><input id="passToCloseAll" type="password" placeholder="password" /></div>
+                <p><button id="closeSessions">Выйти</button></p>
             </form>
         </div>
     </div>
