@@ -17,9 +17,11 @@
             <a id="verified">(V/X)</a>
             <div><a href="#openModal">Сменить пароль</a></div>
             <div><a href="#openModal2">Сменить адрес почты</a></div>
-            <a id="resetPwd">Сбросить пароль</a>
-            <div><a>    .</a></div>
-            <div><a href="#openModalExitSesseions">Завершить все сессии</a></div>
+            <div>
+                <a>Сбросить пароль</a>
+                <button id="resetPwd">Сбросить</button>
+            </div>
+            <div><a href="#openModal3">Завершить все сессии</a></div>
             <p><button id="exit">Выйти</button></p>
         </form>
     </div>
@@ -54,7 +56,7 @@
         </div>
     </div>
 
-    <div id="openModalExitSessions" class="modalDialog">
+    <div id="openModal3" class="modalDialog">
         <div>
             <form action="/exitSessions.js">
                 <a href="#close" title="Закрыть" class="close">X</a>
@@ -64,6 +66,8 @@
             </form>
         </div>
     </div>
+
+    <script src="script.js"></script>
 
 </body>
 
