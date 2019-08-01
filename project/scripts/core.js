@@ -60,8 +60,13 @@ exports.sendFullFile = (response, path) => {
 	if (err)
 		exports.notFound(response)
 	else {
-		if (pathModule.extname(path) == ".html")
+		const en = pathModule.extname(path)
+		if (en == ".html")
 			response.setHeader('Content-Type', 'text/html; charset=utf-8')
+		else if (en == ".css")
+			response.setHeader('Content-Type', 'text/css; charset=utf-8')
+		else if (en == ".js")
+			response.setHeader('Content-Type', 'application/javascript; charset=utf-8')
 		response.end(data)
 	}})
 }
