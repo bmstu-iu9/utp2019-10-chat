@@ -34,6 +34,6 @@ exports.invoke = async (request, response, data) => {
 		await users.setCurrentUser(response, (await users.getUserLogin(args.email)).name)
 		core.sendJSON(response, {errcode: null})
 	} catch (err) {
-		core.sendJSON(response, {errcode: err.code, errmessage: err.message})
+		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}
 }

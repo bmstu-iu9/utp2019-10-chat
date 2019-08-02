@@ -7,6 +7,7 @@ const unconfirmed = require('./scripts/unconfirmed')
 const sessions = require('./scripts/sessions')
 const fs = require('fs')
 const pathModule = require('path')
+const unconfirmed = require('./scripts/passwordreset')
 
 const resetDir = (dirPath) => {
 	try {
@@ -46,3 +47,4 @@ resetJSON(users.USERACCEPT_PATH)
 resetJSON(unconfirmed.UNCONFIRMED_PATH)
 fs.writeFileSync(dialogs.USERDIALOGS_PATH, JSON.stringify({length: 0}))
 resetJSON(sessions.SESSIONS_PATH)
+resetJSON(passwordreset.RESET_PATH)
