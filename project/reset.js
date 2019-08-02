@@ -7,7 +7,7 @@ const unconfirmed = require('./scripts/unconfirmed')
 const sessions = require('./scripts/sessions')
 const fs = require('fs')
 const pathModule = require('path')
-const unconfirmed = require('./scripts/passwordreset')
+const passwordreset = require('./scripts/passwordreset')
 
 const resetDir = (dirPath) => {
 	try {

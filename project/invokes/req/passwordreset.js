@@ -17,7 +17,7 @@ exports.invoke = async (request, response, data) => {
 		}
 		
 		if (!args.email) {
-			core.sendJSON(response, {errcode: 'RCODE_INCORRECT_ARGUMENT', errmessage: 'Incorrect argument'})
+			core.sendJSON(response, {errcode: 'RCODE_INCORRECT_ARGUMENTS', errmessage: 'Incorrect arguments'})
 			return
 		}
 
