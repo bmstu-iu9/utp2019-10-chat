@@ -78,6 +78,7 @@ socket.on('connect', () => {
     socket.emit('dialogs', {})
 })
 
+<<<<<<< Updated upstream
 socket.on('dialogs', (data) => { 
     if (data.dialogs.length === 0) { 
     groupChat.style.display = 'none'; 
@@ -125,3 +126,26 @@ socket.on('messages', (data) => {
       })
   }
 })
+=======
+socket.on('dialogs', (data) => {
+    if (data.dialogs.length === 0) {
+        groupChat.style.display = 'none';
+    }
+    topSetting.classList.add('not_active');
+    for (let i = data.dialogs.length - 1; i >= 0; i--) {
+        let div = document.createElement('div');
+        div.className = 'nameDialog';
+        div.addEventListener('click', (e) => {
+            e.preventDefault();
+            nameChat.textContent = data.dialogs[i].name;
+            topSetting.classList.remove('not_active');
+        });
+        if (div.textContent === '') {
+            groupChat.style.display = 'none';
+        }
+        div.textContent = data.dialogs[i].name;
+        groupChat.appendChild(div);
+        groupChat.parentNode.insertBefore(div, groupChat);
+    }
+});
+>>>>>>> Stashed changes
