@@ -3,16 +3,19 @@
 const core = require('../../scripts/core')
 const users = require('../../scripts/users')
 const consts = require('../../scripts/consts')
-const rcodes = require(consts.RCODES_PATH)
 const socket = require('../../scripts/socket.js')
 
 exports.invoke = async (request, response, data) => {
-	if (!users.getCurrentUser(request)) {
-		core.sendJSON(response, {err: rcodes.NOT_AUTHORIZED})
-		return
+	try {
+		if (!users.getCurrentUser(request)) {
+			core.sendJSON(response, {errcode: 'RCODE_NOT_AUTHORIZED', errmessage: 'Not authorized'})
+			return
+		}
+		
+		socket.exit(request)
+		await users.deleteCurrentUser(request, response)
+		core.sendJSON(response, {errcode: null})
+	} catch (err) {
+		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}
-	
-	socket.exit(request)
-	await users.deleteCurrentUser(request, response)
-	core.sendJSON(response, {err: rcodes.SUCCESS})
 }	

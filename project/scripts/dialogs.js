@@ -5,7 +5,6 @@ const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const fs = require('fs')
 const users = require('./users')
-const rcodes = require(consts.RCODES_PATH)
 
 
 exports.USERDIALOGS_PATH = pathModule.join(consts.USERS_PATH, 'dialogs.json')

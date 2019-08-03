@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<p>Введите новый пароль</p>
+		<input type="password" id="newPassword"><br>
+		<button id="newPasswordButton">NEW PASSWORD</button><br><br>
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script>
+			newPasswordButton.onclick = () => {
+				const req = new XMLHttpRequest()
+				req.open('POST', '/req/setnewpassword.js', true)
+				req.onreadystatechange = () => {
+					if (req.readyState != 4) return;
+					
+					state.textContent = req.status
+					rcode.textContent = req.responseText
+				}
+
+				let curURL = new URL(window.location.href)
+				req.send(JSON.stringify({newPassword: newPassword.value, hash: curURL.searchParams.get("hash")}))
+			}
+		</script>
+	</body>
+</html>
