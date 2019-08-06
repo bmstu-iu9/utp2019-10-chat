@@ -36,8 +36,8 @@ exports.init = () => {
 						exports.io.to('user ' + u).emit('dialog', {name: data.name, id: a.id})
 					})
 				} catch (err) {
-					console.log(err)
-					socket.emit('err', {err: err.toString(), event: 'dialog', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'dialog', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -46,7 +46,9 @@ exports.init = () => {
 					const dlgs = await dialogs.getUserDialogs(curUser, data.begin, data.end)
 					socket.emit('dialogs', {dialogs: dlgs})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'dialogs', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'dialogs', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED',
+						users: err.code == 'RCODE_USERS_NOT_EXISTS' ? err.users : undefined})
 				}
 			})
 			
@@ -60,7 +62,8 @@ exports.init = () => {
 							name: curUser, message: data.message, date: date})
 					})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'message', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'message', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -69,7 +72,8 @@ exports.init = () => {
 					const messages = await dialogs.getMessages(data.dialogId, curUser)
 					socket.emit('messages', {dialogId: data.dialogId, messages: messages})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'messages', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'messages', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -83,17 +87,17 @@ exports.init = () => {
 					else
 						socket.emit('user', {name: data.name, exists: true})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'user', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'user', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
-			
-			//TODO: dialog user, dialog rm, dialog add
 			
 			socket.on('users', async (data) => {
 				try {
 					socket.emit('users', await dialogs.getDialogUsers(curUser, data.dialogId))
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'users', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'users', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -102,7 +106,8 @@ exports.init = () => {
 					await dialogs.addUserInDialog(curUser, data.user, data.dialogId)
 					socket.emit('add', {user: data.user})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'add', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'add', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -111,7 +116,8 @@ exports.init = () => {
 					await dialogs.userDeleteDialog(curUser, data.dialogId)
 					socket.emit('delete', {user: curUser})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'delete', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'delete', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 			
@@ -120,7 +126,8 @@ exports.init = () => {
 					await dialogs.rmUserFromDialog(curUser, data.user, data.dialogId)
 					socket.emit('rm', {user: data.user})
 				} catch (err) {
-					socket.emit('err', {err: err.toString(), event: 'rm', data: data})
+					socket.emit('err', {errmessage: err.toString(), event: 'rm', data: data,
+						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
 				}
 			})
 		})
