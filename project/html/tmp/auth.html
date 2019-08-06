@@ -27,7 +27,7 @@
 					
 					state.textContent = req.status
 					rcode.textContent = req.responseText
-					if (!JSON.parse(req.responseText).errcode);
+					if (!JSON.parse(req.responseText).errcode)
 						window.location.reload()
 				}
 				req.send(JSON.stringify({email: regEmail.value, username: regUserName.value, password: regPassword.value}))
