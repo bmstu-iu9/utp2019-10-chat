@@ -31,18 +31,21 @@
             <div class="rightWindow">
                 <div class="topMenu">
                     <a id="topSetting" class="link" href="#openWindow">Настройки чата</a>
+                    <a id="dialogUserInfo">Участники</a>
+                    <a id="out">Покинуть</a>
                 </div>
                 <div class="nameChat">
                     <span id="nameChat"></span>
                 </div>
-                <div id="chat" hidden="true">
-                    <select id="listdialogs"></select>
-                    <table id="chatTable"></table>
-                    <textarea id="messageText"></textarea>
-                    <button id="submit">Отправить</button>
+                <div class="chat">
+                    <div id="chat" class="chatTable">
+                        <div class="wChat">
+                            <table id="chatTable"></table>
+                        </div>
+                        <textarea id="messageText"></textarea>
+                        <button id="submit">Отправить</button>
+                    </div>
                 </div>
-                <div id="state"></div>
-                <div id="rcode"></div>
             </div>
         </div>
     </div>

@@ -67,7 +67,7 @@ button:active {
     margin: 52px 213px 0px 213px;
     background: #f6f5f7;
     display: flex;
-    height: 100vh;
+    height: 91.5vh;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
         0 10px 10px rgba(0, 0, 0, 0.22);
     display: flex;
@@ -81,10 +81,14 @@ button:active {
     border-style: solid;
     flex-grow: 0.35;
     border-color: cornflowerblue;
-    overflow-y: hidden; 
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 265px;
 }
 
 .rightWindow {
+    display: flex;
+    flex-direction: column;
     border-style: solid;
     flex-grow: 2;
     border-color: cornflowerblue;
@@ -182,8 +186,6 @@ button:active {
     font-size: 12px;
     padding: 8px 30px;
     letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: transform 80ms ease-in;
     margin: 19px 0px -20px 0px;
 }
 
@@ -211,4 +213,48 @@ button:active {
 
 #nameChat {
     font-size: 30px;
+}
+
+.chat {
+    flex-grow: 2;
+    border-left-style: ridge;
+    border-right-style: ridge;
+    margin: 0px 10px 0px 10px;
+}
+
+.chatTable {
+    width: 99.7%;
+    display: flex;
+    height: 99.7%;
+    justify-content: flex-end;
+    flex-direction: column;
+    padding: 0px 0px 0px 1.8px;
+}
+
+#submit {
+    border: 1px solid rgb(45, 129, 238);
+    background-color: rgb(45, 129, 238);
+    color: #FFFFFF;
+    padding: 8px 30px;
+    letter-spacing: 1px;
+}
+
+#messageText {
+    height: 80px;
+}
+
+#dialogUserInfo {
+    position: relative;
+    left: 495px;
+}
+
+#out {
+position: relative;
+left: 530px;
+}
+
+.wChat {
+    max-width: 800px;
+    overflow: auto;
+    max-height: 470px;
 }
