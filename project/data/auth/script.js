@@ -1,17 +1,3 @@
-
-const rcodes = {
-	SUCCESS: 0,
-	LOGIN_OR_PASSWORD_INCORRECT: 1,
-	EMAIL_INCORRECT: 2,
-	EMAIL_ALREADY_EXISTS: 3,
-	USERNAME_ALREADY_EXISTS: 4,
-	EMAIL_AND_USERNAME_ALREADY_EXISTS: 5,
-	FAILED_TO_SEND_EMAIL: 6,
-	JSON_SYNTAX_ERROR: 7,
-	AUTHORIZED_ALREADY: 8,
-	NOT_AUTHORIZED: 9
-}
-
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
@@ -45,9 +31,11 @@ regButton.addEventListener('click', (e) => {
 	regButton.disabled = true;
 	if (!regUserName.value) {
 		regUserName.classList.add("errorInput");
+		return;
 	}
-		if (!regEmail.value) {
+	if (!regEmail.value) {
 		regEmail.classList.add("errorInput");
+		return;
 	}
 	if (regEmail.value.indexOf("@") === -1 && regEmail.value.length !== 0) {
 		tmpEmail.textContent = "Адрес электронной почты должен содержать символ @"
@@ -58,30 +46,40 @@ regButton.addEventListener('click', (e) => {
 
 	if (!regPassword.value) {
 		regPassword.classList.add("errorInput");
+		return;
 	}
 	const req = new XMLHttpRequest()
 	req.open('POST', '/req/registration.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			regError.textContent = req.status + ' ' + req.statusText;
+			regError.style.display = "block";
+			regButton.disabled = false;
+			setTimeout(() => {
+				regError.style.display = "none";
+			}, 5000);
+			return;
+		}
 		data = JSON.parse(req.responseText);
-		switch (data.err) {
-			case rcodes.EMAIL_ALREADY_EXISTS:
+		switch (data.errcode) {
+			case 'EMAIL_ALREADY_EXISTS':
 				regError.textContent = "Данный Email уже используется";
 				regError.style.display = "block";
 				regEmail.classList.add("errorInput");
 				break;
-			case rcodes.USERNAME_ALREADY_EXISTS:
+			case 'USERNAME_ALREADY_EXISTS':
 				regError.textContent = "Этот Ник уже занят";
 				regError.style.display = "block";
 				regUserName.classList.add("errorInput");
 				break;
-			case rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS:
+			case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
 				regError.textContent = "Данный Email и Ник уже заняты";
 				regError.style.display = "block";
 				regEmail.classList.add("errorInput");
 				regUserName.classList.add("errorInput");
 				break;
-			case rcodes.FAILED_TO_SEND_EMAIL:
+			case 'FAILED_TO_SEND_EMAIL':
 				regError.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
 				regError.style.display = "block";
 				regButton.disabled = false;
@@ -89,7 +87,7 @@ regButton.addEventListener('click', (e) => {
 					regError.style.display = "none";
 				}, 5000);
 				break;
-			case rcodes.SUCCESS:
+			case null:
 				regError.style.color = "green";
 				regError.textContent = "Мы выслали вам письмо для верификации аккаунта";
 				regError.style.display = "block";
@@ -100,7 +98,17 @@ regButton.addEventListener('click', (e) => {
 					regButton.disabled = true;
 				});
 				break;
-
+			case 'AUTHORIZED_ALREADY':
+				regError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";
+				regButton.disabled = true;
+				break;
+			default:
+				regError.textContent = 'Неизвестная ошибка: ' + data.errmesage;
+				regError.style.display = "block";
+				regButton.disabled = false;
+				setTimeout(() => {
+					regError.style.display = "none";
+				}, 5000);
 		}
 	}
 	req.send(JSON.stringify({
@@ -114,10 +122,10 @@ regEmail.addEventListener("input", () => {
 	regEmail.classList.remove("errorInput");
 	regButton.disabled = false;
 	tmpEmail.style.display = "none";
-	switch (data.err) {
-		case rcodes.FAILED_TO_SEND_EMAIL:
-		case rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS:
-		case rcodes.EMAIL_ALREADY_EXISTS:
+	switch (data.errcode) {
+		case 'FAILED_TO_SEND_EMAIL':
+		case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
+		case 'EMAIL_ALREADY_EXISTS':
 			regError.style.display = "none";
 	}
 });
@@ -125,9 +133,9 @@ regEmail.addEventListener("input", () => {
 regUserName.addEventListener("input", () => {
 	regUserName.classList.remove("errorInput");
 	regButton.disabled = false;
-	switch (data.err) {
-		case rcodes.EMAIL_AND_USERNAME_ALREADY_EXISTS:
-		case rcodes.USERNAME_ALREADY_EXISTS:
+	switch (data.errcode) {
+		case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
+		case 'USERNAME_ALREADY_EXISTS':
 			regError.style.display = "none";
 	}
 });
@@ -144,6 +152,7 @@ loginButton.addEventListener('click', (e) => {
 		setTimeout(() => {
 			loginEmail.classList.remove("errorInput");
 		}, 1000);
+		return;
 	}
 	if (loginEmail.value.indexOf("@") === -1 && loginEmail.value.length !== 0) {
 		lgEm.textContent = "Адрес электронной почты должен содержать символ @"
@@ -159,14 +168,24 @@ loginButton.addEventListener('click', (e) => {
 		setTimeout(() => {
 			loginPassword.classList.remove("errorInput");
 		}, 1000);
+		return;
 	}
 	const req = new XMLHttpRequest()
 	req.open('POST', '/req/login.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			loginError.textContent = req.status + ' ' + req.statusText;
+			loginError.style.display = "block";
+			loginButton.disabled = false;
+			setTimeout(() => {
+				loginError.style.display = "none";
+			}, 5000);
+			return;
+		}
 		data = JSON.parse(req.responseText);
-		switch (data.err) {
-			case rcodes.LOGIN_OR_PASSWORD_INCORRECT:
+		switch (data.errcode) {
+			case 'LOGIN_OR_PASSWORD_INCORRECT':
 				loginError.textContent = "Неверный Email или пароль";
 				loginError.style.display = "block";
 				loginPassword.classList.add("errorInput");
@@ -176,15 +195,20 @@ loginButton.addEventListener('click', (e) => {
 					loginEmail.classList.remove("errorInput");
 				}, 1000);
 				break;
-			case rcodes.AUTHORIZED_ALREADY:
+			case 'AUTHORIZED_ALREADY':
 				loginError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";
 				loginButton.disabled = false;
 				break;
-				case rcodes.SUCCESS:
-					window.location.href="/chat.html"
-
-
-
+			case null:
+				window.location.href = "/chat.html"
+				break;
+			default:
+				loginError.textContent = 'Неизвестная ошибка: ' + data.errmesage;
+				loginError.style.display = "block";
+				loginButton.disabled = false;
+				setTimeout(() => {
+					regError.style.display = "none";
+				}, 5000);
 		}
 	}
 	req.send(JSON.stringify({
@@ -219,17 +243,39 @@ forgotButton.addEventListener("click", (e) => {
 		return;
 	}
 	const req = new XMLHttpRequest()
-	req.open('POST', '/req/forgotPassword.js', true)
+	req.open('POST', '/req/passwordreset.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			forgotEr.textContent = req.status + ' ' + req.statusText;
+			forgotEr.style.display = "block";
+			forgotButton.disabled = false;
+			setTimeout(() => {
+				forgotEr.style.display = "none";
+			}, 5000);
+		}
 		data = JSON.parse(req.responseText);
-		switch (data.err) {
-			case rcodes.EMAIL_INCORRECT:
+		switch (data.errcode) {
+			case 'EMAIL_INCORRECT':
 				forgotEr.textContent = "Аккаунта с такой электронной почтой не существует";
 				forgotEr.style.display = "block";
 				forgotEmail.classList.add("errorInput");
 				break;
-
+			case 'FAILED_TO_SEND_EMAIL':
+				forgotEr.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
+				forgotEr.style.display = "block";
+				forgotButton.disabled = false;
+				setTimeout(() => {
+					forgotEr.style.display = "none";
+				}, 5000);
+				break;
+			case null:
+				forgotEr.style.color = "green";
+				forgotEr.textContent = "Мы выслали вам письмо на почту для сброса пароля";
+				forgotEr.style.display = "block";
+				forgotEmail.addEventListener("input", () => {
+					forgotButton.disabled = true;
+				})
 		}
 	}
 	req.send(JSON.stringify({
@@ -240,8 +286,8 @@ forgotButton.addEventListener("click", (e) => {
 forgotEmail.addEventListener("input", () => {
 	forgotEmail.classList.remove("errorInput");
 	forgotButton.disabled = false;
-	switch (data.err) {
-		case rcodes.EMAIL_INCORRECT:
+	switch (data.errcode) {
+		case 'EMAIL_INCORRECT':
 			regError.style.display = "none";
 	}
 })

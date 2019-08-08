@@ -1,21 +1,19 @@
-const rcodes = {
-    SUCCESS: 0,
-    NOT_AUTHORIZED: 9
-}
 
 const windowSet = document.getElementById('windowSet');
 const profile = document.getElementById('profile');
 const exit = document.getElementById('exit');
 const setting = document.getElementById('setting');
 const nameChat = document.getElementById('nameChat');
-const nameDialog = document.getElementById('nameDialog');
-const groupChat = document.getElementById('groupChat');
 const topSetting = document.getElementById('topSetting');
 const chat = document.getElementById('chat');
 const dialogUserInfo = document.getElementById('dialogUserInfo');
 const out = document.getElementById('out');
 const chatTable = document.getElementById('chatTable');
 const submit = document.getElementById('submit');
+const dialogName = document.getElementById('dialogName');
+const create = document.getElementById('create');
+const users = document.getElementById('users');
+const leftWindow = document.getElementById('leftWindow');
 
 let data = -1;
 let dialogIdE = null;
@@ -36,11 +34,11 @@ profile.addEventListener('click', (e) => {
     ereq.onreadystatechange = () => {
         if (ereq.readyState != 4) return;
         data = JSON.parse(ereq.responseText);
-        switch (data.err) {
-            case rcodes.SUCCESS:
+        switch (data.errcode) {
+            case null:
                 window.location.href = "/profile.html";
                 break;
-            case rcodes.NOT_AUTHORIZED:
+            case 'NOT_AUTHORIZED':
                 window.location.href = "/error.html";
                 break;
         }
@@ -55,11 +53,11 @@ exit.addEventListener('click', (e) => {
     ereq.onreadystatechange = () => {
         if (ereq.readyState != 4) return;
         data = JSON.parse(ereq.responseText);
-        switch (data.err) {
-            case rcodes.SUCCESS:
+        switch (data.errcode) {
+            case null:
                 window.location.href = "/auth/index.html";
                 break;
-            case rcodes.NOT_AUTHORIZED:
+            case 'NOT_AUTHORIZED':
                 window.location.href = "/error.html";
                 break;
         }
@@ -67,26 +65,18 @@ exit.addEventListener('click', (e) => {
     ereq.send()
 });
 
-const req = new XMLHttpRequest()
-
-req.open('GET', '/req/curuser.js', true)
-req.onreadystatechange = (e) => {
-    if (req.readyState != 4) return;
-    const curUser = JSON.parse(req.responseText).user
-    setting.textContent = curUser
-}
-req.send()
 
 const socket = io();
+
+socket.on('cur', (data) => {
+    setting.textContent = data.name;
+});
 
 socket.on('connect', () => {
     socket.emit('dialogs', {})
 })
 
 socket.on('dialogs', (data) => {
-    if (data.dialogs.length === 0) {
-        groupChat.style.display = 'none';
-    }
     const prevDialog = dialogIdE;
     chat.style.display = 'none';
     topSetting.classList.add('not_active');
@@ -110,12 +100,8 @@ socket.on('dialogs', (data) => {
             dialogIdE = data.dialogs[i].id;
             socket.emit('messages', {dialogId: dialogIdE});
         });
-        if (div.textContent === '') {
-            groupChat.style.display = 'none';
-        }
         div.textContent = data.dialogs[i].name;
-        groupChat.appendChild(div);
-        groupChat.parentNode.insertBefore(div, groupChat);
+        leftWindow.appendChild(div);
         if (prevDialog === data.dialogs[i].dialogId) {
             dialogIdE = prevDialog;
             socket.emit('messages', {dialogId: dialogIdE});
@@ -150,8 +136,15 @@ submit.addEventListener('click', () => {
 });
 
 socket.on('delete', (data) => {
-    alert(data.id);
-    document.getElementById('dialogInLeft' + data.id).remove(); 
+    document.getElementById('dialogInLeft' + data.dialogId).remove(); 
+    if (dialogIdE === data.dialogId) {
+        dialogIdE = null;
+        nameChat.textContent = '';
+        chat.style.display = 'none';
+        topSetting.classList.add('not_active');
+        out.classList.add('not_active');
+        dialogUserInfo.classList.add('not_active');
+    }
 });
 
 out.addEventListener('click', (e) => {
@@ -159,3 +152,47 @@ out.addEventListener('click', (e) => {
     socket.emit('delete', {dialogId: dialogIdE});
 });
 
+socket.on('dialog', (data) => {
+    let div = createElement('div');
+    div.className = 'nameDialog';
+    div.id = 'dialogInLeft' + data.dialogs[i].id;
+    div.textContent = dialogName.value;
+    leftWindow.prepend(div);
+
+});
+
+create.addEventListener('click', (e) => {
+    create.disabled = true;
+    e.preventDefault();
+    if (!dialogName.value) {
+        dialogName.classList.add("errorInput");
+        return;
+    }
+    socket.emit('dialog', {name: dialogName.value, users: users.value === '' ? [] : users.value.split('\n')});
+    dialogName.value = '';
+    users.value = '';
+    modalClose();
+});
+
+function modalClose() {
+	if (location.hash == '#openModal') {
+		location.hash = '';
+	}
+}
+
+
+dialogName.addEventListener('input', () => {
+    dialogName.classList.remove("errorInput");
+	create.disabled = false;
+})
+
+messageText.addEventListener('keyup',function(e){
+    if (e.keyCode === 13) {
+        if (messageText.value == '') return
+    socket.emit('message', {
+        dialogId: dialogIdE,
+        message: messageText.value
+    })
+    messageText.value = ''
+  }
+});

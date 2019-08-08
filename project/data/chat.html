@@ -19,14 +19,10 @@
             <button id="setting" class="settings"></button>
         </div>
         <div class="windowChat">
-            <div class="leftWindow">
+            <div id="leftWindow" class="leftWindow">
                 <div class="topMenu">
                     <a class="link" href="#openModal">Создать чат</a>
                 </div>
-                <div class="windowSearch">
-                    <input id="UserName" class="search" type="text" placeholder="Беседа" />
-                </div>
-                <div id="groupChat" class="nameDialog"></div>
             </div>
             <div class="rightWindow">
                 <div class="topMenu">
@@ -62,7 +58,7 @@
 
     <div id="openWindow" class="modalDialog">
         <div>
-            <a href="#" title="Закрыть" class="close">X</a>
+            <a href="#" class="close">X</a>
             <p>Введите название чата: <input id="dialogName">
                 <span id="errorField"></span></p>
             <p>Введите имена пользователей через перевод строки:</p>
