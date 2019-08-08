@@ -125,6 +125,7 @@ const userExitDialog = async (dialog, user,id) => {
 exports.userDeleteDialog = async (user, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 	await userExitDialog(dialog, user, id)
+	return dialog.brigadier
 }
 
 exports.rmUserFromDialog = async (src, dest, id) => {
@@ -152,10 +153,10 @@ exports.addMessage = async (id,name,message,date) => {
 		throw new DialogError('Message empty', 'RCODE_MESSAGE_EMPTY')
 	
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json' ))
-    if (!dialog.users.includes(name) && dialog.brigadier != name)
+    if (name != '' && !dialog.users.includes(name) && dialog.brigadier != name)
     	throw new DialogError('Send message permission denied', 'RCODE_PERMISSION_DENIED')
 	
-	if (!dialog.brigadier)
+	if (!dialog.brigadier && name != '')
 		throw new DialogError('Dialog closed', 'RCODE_DIALOG_CLOSED')
     
     dialog.messages[dialog.messages.length] = {name : name, message : message, date : date}
@@ -170,7 +171,7 @@ exports.getMessages = async (id,name,begin, end) => {
     if (!dialog.users.includes(name) && dialog.brigadier != name)
     	throw new DialogError('Get messages permission denied', 'RCODE_PERMISSION_DENIED')
     
-    return dialog.messages.slice(begin,end)
+    return {messages: dialog.messages.slice(begin,end), brigadier: dialog.brigadier}
 }
 
 

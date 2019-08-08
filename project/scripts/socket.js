@@ -18,16 +18,37 @@ exports.exit = (request) => {
 	}
 }
 
+const sendInfoMessage = async (dialogId, msg) => {
+	const date = new Date()
+	const users = await dialogs.addMessage(dialogId, '', msg, date)
+	
+	users.forEach((u) => {
+		exports.io.to('user ' + u).emit('message', {dialogId: dialogId,
+			name: '', message: msg, date: date})
+	})
+} 
+
 exports.init = () => {
 	exports.io = new SocketioServer(server.server)
 	
 	exports.io.on('connection', async (socket) => {
 		const curUser = sessions.getUser(core.getCookies(socket.request).sessionId)
-		if (!curUser || (await users.getUserAccept(curUser)).notApproved) {
+		if (!curUser) {
+			socket.emit('err', {errcode: 'RCODE_CONNECT_USER_NOT_FOUND', event: 'connect',
+				errmessage: 'Connect user not found'});
+			socket.disconnect(true)
+			return
+		}
+	
+		if ((await users.getUserAccept(curUser)).notApproved) {
+			socket.emit('err', {errcode: 'RCODE_CONNECT_USER_NOT_APPROVED', event: 'connect',
+				errmessage: 'Connect user not approved'});
 			socket.disconnect(true)
 			return
 		}
 			
+		socket.emit('cur', {name: curUser})
+	
 		socket.join('user ' + curUser, () => {
 			socket.on('dialog', async (data) => {
 				try {
@@ -35,6 +56,7 @@ exports.init = () => {
 					a.users.forEach((u) => {
 						exports.io.to('user ' + u).emit('dialog', {name: data.name, id: a.id})
 					})
+					await sendInfoMessage(a.id, curUser + ' создал чат ' + data.name)
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'dialog', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
@@ -69,8 +91,8 @@ exports.init = () => {
 			
 			socket.on('messages', async (data) => {
 				try {
-					const messages = await dialogs.getMessages(data.dialogId, curUser)
-					socket.emit('messages', {dialogId: data.dialogId, messages: messages})
+					const a = await dialogs.getMessages(data.dialogId, curUser)
+					socket.emit('messages', {dialogId: data.dialogId, messages: a.messages, brigadier: a.brigadier})
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'messages', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
@@ -105,6 +127,7 @@ exports.init = () => {
 				try {
 					await dialogs.addUserInDialog(curUser, data.user, data.dialogId)
 					socket.emit('add', {user: data.user})
+					await sendInfoMessage(data.dialogId, curUser + ' добавил ' + data.user + ' в чат')
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'add', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
@@ -113,8 +136,11 @@ exports.init = () => {
 			
 			socket.on('delete', async (data) => {
 				try {
-					await dialogs.userDeleteDialog(curUser, data.dialogId)
-					socket.emit('delete', {user: curUser})
+					const brigadier = await dialogs.userDeleteDialog(curUser, data.dialogId)
+					socket.emit('delete', {dialogId: data.dialogId})
+					await sendInfoMessage(data.dialogId, curUser + ' удалил чат')
+					if (brigadier == null)
+						sendInfoMessage(data.dialogId, 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'delete', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
@@ -125,6 +151,7 @@ exports.init = () => {
 				try {
 					await dialogs.rmUserFromDialog(curUser, data.user, data.dialogId)
 					socket.emit('rm', {user: data.user})
+					await sendInfoMessage(a.id, curUser + ' удалил ' + data.user + ' из чата')
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'rm', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
