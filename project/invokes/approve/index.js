@@ -5,7 +5,7 @@ const consts = require('../../scripts/consts')
 const path = require('path')
 const unconfirmed = require('../../scripts/unconfirmed')
 
-const approve = async (request, response, data) => {
+exports.invoke = async (request, response, data) => {
 	let hash
 	try {
 		hash = core.getQueryParams(data).hash
@@ -24,6 +24,3 @@ const approve = async (request, response, data) => {
     	core.notFound(response)
     }
 }
-
-exports.invoke = approve
-

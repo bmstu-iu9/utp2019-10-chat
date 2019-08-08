@@ -5,15 +5,15 @@ const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const fs = require('fs')
 const users = require('./users')
-const rcodes = require(consts.RCODES_PATH)
 
 
 exports.USERDIALOGS_PATH = pathModule.join(consts.USERS_PATH, 'dialogs.json')
 
 class DialogError extends Error {
-	constructor(msg) {
+	constructor(msg, code) {
 		super(msg)
-		this.code = 'QC_DIALOG_ERROR'
+		this.code = code
+		this.name = "DialogError"
 	}
 }
 
@@ -37,7 +37,7 @@ const normalizeUsers = (userAccept, users, curUser) => {
 	})
 	
 	if (notExistsUsers.length) {
-		let exc = new DialogError('Users not exists')
+		let exc = new DialogError('Users not exists', 'RCODE_USERS_NOT_EXISTS')
 		exc.notExistsUsers = notExistsUsers
 		throw exc
 	}
@@ -47,7 +47,7 @@ const normalizeUsers = (userAccept, users, curUser) => {
 
 exports.addDialog = async (name,brigadier,peoples) => {
 	if (name == '')
-		throw new DialogError('Dialog name empty')
+		throw new DialogError('Dialog name empty', 'RCODE_DIALOG_NAME_EMPTY')
 	
 	let useraccept = await jsonfile.read(users.USERACCEPT_PATH)
 	peoples = normalizeUsers(useraccept, peoples, brigadier)
@@ -99,7 +99,7 @@ const userExitDialog = async (dialog, user,id) => {
 	const i = dialog.users.indexOf(user)
 	let useraccept
 	if (i < 0 && user != dialog.brigadier) {
-		throw new DialogError('Users not contains in dialog')
+		throw new DialogError('Users not contains in dialog', 'RCODE_USER_IS_NOT_IN_DIALOG')
 	}
 	
 	useraccept = await jsonfile.read(users.USERACCEPT_PATH)
@@ -125,15 +125,16 @@ const userExitDialog = async (dialog, user,id) => {
 exports.userDeleteDialog = async (user, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 	await userExitDialog(dialog, user, id)
+	return dialog.brigadier
 }
 
 exports.rmUserFromDialog = async (src, dest, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 	if (src != dialog.brigadier)
-		throw new DialogError('Remove user by not brigadier')
+		throw new DialogError('Remove user by not brigadier', 'RCODE_PERMISSION_DENIED')
 
 	if (dest == src)
-		throw new DialogError('Brigadier self removing')
+		throw new DialogError('Brigadier self removing', 'RCODE_BRIGADIER_SELF_REMOVING')
 	
 	await userExitDialog(dialog, dest, id)
 }
@@ -141,7 +142,7 @@ exports.rmUserFromDialog = async (src, dest, id) => {
 exports.getDialogUsers = async (user, id) => {
 	const dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 	if (!dialog.users.includes(user) && dialog.brigadier != user) {
-		throw new DialogError('Dialog users access permission denied')
+		throw new DialogError('Dialog users access permission denied', 'RCODE_PERMISSION_DENIED')
 	}
 	
     return {brigadier: dialog.brigadier, users: dialog.users}
@@ -149,14 +150,14 @@ exports.getDialogUsers = async (user, id) => {
 
 exports.addMessage = async (id,name,message,date) => {
 	if (message == '')
-		throw new DialogError('Message empty')
+		throw new DialogError('Message empty', 'RCODE_MESSAGE_EMPTY')
 	
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json' ))
-    if (!dialog.users.includes(name) && dialog.brigadier != name)
-    	throw new DialogError('Send message permission denied')
+    if (name != '' && !dialog.users.includes(name) && dialog.brigadier != name)
+    	throw new DialogError('Send message permission denied', 'RCODE_PERMISSION_DENIED')
 	
-	if (!dialog.brigadier)
-		throw new DialogError('Dialog closed')
+	if (!dialog.brigadier && name != '')
+		throw new DialogError('Dialog closed', 'RCODE_DIALOG_CLOSED')
     
     dialog.messages[dialog.messages.length] = {name : name, message : message, date : date}
 	await jsonfile.write(pathModule.join(consts.DIALOGS_PATH,id+'.json'), dialog)
@@ -168,9 +169,9 @@ exports.getMessages = async (id,name,begin, end) => {
     let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json' ))
     
     if (!dialog.users.includes(name) && dialog.brigadier != name)
-    	throw new DialogError('Get messages permission denied')
+    	throw new DialogError('Get messages permission denied', 'RCODE_PERMISSION_DENIED')
     
-    return dialog.messages.slice(begin,end)
+    return {messages: dialog.messages.slice(begin,end), brigadier: dialog.brigadier}
 }
 
 
@@ -179,13 +180,13 @@ exports.addUserInDialog = async (brigadier, user,id) => {
     let dialog = await jsonfile.read(pathModule.resolve(consts.DIALOGS_PATH, id + '.json' ))
     
     if (dialog.brigadier != brigadier)
-    	throw new DialogError('Add user permission denied')
+    	throw new DialogError('Add user permission denied', 'RCODE_PERMISSION_DENIED')
     
     if (!useraccept[user] || useraccept[user].notApproved)
-    	throw new DialogError('Adding not exists user')
+    	throw new DialogError('Adding not exists user', 'RCODE_USER_NOT_EXISTS')
     
     if(dialog.users.includes(user) || dialog.brigadier == user)
-    	throw new DialogError('Adding already exists user')
+    	throw new DialogError('Adding already exists user', 'RCODE_USER_ALREADY_EXISTS')
     
     
     useraccept[user].dialogs.push(id)
