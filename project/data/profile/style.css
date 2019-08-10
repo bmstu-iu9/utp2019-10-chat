@@ -1,0 +1,128 @@
+/* body {
+	background: #f6f5f7;
+	display: flex;
+	justify-content: left;
+	align-items: left;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh;
+	margin: -20px 0 50px;
+} */
+
+h1 {
+	font-weight: bold;
+	margin: 0;
+}
+
+h2 {
+	font-weight: bolder;
+	text-align: center;
+}
+
+img {
+    border: 2px solid #ddd;
+    border-radius: 5%;
+    padding: 3px;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid rgb(45, 129, 238);
+	background-color: rgb(45, 129, 238);
+	color: #FFFFFF;
+	font-size: 10px;
+	font-weight: bold;
+	padding: 8px 25px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+button:disabled {
+	background-color: grey; 
+	border: 1px solid grey;
+}
+
+
+.profile {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+	text-align: center;
+	background: -webkit-linear-gradient(bottom, rgb(27, 192, 238), rgb(61, 49, 167));
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 0;
+	/* font-family: 'Montserrat', sans-serif; */
+}
+
+.nickname {
+	color: greenyellow;
+	font-weight: 700;
+	font-size: 18px;
+	
+}
+
+.modalDialog {
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	position: absolute;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 100;
+	display: none;
+	pointer-events: none;
+}
+
+.modalDialog:target {
+	display: flex;
+	pointer-events: auto;
+}
+
+.modalDialog > div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	width: 500px;
+	position: relative;
+	margin: 10% auto;
+	padding: 10px 20px 20px 20px;
+	border-radius: 30px;
+	background: #fff;
+}
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	border-radius: 12px;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
