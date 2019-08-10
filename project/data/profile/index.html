@@ -16,7 +16,7 @@
         </div>
         <div class="menu">
             <span class="name">QuickChat</span>
-            <button id="setting" class="settings"></button>
+            <button id="setting" class="settings">а</button>
         </div>
         <div id="profile" class="profile">
             <div class="pfImg">
@@ -46,7 +46,7 @@
                 <div><input id="oldPwd" type="password" name="Old Password" placeholder="password" /></div>
                 <div><a>Введите новый пароль</a></div>
                 <div><input id="newPwd" type="password" name="New Password" placeholder="password" /></div>
-                <p><button id ="changePassBtn">Сменить</button></p>
+                <p><button class="modalBtn" id ="changePassBtn">Сменить</button></p>
                 <span id="changePwdErr"></span>
             </form>
         </div>
@@ -58,11 +58,12 @@
                 <a href="#close" title="Закрыть" class="close">X</a>
                 <div><a>Введите пароль</a></div>
                 <div><input id="passToCloseAll" type="password" placeholder="password" /></div>
-                <p><button id="closeSessions">Выйти</button></p>
+                <p><button class="modalBtn" id="closeSessions">Выйти</button></p>
             </form>
         </div>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
 
 </body>

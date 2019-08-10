@@ -14,14 +14,14 @@ img {
     padding: 3px;
 }
 
-button {
+.modalBtn {
 	border-radius: 20px;
 	border: 1px solid rgb(45, 129, 238);
 	background-color: rgb(45, 129, 238);
 	color: #FFFFFF;
-	font-size: 10px;
+	font-size: 12px;
 	font-weight: bold;
-	padding: 8px 25px;
+	padding: 12px 45px;
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;

@@ -2,6 +2,7 @@ const windowSet = document.getElementById('windowSet');
 const setting = document.getElementById('setting');
 const chats = document.getElementById('chats');
 const exit = document.getElementById('exit');
+const nickname = document.getElementById('nickname')
 const container=  document.getElementById('container')
 const profileImg = document.getElementById('profileImg')
 const resetPwdBtn = document.getElementById('resetPwd')
@@ -77,4 +78,11 @@ document.addEventListener('keydown', function (e) {
 	if (e.keyCode == 27) {
 		modalClose();
 	}
+});
+
+const socket = io();
+
+socket.on('cur', (data) => {
+	setting.textContent = data.name;
+	nickname.textContent = data.name;
 });
