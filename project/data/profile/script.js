@@ -2,7 +2,6 @@
 const container=  document.getElementById('container')
 const profileImg = document.getElementById('profileImg')
 const resetPwdBtn = document.getElementById('resetPwd')
-const exitBtn = document.getElementById('exit')
 const oldPwdInput = document.getElementById('oldPwd')
 const newPwdInput = document.getElementById('newPwd')
 const changePassBtn = document.getElementById('changePassBtn')
