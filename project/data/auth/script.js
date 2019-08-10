@@ -63,23 +63,23 @@ regButton.addEventListener('click', (e) => {
 		}
 		data = JSON.parse(req.responseText);
 		switch (data.errcode) {
-			case 'EMAIL_ALREADY_EXISTS':
+			case 'RCODE_EMAIL_ALREADY_EXISTS':
 				regError.textContent = "Данный Email уже используется";
 				regError.style.display = "block";
 				regEmail.classList.add("errorInput");
 				break;
-			case 'USERNAME_ALREADY_EXISTS':
+			case 'RCODE_USERNAME_ALREADY_EXISTS':
 				regError.textContent = "Этот Ник уже занят";
 				regError.style.display = "block";
 				regUserName.classList.add("errorInput");
 				break;
-			case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
+			case 'RCODE_EMAIL_AND_USERNAME_ALREADY_EXISTS':
 				regError.textContent = "Данный Email и Ник уже заняты";
 				regError.style.display = "block";
 				regEmail.classList.add("errorInput");
 				regUserName.classList.add("errorInput");
 				break;
-			case 'FAILED_TO_SEND_EMAIL':
+			case 'RCODE_FAILED_TO_SEND_EMAIL':
 				regError.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
 				regError.style.display = "block";
 				regButton.disabled = false;
@@ -98,7 +98,7 @@ regButton.addEventListener('click', (e) => {
 					regButton.disabled = true;
 				});
 				break;
-			case 'AUTHORIZED_ALREADY':
+			case 'RCODE_AUTHORIZED_ALREADY':
 				regError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";
 				regButton.disabled = true;
 				break;
@@ -123,9 +123,9 @@ regEmail.addEventListener("input", () => {
 	regButton.disabled = false;
 	tmpEmail.style.display = "none";
 	switch (data.errcode) {
-		case 'FAILED_TO_SEND_EMAIL':
-		case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
-		case 'EMAIL_ALREADY_EXISTS':
+		case 'RCODE_FAILED_TO_SEND_EMAIL':
+		case 'RCODE_EMAIL_AND_USERNAME_ALREADY_EXISTS':
+		case 'RCODE_EMAIL_ALREADY_EXISTS':
 			regError.style.display = "none";
 	}
 });
@@ -134,8 +134,8 @@ regUserName.addEventListener("input", () => {
 	regUserName.classList.remove("errorInput");
 	regButton.disabled = false;
 	switch (data.errcode) {
-		case 'EMAIL_AND_USERNAME_ALREADY_EXISTS':
-		case 'USERNAME_ALREADY_EXISTS':
+		case 'RCODE_EMAIL_AND_USERNAME_ALREADY_EXISTS':
+		case 'RCODE_USERNAME_ALREADY_EXISTS':
 			regError.style.display = "none";
 	}
 });
@@ -185,7 +185,7 @@ loginButton.addEventListener('click', (e) => {
 		}
 		data = JSON.parse(req.responseText);
 		switch (data.errcode) {
-			case 'LOGIN_OR_PASSWORD_INCORRECT':
+			case 'RCODE_LOGIN_OR_PASSWORD_INCORRECT':
 				loginError.textContent = "Неверный Email или пароль";
 				loginError.style.display = "block";
 				loginPassword.classList.add("errorInput");
@@ -195,7 +195,7 @@ loginButton.addEventListener('click', (e) => {
 					loginEmail.classList.remove("errorInput");
 				}, 1000);
 				break;
-			case 'AUTHORIZED_ALREADY':
+			case 'RCODE_AUTHORIZED_ALREADY':
 				loginError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";
 				loginButton.disabled = false;
 				break;
@@ -256,12 +256,12 @@ forgotButton.addEventListener("click", (e) => {
 		}
 		data = JSON.parse(req.responseText);
 		switch (data.errcode) {
-			case 'EMAIL_INCORRECT':
+			case 'RCODE_EMAIL_INCORRECT':
 				forgotEr.textContent = "Аккаунта с такой электронной почтой не существует";
 				forgotEr.style.display = "block";
 				forgotEmail.classList.add("errorInput");
 				break;
-			case 'FAILED_TO_SEND_EMAIL':
+			case 'RCODE_FAILED_TO_SEND_EMAIL':
 				forgotEr.textContent = "Неудалось отправить письмо с ссылкой на верификацию на элекротнную почту. Пожалуйста, попробуйте позже.";
 				forgotEr.style.display = "block";
 				forgotButton.disabled = false;
@@ -287,7 +287,7 @@ forgotEmail.addEventListener("input", () => {
 	forgotEmail.classList.remove("errorInput");
 	forgotButton.disabled = false;
 	switch (data.errcode) {
-		case 'EMAIL_INCORRECT':
+		case 'RCODE_EMAIL_INCORRECT':
 			regError.style.display = "none";
 	}
 })
