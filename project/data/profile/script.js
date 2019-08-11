@@ -24,11 +24,22 @@ setting.addEventListener('click', (e) => {
     }
 });
 
+closeSessionsBtn.addEventListener('click', e => {
+	e.preventDefault();
+	if (!passToCloseAllInput.value){
+		passToCloseAllInput.classList.add("errorInput");
+		setTimeout(() => {
+			passToCloseAllInput.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+})
+
 changePassBtn.addEventListener('click', e => {
 	e.preventDefault();
 	// changePassBtn.disabled = true;
 	if (!oldPwdInput.value) {
-		oldPwdInput.classList.add("errorInput")
+		oldPwdInput.classList.add("errorInput");
 		setTimeout(() => {
 			oldPwdInput.classList.remove("errorInput")
 		}, 1000);

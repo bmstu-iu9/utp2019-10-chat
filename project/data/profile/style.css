@@ -8,6 +8,12 @@ h2 {
 	text-align: center;
 }
 
+a {
+	color: #333;
+	font-size: 14px;
+	margin: 15px 0;
+}
+
 img {
     border: 2px solid #ddd;
     border-radius: 5%;
