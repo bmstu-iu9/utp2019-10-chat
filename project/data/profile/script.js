@@ -12,8 +12,6 @@ const changePassBtn = document.getElementById('changePassBtn')
 const changePwdErr = document.getElementById('changePwdErr')
 const currentPwdInput = document.getElementById('currentPwd')
 const newMailInput = document.getElementById('newMail')
-const changeMailBtn = document.getElementById('changeMailBtn')
-const changeMailErr = document.getElementById('changeMailErr')
 const passToCloseAllInput = document.getElementById('passToCloseAll')
 const closeSessionsBtn = document.getElementById('closeSessions')
 
@@ -24,6 +22,25 @@ setting.addEventListener('click', (e) => {
     } else {
         windowSet.style.display = "flex";
     }
+});
+
+changePassBtn.addEventListener('click', e => {
+	e.preventDefault();
+	// changePassBtn.disabled = true;
+	if (!oldPwdInput.value) {
+		oldPwdInput.classList.add("errorInput")
+		setTimeout(() => {
+			oldPwdInput.classList.remove("errorInput")
+		}, 1000);
+		return;
+	}
+	if (!newPwdInput.value) {
+		newPwdInput.classList.add("errorInput")
+		setTimeout(() => {
+			newPwdInput.classList.remove("errorInput")
+		}, 1000);
+		return;
+	}
 });
 
 chats.addEventListener('click', (e) => {
