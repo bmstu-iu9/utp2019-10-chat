@@ -182,8 +182,7 @@
 					
 					state.textContent = ereq.status
 					rcode.textContent = ereq.responseText
-					if (!JSON.parse(ereq.responseText).errcode)
-						window.location.reload()
+					window.location.href="/auth/index.html"
 				}
 				ereq.send()
 			}
