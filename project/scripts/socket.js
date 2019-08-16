@@ -13,9 +13,16 @@ exports.exit = (request) => {
 	const sockets = exports.io.to('user ' + curUser).connected
 	for (let socketId in sockets) {
 		if (core.getCookies(sockets[socketId].request).sessionId == sessionId) {
+			sockets[socketId].emit('exit')
 			sockets[socketId].disconnect(true)
 		}
 	}
+}
+
+exports.exitByUser = (user) => {
+	const sockets = exports.io.to('user ' + user).emit('exit').connected
+	for (let socketId in sockets)
+		sockets[socketId].disconnect(true)
 }
 
 const sendInfoMessage = async (dialogId, msg) => {

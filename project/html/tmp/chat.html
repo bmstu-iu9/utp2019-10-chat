@@ -105,6 +105,10 @@
 					}
 	  			})
 	  			
+	  			socket.on('exit', () => {
+	  				userInfo.textContent = 'Вышел'
+	  			})
+	  			
 	  			socket.on('user', (data) => {
 	  				userInfo.textContent = JSON.stringify(data).replace(/\n/g, '<br>')
 	  			})
@@ -182,8 +186,6 @@
 					
 					state.textContent = ereq.status
 					rcode.textContent = ereq.responseText
-					if (!JSON.parse(ereq.responseText).errcode)
-						window.location.reload()
 				}
 				ereq.send()
 			}
