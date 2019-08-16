@@ -67,7 +67,7 @@ exports.sendFullFile = (response, path) => {
 			response.setHeader('Content-Type', 'text/css; charset=utf-8')
 		else if (en == ".js")
 			response.setHeader('Content-Type', 'application/javascript; charset=utf-8')
-		else if (en == ".ico0")
+		else if (en == ".ico")
 			response.setHeader('Content-Type', 'image/vnd.microsoft.icon')
 		response.end(data)
 	}})
