@@ -6,15 +6,11 @@ const consts = require('../../scripts/consts')
 
 exports.invoke = async (request, response, data) => {
 	const curUser = users.getCurrentUser(request)
-	if (curUser) {
-		if ((await users.getUserAccept(curUser)).notApproved) {
-			core.redirect(response, '/profile')
-			return
-		}
-		
-		core.redirect(response, '/')
+	
+	if (!curUser) {
+		core.redirect(response, '/auth')
 		return
 	}
-	
-	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'auth/index.html'))
+
+	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'profile/index.html'))
 }
