@@ -9,26 +9,65 @@
 </head>
 
 <body>
-<div class="conteiner">
-    <div id="windowSet" class="window">
-        <button id="profile" class="menuBut">Настройки профиля</button>
-        <button id="exit" class="menuBut">Выйти</button>
-    </div>
-    <div class="menu">
-        <span class="name">QuickChat</span>
-        <button id="setting" class="settings">Настройки</button>
-    </div>
-    <div class="windowChat">
-        <div class="leftWindow">
-            <h1>Привет</h1>
+    <div class="conteiner">
+        <div id="windowSet" class="window">
+            <button id="profile" class="menuBut">Настройки профиля</button>
+            <button id="exit" class="menuBut">Выйти</button>
         </div>
-        <div class="rightWindow">
-            <h1>Пока</h1>
+        <div class="menu">
+            <span class="name">QuickChat</span>
+            <button id="setting" class="settings"></button>
+        </div>
+        <div class="windowChat">
+            <div id="leftWindow" class="leftWindow">
+                <div class="topMenu">
+                    <a class="link" href="#openModal">Создать чат</a>
+                </div>
+            </div>
+            <div class="rightWindow">
+                <div class="topMenu">
+                    <a id="topSetting" class="link" href="#openWindow">Настройки чата</a>
+                    <a id="dialogUserInfo">Участники</a>
+                    <a id="out">Покинуть</a>
+                </div>
+                <div class="nameChat">
+                    <span id="nameChat"></span>
+                </div>
+                <div class="chat">
+                    <div id="chat" class="chatTable">
+                        <div class="wChat">
+                            <table id="chatTable"></table>
+                        </div>
+                        <textarea id="messageText"></textarea>
+                        <button id="submit">Отправить</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-    <script src="/script.js"></script>
+    <div id="openModal" class="modalDialog">
+        <div>
+            <a href="#" title="Закрыть" class="close">X</a>
+            <p>Введите название чата: <input id="dialogName">
+                <span id="errorField"></span></p>
+            <p>Введите имена пользователей через перевод строки:</p>
+            <textarea id="users"></textarea>
+            <button id="create" class="createChat">Создать чат</button><br>
+        </div>
+    </div>
 
+    <div id="openWindow" class="modalDialog">
+        <div>
+            <a href="#" class="close">X</a>
+            <p>Введите название чата: <input id="dialogName">
+                <span id="errorField"></span></p>
+            <p>Введите имена пользователей через перевод строки:</p>
+            <textarea id="users"></textarea>
+            <button id="create" class="createChat">Создать чат</button><br>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
 </body>
 
 </html>

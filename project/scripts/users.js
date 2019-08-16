@@ -13,7 +13,7 @@ exports.SALT_LENGTH = 16
 exports.PASSWORD_ITERATIONS_COUNT = 1000
 exports.PASSWORD_HASH_LENGTH = 32
 
-const passwordHash = (password, salt) => {
+exports.passwordHash = (password, salt) => {
 	return new Promise((resolve, reject) => {
 		crypto.pbkdf2(password, salt,
 			exports.PASSWORD_ITERATIONS_COUNT, exports.PASSWORD_HASH_LENGTH, 'sha1',
@@ -37,7 +37,7 @@ exports.addUser = async (email, name, password) => {
 	userlogin[email].name = name
 	userlogin[email].salt = crypto.randomBytes(16).toString('hex')
 	useraccept[name].notApproved = true
-	userlogin[email].passwordHash = await passwordHash(password, userlogin[email].salt)
+	userlogin[email].passwordHash = await exports.passwordHash(password, userlogin[email].salt)
 	
 	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
 	try {
@@ -103,7 +103,7 @@ exports.comparePasswords = async (password, email) => {
 	if (userlogin[email] === undefined)
 		return false
 		
-	return await passwordHash(password, userlogin[email].salt) == userlogin[email].passwordHash
+	return await exports.passwordHash(password, userlogin[email].salt) == userlogin[email].passwordHash
 }
 
 exports.setCurrentUser = async (response, username) => {
