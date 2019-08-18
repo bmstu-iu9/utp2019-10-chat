@@ -5,15 +5,16 @@ const exit = document.getElementById('exit');
 const nickname = document.getElementById('nickname')
 const container=  document.getElementById('container')
 const profileImg = document.getElementById('profileImg')
-const resetPwdBtn = document.getElementById('resetPwd')
+const changePass = document.getElementById('changePass')
 const oldPwdInput = document.getElementById('oldPwd')
 const newPwdInput = document.getElementById('newPwd')
 const changePassBtn = document.getElementById('changePassBtn')
 const changePwdErr = document.getElementById('changePwdErr')
 const currentPwdInput = document.getElementById('currentPwd')
 const newMailInput = document.getElementById('newMail')
-const passToCloseAllInput = document.getElementById('passToCloseAll')
+const changePassDiv = document.getElementById('changePassDiv')
 const closeSessionsBtn = document.getElementById('closeSessions')
+const exitSesErr = document.getElementById('exitSesError')
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -24,16 +25,62 @@ setting.addEventListener('click', (e) => {
     }
 });
 
+setting.addEventListener('load', e => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/curuser.js', true);
+	req.onreadystatechange = () => {
+		if (req.status != 200) {
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode == null) {
+			setting.textContent = data.user;
+			nickname.textContent = data.user;
+		}
+	}
+});
+
+// changePass.addEventListener('click', e => {
+// 	e.preventDefault();
+// 	changePassDiv.visibility = "visible";
+// })
+
 closeSessionsBtn.addEventListener('click', e => {
 	e.preventDefault();
-	if (!passToCloseAllInput.value){
-		passToCloseAllInput.classList.add("errorInput");
-		setTimeout(() => {
-			passToCloseAllInput.classList.remove("errorInput");
-		}, 1000);
-		return;
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/allsessionsexit.js', true);
+	req.onreadystatechange = () => {
+		if (req.status != 200) {
+			exitSesErr.textContent = req.status + ' ' + req.statusText;
+			exitSesErr.style.display = "block"
+			closeSessionsBtn.disabed = false;
+			setTimeout(() => {
+				exitSesErr.style.display = "none";
+			}, 5000);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		switch (data.errcode) {
+			case 'RCODE_NOT_AUTHORIZED' :
+				exitSesErr.textContent = "Вы не авторизованы";
+				exitSesErr.style.display = "block";
+				setTimeout(() => {
+					exitSesErr.style.display = "none";
+				}, 1000);
+				window.location.href = "/error.html";
+				break;
+			case null :
+				exitSesErr.style.color = "green"; 
+				exitSesErr.style.display = "block";
+				setTimeout(() => {
+					exitSesErr.style.display = "none";
+				}, 1000);
+				window.location.href = "/auth/index.html";
+				break;
+		}
 	}
-})
+});
 
 changePassBtn.addEventListener('click', e => {
 	e.preventDefault();
@@ -54,24 +101,24 @@ changePassBtn.addEventListener('click', e => {
 	}
 });
 
-chats.addEventListener('click', (e) => {
-    e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
-        switch (data.errcode) {
-            case null:
-                window.location.href = "./chat.html";
-                break;
-            case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
-                break;
-        }
-    }
-    ereq.send()
-});
+// chats.addEventListener('click', (e) => {
+//     e.preventDefault();
+//     const ereq = new XMLHttpRequest()
+//     ereq.open('GET', '/req/exit.js', true)
+//     ereq.onreadystatechange = () => {
+//         if (ereq.readyState != 4) return;
+//         data = JSON.parse(ereq.responseText);
+//         switch (data.errcode) {
+//             case null:
+//                 window.location.href = "/chat.html";
+//                 break;
+//             case 'NOT_AUTHORIZED':
+//                 window.location.href = "/error.html";
+//                 break;
+//         }
+//     }
+//     ereq.send()
+// });
 
 exit.addEventListener('click', (e) => {
     e.preventDefault();
@@ -92,10 +139,6 @@ exit.addEventListener('click', (e) => {
     ereq.send()
 });
 
-profileImg.addEventListener('click', () => {
-    //выбор нового изображения с диска
-})
-
 function modalClose() {
 	if (location.hash == '#openModal' || location.hash == '#openModal2' || location.hash == '#openModal3') {
 		location.hash = '';
@@ -108,9 +151,9 @@ document.addEventListener('keydown', function (e) {
 	}
 });
 
-const socket = io();
+// const socket = io();
 
-socket.on('cur', (data) => {
-	setting.textContent = data.name;
-	nickname.textContent = data.name;
-});
+// socket.on('cur', (data) => {
+// 	setting.textContent = data.name;
+// 	nickname.textContent = data.name;
+// });

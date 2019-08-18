@@ -36,7 +36,7 @@ profile.addEventListener('click', (e) => {
         data = JSON.parse(ereq.responseText);
         switch (data.errcode) {
             case null:
-                window.location.href = "/profile.html";
+                window.location.href = "/profile/index.html";
                 break;
             case 'NOT_AUTHORIZED':
                 window.location.href = "/error.html";
