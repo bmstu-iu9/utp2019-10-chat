@@ -5,7 +5,7 @@ h1 {
 
 h2 {
 	font-weight: bolder;
-	text-align: center;
+	/* text-align: center; */
 }
 
 a {
@@ -14,10 +14,24 @@ a {
 	margin: 15px 0;
 }
 
+p {
+	font-weight: 700;
+	font-size: 18px;
+}
+
 img {
     border: 2px solid #ddd;
     border-radius: 5%;
     padding: 3px;
+}
+
+.changePass {
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.changePassFields {
+	visibility: visible;
 }
 
 .modalBtn {

@@ -4,8 +4,8 @@
 <head>
     <title>Профиль | QuickChat</title>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/profile/style.css"></script>
 </head>
 
 <body>
@@ -16,23 +16,34 @@
         </div>
         <div class="menu">
             <span class="name">QuickChat</span>
-            <button id="setting" class="settings">а</button>
+            <button id="setting" class="settings"></button> <!--не забыть сделать пустым-->
         </div>
         <div id="profile" class="profile">
             <div class="pfImg">
-                <img src="default.png" id="profileImg">
+                <img src="/profile/default.png" id="profileImg">
             </div>
             <div class="right">
                 <div class="nicknameField">
                     <p>Имя пользователя: </p>
-                    <p class="nickname" id="nickname">Nickname</p>
+                    <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
                 </div>
                 <div class="mailField">
                     <p>Почта: </p>
-                    <p class="email" id="email">mail</p>
+                    <p class="email" id="email">mail</p><!--сделать пустым-->
                 </div>
-                <div><a href="#openModal">Сменить пароль</a></div>
-                <div><a href="#openModal3">Завершить все сессии</a></div>
+                <div class="changePassDiv" id="changePassDiv">
+                    <!-- <a href="#openModal">Сменить пароль</a> -->
+                    <a class="changePass" id="changePass" href="#changePass">Смена пароля</a>
+                    <div id="changePassFields" class="changePassFields">
+                        <div><a>Введите старый пароль</a></div>
+                        <div><input id="oldPwd" type="password" name="Old Password" placeholder="password" /></div>
+                        <div><a>Введите новый пароль</a></div>
+                        <div><input id="newPwd" type="password" name="New Password" placeholder="password" /></div>
+                        <p><button class="modalBtn" id ="changePassBtn">Сменить</button></p>
+                        <span id="changePwdErr"></span>
+                    </div>
+                </div>
+                <div><a href="#openModal3">Завершить все сессии</a></div> <!--Модальное окно на случай миссклика-->
             </div>
         </div>
     </div>
@@ -54,17 +65,18 @@
 
     <div id="openModal3" class="modalDialog">
         <div>
-            <form action="/exitSessions.js">
+            <form>
                 <a href="#close" title="Закрыть" class="close">X</a>
-                <div><a>Введите пароль</a></div>
-                <div><input id="passToCloseAll" type="password" placeholder="password" /></div>
+                <!-- <div><a>Введите пароль</a></div>
+                <div><input id="passToCloseAll" type="password" placeholder="password" /></div> -->
                 <p><button class="modalBtn" id="closeSessions">Выйти</button></p>
+                <span id="exitSesError"></span>
             </form>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
+    <script src="/profile/script.js"></script>
 
 </body>
 
