@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<p id="username"></p>
+		<p>Удаление</p>
+		<button id="deleteButton">DELETE</button><br><br>
+		<p>Выход из всех сессий</p>
+		<button id="allExit">ALLEXIT</button><br><br>
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script>
+		const req = new XMLHttpRequest()
+		req.open('POST', '/req/curuser.js', true)
+		req.onreadystatechange = () => {
+			if (req.readyState != 4) return;
+			
+			state.textContent = req.status
+			rcode.textContent = req.responseText
+			const ud = JSON.parse(req.responseText)
+			username.textContent = ud.user
+			if (ud.notapproved)
+				username.textContent += 'не верифицирован'
+		}
+		req.send()
+		
+		allExit.onclick = () => {
+			const ereq = new XMLHttpRequest()
+			ereq.open('POST', '/req/allsessionsexit.js', true)
+			ereq.onreadystatechange = () => {
+				if (ereq.readyState != 4) return;
+			
+				state.textContent = ereq.status
+				rcode.textContent = ereq.responseText
+			}
+			ereq.send()
+		}
+		
+		deleteButton.onclick = () => {
+			const ereq = new XMLHttpRequest()
+			ereq.open('POST', '/req/deleteuser.js', true)
+			ereq.onreadystatechange = () => {
+				if (ereq.readyState != 4) return;
+			
+				state.textContent = ereq.status
+				rcode.textContent = ereq.responseText
+			}
+			ereq.send()
+		}
+		</script>
+	</body>
+</html>

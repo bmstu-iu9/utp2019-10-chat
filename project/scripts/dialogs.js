@@ -201,3 +201,7 @@ exports.addUserInDialog = async (brigadier, user,id) => {
 		throw err
 	}
 }
+
+exports.deleteUser = (user) => {
+	
+}
