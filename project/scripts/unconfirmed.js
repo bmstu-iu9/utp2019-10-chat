@@ -46,6 +46,16 @@ exports.deleteUserFromUnconfirmed = async (hash) => {
 	return true
 }
 
+exports.deleteByName = async (name) => {
+	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
+	for (let i in newConfirmed) {
+		if (newConfirmed[i] === name) {
+			delete newConfirmed[i]
+			await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
+		}
+	}
+}
+
 exports.approveUnconfirmedUser = async (hash) => {
 	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
 	const username = newConfirmed[hash]

@@ -14,11 +14,18 @@ exports.invoke = async (request, response, data) => {
 			return
 		}
 		
-		socket.exitByUser(curUser)
-		await sessions.deleteSessionsByUser(curUser)
 		await users.deleteCurrentUser(request, response)
+		try {
+			await users.deleteUser(curUser)
+		} catch (err) {
+			if (err.rcode)
+				core.sendJSON(response, {errcode: err.rcode, errmessage: err.toString()})
+			else
+				throw err
+		}
 		core.sendJSON(response, {errcode: null})
 	} catch (err) {
+		console.log(err)
 		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}
 }	
