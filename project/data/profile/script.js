@@ -15,6 +15,7 @@ const newMailInput = document.getElementById('newMail')
 const changePassDiv = document.getElementById('changePassDiv')
 const closeSessionsBtn = document.getElementById('closeSessions')
 const exitSesErr = document.getElementById('exitSesError')
+const deleteAccBut = document.getElementById('deleteAcc')
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -41,11 +42,38 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		if (data.errcode == null) {
 			setting.textContent = data.user;
 			nickname.textContent = data.user;
+			if (data.notapproved == undefined) {
+				nickname.style.color = "green";
+			} else {
+				nickname.style.color = "red";
+			}
 		}else {
 			alert(data.errcode);
 		}
 	}
 	req.send();
+});
+
+deleteAccBut.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/deleteuser.js', true);
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode == null) {
+			alert("Аккаунт удален");
+			window.location.href = "/auth/index.html";
+		} else {
+			alert(data.errcode);
+		}
+	}
 });
 
 // changePass.addEventListener('click', e => {
@@ -112,24 +140,10 @@ changePassBtn.addEventListener('click', (e) => {
 	}
 });
 
-// chats.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     const req = new XMLHttpRequest()
-//     req.open('GET', '/req/exit.js', true)
-//     req.onreadystatechange = () => {
-//         if (req.readyState != 4) return;
-//         data = JSON.parse(req.responseText);
-//         switch (data.errcode) {
-//             case null:
-//                 window.location.href = "/chat.html";
-//                 break;
-//             case 'NOT_AUTHORIZED':
-//                 window.location.href = "/error.html";
-//                 break;
-//         }
-//     }
-//     req.send()
-// });
+chats.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = "/chat.html";
+});
 
 exit.addEventListener('click', (e) => {
     e.preventDefault();
@@ -137,7 +151,6 @@ exit.addEventListener('click', (e) => {
     req.open('GET', '/req/exit.js', true)
     req.onreadystatechange = () => {
 		if (req.readyState != 4) {
-			alert (req.readyState);
 			return;
 		}
         if (req.readyState != 4) return;

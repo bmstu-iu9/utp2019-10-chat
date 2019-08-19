@@ -16,7 +16,7 @@
         </div>
         <div class="menu">
             <span class="name">QuickChat</span>
-            <button id="setting" class="settings"></button> <!--не забыть сделать пустым-->
+            <button id="setting" class="settings"></button> 
         </div>
         <div id="profile" class="profile">
             <div class="pfImg">
@@ -26,10 +26,6 @@
                 <div class="nicknameField">
                     <p>Имя пользователя: </p>
                     <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
-                </div>
-                <div class="mailField">
-                    <p>Почта: </p>
-                    <p class="email" id="email">mail</p><!--сделать пустым-->
                 </div>
                 <div class="changePassDiv" id="changePassDiv">
                     <!-- <a href="#openModal">Сменить пароль</a> -->
@@ -44,13 +40,14 @@
                     </div>
                 </div>
                 <div><a href="#openModal3">Завершить все сессии</a></div> <!--Модальное окно на случай миссклика-->
+                <div><a href="#openModal4">Удалить аккаунт</a></div> <!--Модальное окно на случай миссклика-->
             </div>
         </div>
     </div>
 
     <div id="openModal" class="modalDialog">
         <div>
-            <form action="/changePwd.js">
+            
                 <a href="#close" title="Закрыть" class="close">X</a>
                 <h2>Смена пароля</h2>
                 <div><a>Введите старый пароль</a></div>
@@ -59,7 +56,7 @@
                 <div><input id="newPwd" type="password" name="New Password" placeholder="password" /></div>
                 <p><button class="modalBtn" id ="changePassBtn">Сменить</button></p>
                 <span id="changePwdErr"></span>
-            </form>
+            
         </div>
     </div>
 
@@ -74,6 +71,16 @@
             </form>
         </div>
     </div>
+
+    <div id="openModal4" class="modalDialog">
+            <div>
+                <form>
+                    <a href="#close" title="Закрыть" class="close">X</a>
+                    <h2>Вы уверены?</h2>
+                    <p><button class="modalBtn" id="deleteAcc">Удалить</button></p>
+                </form>
+            </div>
+        </div>
 
     <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script src="/profile/script.js"></script>
