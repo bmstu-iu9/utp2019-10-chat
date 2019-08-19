@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<p>Введите новую почту</p>
+		<input id="newEmail"><br>
+		<p>Введите пароль</p>
+		<input type="password" id="password"><br>
+		<button id="newEmailButton">NEW EMAIL</button><br><br>
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script>
+			newEmailButton.onclick = () => {
+				const req = new XMLHttpRequest()
+				req.open('POST', '/req/changeemail.js', true)
+				req.onreadystatechange = () => {
+					if (req.readyState != 4) return;
+					
+					state.textContent = req.status
+					rcode.textContent = req.responseText
+				}
+
+				req.send(JSON.stringify({newEmail: newEmail.value, password: password.value}))
+			}
+		</script>
+	</body>
+</html>
