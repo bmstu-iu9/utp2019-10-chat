@@ -38,7 +38,7 @@ exports.deleteUserFromResetList = async (hash) => {
 
 exports.deleteByEmail = async (email) => {
 	let resetlist = await jsonfile.read(exports.RESET_PATH)
-	for (let i in newConfirmed) {
+	for (let i in resetlist) {
 		if (resetlist[i] === email) {
 			delete resetlist[i]
 			await jsonfile.write(exports.RESET_PATH, resetlist)

@@ -36,7 +36,7 @@ exports.deleteUserFromUnconfirmed = async (hash) => {
 	await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
 	
 	try {
-		await users.deleteUser(username)
+		await users.deleteUserReg(username)
 	} catch (err) {
 		newConfirmed[hash] = username
 		await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
