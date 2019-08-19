@@ -25,20 +25,27 @@ setting.addEventListener('click', (e) => {
     }
 });
 
-setting.addEventListener('load', e => {
+document.addEventListener('DOMContentLoaded', (e) => {
 	e.preventDefault();
 	const req = new XMLHttpRequest();
 	req.open('POST', '/req/curuser.js', true);
 	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
 		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
 			return;
 		}
 		data = JSON.parse(req.responseText);
 		if (data.errcode == null) {
 			setting.textContent = data.user;
 			nickname.textContent = data.user;
+		}else {
+			alert(data.errcode);
 		}
 	}
+	req.send();
 });
 
 // changePass.addEventListener('click', e => {
@@ -46,11 +53,14 @@ setting.addEventListener('load', e => {
 // 	changePassDiv.visibility = "visible";
 // })
 
-closeSessionsBtn.addEventListener('click', e => {
+closeSessionsBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 	const req = new XMLHttpRequest();
 	req.open('POST', '/req/allsessionsexit.js', true);
 	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
 		if (req.status != 200) {
 			exitSesErr.textContent = req.status + ' ' + req.statusText;
 			exitSesErr.style.display = "block"
@@ -68,7 +78,7 @@ closeSessionsBtn.addEventListener('click', e => {
 				setTimeout(() => {
 					exitSesErr.style.display = "none";
 				}, 1000);
-				window.location.href = "/error.html";
+				alert("Not authorized");
 				break;
 			case null :
 				exitSesErr.style.color = "green"; 
@@ -80,9 +90,10 @@ closeSessionsBtn.addEventListener('click', e => {
 				break;
 		}
 	}
+	req.send()
 });
 
-changePassBtn.addEventListener('click', e => {
+changePassBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 	// changePassBtn.disabled = true;
 	if (!oldPwdInput.value) {
@@ -103,11 +114,11 @@ changePassBtn.addEventListener('click', e => {
 
 // chats.addEventListener('click', (e) => {
 //     e.preventDefault();
-//     const ereq = new XMLHttpRequest()
-//     ereq.open('GET', '/req/exit.js', true)
-//     ereq.onreadystatechange = () => {
-//         if (ereq.readyState != 4) return;
-//         data = JSON.parse(ereq.responseText);
+//     const req = new XMLHttpRequest()
+//     req.open('GET', '/req/exit.js', true)
+//     req.onreadystatechange = () => {
+//         if (req.readyState != 4) return;
+//         data = JSON.parse(req.responseText);
 //         switch (data.errcode) {
 //             case null:
 //                 window.location.href = "/chat.html";
@@ -117,16 +128,20 @@ changePassBtn.addEventListener('click', e => {
 //                 break;
 //         }
 //     }
-//     ereq.send()
+//     req.send()
 // });
 
 exit.addEventListener('click', (e) => {
     e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
+    const req = new XMLHttpRequest()
+    req.open('GET', '/req/exit.js', true)
+    req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			alert (req.readyState);
+			return;
+		}
+        if (req.readyState != 4) return;
+        data = JSON.parse(req.responseText);
         switch (data.errcode) {
             case null:
                 window.location.href = "/auth/index.html";
@@ -136,7 +151,7 @@ exit.addEventListener('click', (e) => {
                 break;
         }
     }
-    ereq.send()
+    req.send()
 });
 
 function modalClose() {
