@@ -41,7 +41,7 @@ body {
     z-index: 1;
     top: 42px;
     height: 59px;
-   width: 160px;
+    width: 160px;
 
 }
 
@@ -76,8 +76,6 @@ body {
     padding: 1px 5px;
     border-style: solid;
     border-color: cornflowerblue;
-    overflow-y: auto;
-    overflow-x: hidden;
     width: 240px;
 }
 
@@ -116,8 +114,6 @@ body {
     margin: -5px 42px 6px 0px;
 }
 
-
-
 .modalDialog {
     align-items: center;
     justify-content: center;
@@ -139,8 +135,21 @@ body {
     pointer-events: auto;
 }
 
+.newChat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 500px;
+    position: relative;
+    margin: 10% auto;
+    padding: 10px 20px 20px 20px;
+    border-radius: 30px;
+    background: #fff;
+}
 
-.modalDialog>div {
+.windowSettingChat {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -244,8 +253,8 @@ body {
 }
 
 #out {
-position: relative;
-left: 530px;
+    position: relative;
+    left: 530px;
 }
 
 .wChat {
@@ -260,14 +269,57 @@ left: 530px;
 }
 
 .errorInput {
-	border: 1.5px solid red;
+    border: 1.5px solid red;
 }
 
 button:disabled {
-	background-color: grey; 
-	border: 1px solid grey;
+    background-color: grey;
+    border: 1px solid grey;
 }
 
 #dialogName {
     outline: none;
+}
+
+.memberWindow {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    width: 400px;
+    height: 360px;
+    position: relative;
+    padding: 10px 20px 20px 20px;
+    border-radius: 30px;
+    background: #fff;
+}
+
+.nameMember {
+    display: block;
+    width: 260px;
+    border-bottom-style: ridge;
+    font-size: 20px;
+    padding-top: 9px;
+    padding-bottom: 5px;
+}
+
+#members {
+    overflow-y: auto;
+}
+
+#signMembers {
+    padding: 10px 5px 0px 10px;
+    font-size: 20px;
+}
+
+.brigadier {
+    padding: 10px 5px 0px 10px;
+    font-size: 20px;
+}
+
+#windowNameChat {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 232px;
+    height: 650px;
 }
