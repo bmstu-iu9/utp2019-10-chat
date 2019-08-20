@@ -28,10 +28,9 @@ exports.exitByUser = (user) => {
 exports.deleteUserFromAllDialogs = async (curUser, dialogss) => {
 	for (let i = 0; i < dialogss.length; i++) {
 		const brigadier = await dialogs.deleteUserDialogOnly(curUser, dialogss[i])
-		socket.emit('delete', {dialogId: dialogss[i]})
 		await sendInfoMessage(dialogss[i], curUser + ' удалил чат')
 		if (brigadier == null)	
-			sendInfoMessage(s, 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
+			await sendInfoMessage(dialogss[i], 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
 	}
 }
 

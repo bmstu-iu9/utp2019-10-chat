@@ -128,7 +128,7 @@ exports.userDeleteDialog = async (user, id) => {
 	return dialog.brigadier
 }
 
-exports.deleteUserDialogOnly = async (user, dialogs) => {
+exports.deleteUserDialogOnly = async (user, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 
 	const i = dialog.users.indexOf(user)

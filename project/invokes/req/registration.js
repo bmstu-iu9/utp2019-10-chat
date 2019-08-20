@@ -49,7 +49,6 @@ exports.invoke = async (request, response, data) => {
 	    	await mail.sendMail(args.email, 'QuickChat registration!',
 	     		 'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve?hash="+hash)
 	    } catch (err) {
-	    	console.log(err)
 	    	await unconfirmed.deleteUserFromUnconfirmed(hash)
 	    	core.sendJSON(response, {errcode: 'RCODE_FAILED_TO_SEND_EMAIL', errmessage: 'Failed to send email'})
 	    	return
@@ -58,8 +57,6 @@ exports.invoke = async (request, response, data) => {
 	    await users.setCurrentUser(response, args.username)
 		core.sendJSON(response, {errcode: null})
 	} catch (err) {
-		console.log(err)
-		console.log('азааз')
 		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}
 }

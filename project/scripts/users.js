@@ -96,7 +96,7 @@ exports.deleteUserReg = async (username) => {
 }
 
 exports.deleteUser = async (username) => {
-	let userlogin = await jsonfile.read(exports.USERACCEPT_PATH)
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
 	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	
 	const ua = useraccept[username]
