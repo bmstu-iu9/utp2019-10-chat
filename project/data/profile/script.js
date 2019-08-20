@@ -2,20 +2,23 @@ const windowSet = document.getElementById('windowSet');
 const setting = document.getElementById('setting');
 const chats = document.getElementById('chats');
 const exit = document.getElementById('exit');
-const nickname = document.getElementById('nickname')
-const container=  document.getElementById('container')
-const profileImg = document.getElementById('profileImg')
-const changePass = document.getElementById('changePass')
-const oldPwdInput = document.getElementById('oldPwd')
-const newPwdInput = document.getElementById('newPwd')
-const changePassBtn = document.getElementById('changePassBtn')
-const changePwdErr = document.getElementById('changePwdErr')
-const currentPwdInput = document.getElementById('currentPwd')
-const newMailInput = document.getElementById('newMail')
-const changePassDiv = document.getElementById('changePassDiv')
-const closeSessionsBtn = document.getElementById('closeSessions')
-const exitSesErr = document.getElementById('exitSesError')
-const deleteAccBut = document.getElementById('deleteAcc')
+const nickname = document.getElementById('nickname');
+const container=  document.getElementById('container');
+const profileImg = document.getElementById('profileImg');
+const changePass = document.getElementById('changePass');
+const oldPwdInput = document.getElementById('oldPwd');
+const newPwdInput = document.getElementById('newPwd');
+const changePassBtn = document.getElementById('changePassBtn');
+const changePwdErr = document.getElementById('changePwdErr');
+const currentPwdInput = document.getElementById('currentPwd');
+const newMailInput = document.getElementById('newMail');
+const changePassDiv = document.getElementById('changePassDiv');
+const closeSessionsBtn = document.getElementById('closeSessions');
+const exitSesErr = document.getElementById('exitSesError');
+const deleteAccBut = document.getElementById('deleteAcc');
+const changeMailBtn = document.getElementById('changeMailBtn');
+const yourPwdTxt = document.getElementById('yourPwd');
+const yourMailTxt = document.getElementById('yourMail');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -74,6 +77,25 @@ deleteAccBut.addEventListener('click', (e) => {
 			alert(data.errcode);
 		}
 	}
+	req.send();
+});
+
+changeMailBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/changeemail.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		if (req.status != 200) {
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode != null) {
+			alert(data.errmessage);
+			return;
+		}
+		alert("Changed successfully");
+	}
+	req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
 });
 
 // changePass.addEventListener('click', e => {

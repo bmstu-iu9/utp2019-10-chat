@@ -27,7 +27,7 @@
                     <p>Имя пользователя: </p>
                     <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
                 </div>
-                <div class="changePassDiv" id="changePassDiv">
+                <div class="changeDiv" id="changePassDiv">
                     <!-- <a href="#openModal">Сменить пароль</a> -->
                     <a class="changePass" id="changePass" href="#changePass">Смена пароля</a>
                     <div id="changePassFields" class="changePassFields">
@@ -39,6 +39,18 @@
                         <span id="changePwdErr"></span>
                     </div>
                 </div>
+                <div class="changeDiv" id="changeMailDiv">
+                        <!-- <a href="#openModal">Сменить пароль</a> -->
+                        <a class="changeMail" id="changeMail" href="#changeMail">Смена пароля</a>
+                        <div id="changeMailFields" class="changeMailFields">
+                            <div><a>Введите новую почту</a></div>
+                            <div><input id="yourMail" type="email" name="Email" placeholder="email" /></div>
+                            <div><a>Введите ваш пароль</a></div>
+                            <div><input id="yourPwd" type="password" name="Password" placeholder="password" /></div>
+                            <p><button class="modalBtn" id ="changeMailBtn">Сменить</button></p>
+                            <span id="changeMailErr"></span>
+                        </div>
+                    </div>
                 <div><a href="#openModal3">Завершить все сессии</a></div> <!--Модальное окно на случай миссклика-->
                 <div><a href="#openModal4">Удалить аккаунт</a></div> <!--Модальное окно на случай миссклика-->
             </div>
