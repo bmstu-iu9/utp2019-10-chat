@@ -128,6 +128,20 @@ exports.userDeleteDialog = async (user, id) => {
 	return dialog.brigadier
 }
 
+exports.deleteUserDialogOnly = async (user, id) => {
+	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
+
+	const i = dialog.users.indexOf(user)
+	
+	if (i >= 0) {
+		dialog.users.splice(i, 1)
+	} else if (user == dialog.brigadier) {
+		dialog.brigadier = null
+	}
+		
+	await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
+}
+
 exports.rmUserFromDialog = async (src, dest, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
 	if (src != dialog.brigadier)
@@ -200,8 +214,4 @@ exports.addUserInDialog = async (brigadier, user,id) => {
 		await jsonfile.write(pathModule.resolve(consts.DIALOGS_PATH,id+'.json'), dialog)
 		throw err
 	}
-}
-
-exports.deleteUser = (user) => {
-	
 }

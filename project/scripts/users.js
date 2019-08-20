@@ -7,6 +7,8 @@ const jsonfile = require('./jsonfile')
 const pathModule = require('path')
 const crypto = require('crypto')
 const unconfirmed = require('./unconfirmed')
+const passwordreset = require('./passwordreset')
+const changeemail = require('./changeemail')
 const socket = require('./socket')
 
 
@@ -74,8 +76,27 @@ exports.getFullUserAccept = async () => {
 	return useraccept
 }
 
-exports.deleteUser = async (username) => {
+exports.deleteUserReg = async (username) => {
 	let userlogin = await jsonfile.read(exports.USERACCEPT_PATH)
+	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
+	
+	const ua = useraccept[username]
+	const ul = userlogin[ua.email]
+	delete useraccept[username]
+	delete userlogin[ua.email]
+	
+	await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
+	try {
+		await jsonfile.write(exports.USERLOGIN_PATH, userlogin)
+	} catch (err) {
+		useraccept[username] = ua
+		await jsonfile.write(exports.USERACCEPT_PATH, useraccept)
+		throw err
+	}
+}
+
+exports.deleteUser = async (username) => {
+	let userlogin = await jsonfile.read(exports.USERLOGIN_PATH)
 	let useraccept = await jsonfile.read(exports.USERACCEPT_PATH)
 	
 	const ua = useraccept[username]
@@ -97,9 +118,10 @@ exports.deleteUser = async (username) => {
 		await unconfirmed.deleteByName(username)
 		await passwordreset.deleteByEmail(ua.email)
 		await changeemail.deleteByEmail(ua.email)
-		await socket.deleteUserFromAllDialogs(username)
+		if (ua.dialogs)
+			await socket.deleteUserFromAllDialogs(username, ua.dialogs)
 		await socket.exitByUser(username)
-		await sessions.deleteSessionsByUser(curUser)
+		await sessions.deleteSessionsByUser(username)
 	} catch (err) {
 		err.rcode = 'RCODE_USER_DELETE_NOT_ALL'
 		throw err
