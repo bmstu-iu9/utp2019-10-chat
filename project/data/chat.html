@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/style.css">
     <title>Чаты | QuickChat</title>
     <meta charset="UTF-8">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:400,800'>
 </head>
 
 <body>
@@ -31,13 +32,10 @@
                     <a id="dialogUserInfo" class="link" href="#openModal2">Участники</a>
                     <a id="out" class="link">Покинуть</a>
                 </div>
-                <div class="nameChat">
-                    <span id="nameChat"></span>
-                </div>
+                <div id="nameChat" class="nameChat"></div>
                 <div class="chat">
                     <div id="chat" class="chatTable">
-                        <div class="wChat">
-                            <table id="chatTable"></table>
+                        <div id="chatTable" class="wChat">
                         </div>
                         <textarea id="messageText"></textarea>
                         <button id="submit">Отправить</button>
@@ -48,23 +46,29 @@
     </div>
     <div id="openModal" class="modalDialog">
         <div class="newChat">
-            <a href="#" title="Закрыть" class="close">X</a>
-            <p>Введите название чата: <input id="dialogName">
-                <span id="errorField"></span></p>
-            <p>Введите имена пользователей через перевод строки:</p>
-            <textarea id="users"></textarea>
-            <button id="create" class="createChat">Создать чат</button><br>
+            <a href="#" title="Закрыть" class="close" id="closeCreate">X</a>
+            <p>Введите название чата: <input class="input" id="dialogName" placeholder="НазваниеЧата">
+                <p>Введите имена пользователей через перевод строки:</p>
+                <textarea id="users"></textarea>
+                <button id="create" class="createChat">Создать чат</button><br>
         </div>
     </div>
 
     <div id="openWindow" class="modalDialog">
         <div class="windowSettingChat">
-            <a href="#" class="close">X</a>
-            <p>Введите название чата: <input id="dialogName">
-                <span id="errorField"></span></p>
-            <p>Введите имена пользователей через перевод строки:</p>
-            <textarea id="users"></textarea>
-            <button id="create" class="createChat">Создать чат</button><br>
+            <a href="#" class="close" id="closeSetWindow">X</a>
+            <div class="windowAdd">
+                <a>Добавить участника</a>
+                <input class="inputSettingChat" id="addName" type="text" placeholder="Никнейм">
+                <button class="buttonWindowSettingChat1" id="add">Добавить</button>
+            </div>
+            <div id="addInform"></div>
+            <div class="windowDel">
+                <a>Удалить участника</a>
+                <input class="inputSettingChat" id="deleteName" type="text" placeholder="Никнейм">
+                <button class="buttonWindowSettingChat2" id="deleteButton">Удалить</button><br>
+            </div>
+            <div id="delInform"></div>
         </div>
     </div>
 

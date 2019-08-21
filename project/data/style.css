@@ -11,11 +11,17 @@
 }
 
 body {
+	font-family: 'Montserrat', sans-serif;
+}
+
+body {
     margin: -8px;
 }
 
 .name {
-    margin: 1px 800px 1px 100px;
+    font-weight: bold;
+    position: relative;
+    left: 10%;
     font-size: 30px;
     outline: none;
     background-color: rgb(45, 129, 238);
@@ -27,7 +33,9 @@ body {
     background-color: rgb(45, 129, 238);
     color: white;
     font-size: 30px;
-    margin: 6px -4px;
+    position: relative;
+    left: 63%;
+    padding-top: 6px;
 }
 
 
@@ -35,14 +43,12 @@ body {
     display: none;
     flex-direction: column;
     color: black;
-    padding: 0;
     position: absolute;
-    left: 1030px;
+    left: 73.5%;
     z-index: 1;
-    top: 42px;
-    height: 59px;
-    width: 160px;
-
+    top: 5%;
+    height: 17%;
+    width: 11%;
 }
 
 
@@ -64,26 +70,28 @@ body {
     background: #f6f5f7;
     display: flex;
     height: 91.5vh;
+    width: 71.5%;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
         0 10px 10px rgba(0, 0, 0, 0.22);
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
-
 }
 
 .leftWindow {
     padding: 1px 5px;
     border-style: solid;
     border-color: cornflowerblue;
-    width: 240px;
+    width: 40%;
+    max-width: 305px;
 }
 
 .rightWindow {
     display: flex;
     flex-direction: column;
     border-style: solid;
-    width: 875px;
+    width: 100%;
+    height: 99%;
     border-color: cornflowerblue;
     padding: 1px 5px;
 }
@@ -102,16 +110,20 @@ body {
     border-bottom-style: ridge;
     width: 100%;
     height: 54px;
+    max-width: 775px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .topMenu {
     border-bottom-style: ridge;
     width: 100%;
     padding-top: 9px;
-    margin: -5px 42px 6px 0px;
+    margin: -5px 0px 5px 0px;
 }
 
 .modalDialog {
@@ -215,12 +227,9 @@ body {
     color: #f6f5f7;
 }
 
-#nameChat {
-    font-size: 30px;
-}
 
 .chat {
-    flex-grow: 2;
+    height: 100%;
     border-left-style: ridge;
     border-right-style: ridge;
     margin: 0px 10px 0px 10px;
@@ -249,18 +258,21 @@ body {
 
 #dialogUserInfo {
     position: relative;
-    left: 495px;
+    left: 53%;
 }
 
 #out {
     position: relative;
-    left: 530px;
+    left: 56%;
 }
 
 .wChat {
-    max-width: 800px;
-    overflow: auto;
-    max-height: 470px;
+    max-width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
 }
 
 #errorField {
@@ -278,7 +290,7 @@ button:disabled {
 }
 
 #dialogName {
-    outline: none;
+    font-size: 17px;
 }
 
 .memberWindow {
@@ -299,7 +311,7 @@ button:disabled {
     width: 260px;
     border-bottom-style: ridge;
     font-size: 20px;
-    padding-top: 9px;
+    padding-top: 2px;
     padding-bottom: 5px;
 }
 
@@ -313,13 +325,85 @@ button:disabled {
 }
 
 .brigadier {
-    padding: 10px 5px 0px 10px;
+    padding: 0px 5px 0px 10px;
     font-size: 20px;
 }
 
 #windowNameChat {
     overflow-y: auto;
     overflow-x: hidden;
-    width: 232px;
-    height: 650px;
+    width: 100%;
+    height: 92%;
+}
+
+.messageBlock {
+    display: flex;
+}
+
+.messageContent {
+    border: 1px solid black;
+    padding: 2px;
+    background: rgb(190, 218, 255);
+    border-radius: 9px;
+    font-size: 19px;
+    margin-bottom: 10px;
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.myMessage {
+    flex-direction: row-reverse;
+}
+
+.myMessage .messageContent {
+    background: rgb(120, 255, 117);
+}
+
+.createNewChatName {
+    border: 1px solid black;
+    padding: 2px;
+    background: rgb(217, 255, 3);
+    border-radius: 9px;
+    font-size: 19px;
+    margin-bottom: 10px;
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.buttonWindowSettingChat1 {
+    border-radius: 20px;
+    border: 1px solid rgb(45, 129, 238);
+    background-color: rgb(45, 129, 238);
+    color: #FFFFFF;
+    font-size: 13px;
+    padding: 5px 15px;
+    letter-spacing: 1px;
+}
+
+.buttonWindowSettingChat2 {
+    border-radius: 20px;
+    border: 1px solid rgb(45, 129, 238);
+    background-color: rgb(45, 129, 238);
+    color: #FFFFFF;
+    font-size: 13px;
+    padding: 5px 20px;
+    letter-spacing: 1px;
+    margin-left: 7px;
+}
+
+.inputSettingChat {
+    font-size: 17px;
+}
+
+input:focus {
+	outline: none;
+	border: 1.5px solid #2d81ee
+}
+
+.windowDel {
+    padding-top: 30px;
+}
+
+.windowAdd {
+    padding-top: 20px;
 }

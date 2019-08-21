@@ -13,14 +13,22 @@ const dialogName = document.getElementById('dialogName');
 const create = document.getElementById('create');
 const users = document.getElementById('users');
 const windowNameChat = document.getElementById('windowNameChat');
-const memberWindow = document.getElementById('memberWindow');
 const members = document.getElementById('members');
 const signMembers = document.getElementById('signMembers');
 const close = document.getElementById('close');
-const openModal2 = document.getElementById('openModal2');
-let data = -1;
+const messageText = document.getElementById('messageText');
+const add = document.getElementById('add');
+const addName = document.getElementById('addName');
+const closeSetWindow = document.getElementById('closeSetWindow');
+const deleteName = document.getElementById('deleteName');
+const deleteButton = document.getElementById('deleteButton');
+const delInform = document.getElementById('delInform');
+const closeCreate = document.getElementById('closeCreate');
+
+let data = null;
 let dialogIdE = null;
 let nameC = null;
+
 
 
 setting.addEventListener('click', (e) => {
@@ -34,21 +42,7 @@ setting.addEventListener('click', (e) => {
 
 profile.addEventListener('click', (e) => {
     e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
-        switch (data.errcode) {
-            case null:
-                window.location.href = "/profile.html";
-                break;
-            case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
-                break;
-        }
-    }
-    ereq.send()
+    window.location.href = "/profile";
 });
 
 exit.addEventListener('click', (e) => {
@@ -60,10 +54,8 @@ exit.addEventListener('click', (e) => {
         data = JSON.parse(ereq.responseText);
         switch (data.errcode) {
             case null:
-                window.location.href = "/auth/index.html";
-                break;
             case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
+                window.location.href = "/auth";
                 break;
         }
     }
@@ -98,12 +90,10 @@ socket.on('dialogs', (data) => {
                 return;
             }
             nameChat.textContent = data.dialogs[i].name;
-            topSetting.classList.remove('not_active');
             out.classList.remove('not_active')
             dialogUserInfo.classList.remove('not_active')
             chat.style.display = 'flex';
             dialogIdE = data.dialogs[i].id;
-            alert(data.dialogs[i].id);
             socket.emit('messages', {
                 dialogId: dialogIdE
             });
@@ -120,16 +110,45 @@ socket.on('dialogs', (data) => {
 });
 
 socket.on('message', (data) => {
-    chatTable.innerHTML += '</td><td>' + data.name + '</td><td>' + '</td><td>' +
-        data.message.replace(/\n/g, '<br>') + '</td><td>' + '</td><td>' + (new Date(data.date)).toLocaleString() + '</td></tr>'
+    let messageBlock = document.createElement('div');
+    let div = document.createElement('div');
+    messageBlock.className = 'messageBlock';
+    if (data.name === setting.textContent) {
+        messageBlock.classList.add('myMessage')
+    }
+    if (data.name === '') {
+        div.className = 'createNewChatName'
+        div.textContent = data.message;
+    } else {
+        div.className = 'messageContent';
+        div.textContent = data.name + ':\n' + data.message;
+    }
+    messageBlock.append(div);
+    chatTable.append(messageBlock);
 })
 
 socket.on('messages', (data) => {
+    if (data.brigadier === setting.textContent) {
+        topSetting.classList.remove('not_active');
+    }
     chatTable.innerHTML = '';
     data.messages.forEach((mes) => {
-        chatTable.innerHTML += '<tr><td>' + mes.name + '</td><td>' + '</td><td>' +
-            mes.message.replace(/\n/g, '<br>') + '</td><td>' + '</td><td>' + (new Date(mes.date)).toLocaleString() + '</td></tr>';
-    })
+        let messageBlock = document.createElement('div');
+        let div = document.createElement('div');
+        messageBlock.className = 'messageBlock';
+        if (mes.name === setting.textContent) {
+            messageBlock.classList.add('myMessage')
+        }
+        if (mes.name === '') {
+            div.className = 'createNewChatName'
+            div.textContent = mes.message;
+        } else {
+            div.className = 'messageContent';
+            div.textContent = mes.name + ':\n' + mes.message;
+        }
+        messageBlock.append(div);
+        chatTable.append(messageBlock);
+    });
 });
 
 socket.on('err', (data) => {
@@ -137,7 +156,7 @@ socket.on('err', (data) => {
 })
 
 submit.addEventListener('click', () => {
-    if (messageText.value == '') return
+    if (messageText.value == '') return;
     socket.emit('message', {
         dialogId: dialogIdE,
         message: messageText.value
@@ -167,30 +186,30 @@ out.addEventListener('click', (e) => {
 socket.on('dialog', (data) => {
     let div = document.createElement('div');
     div.className = 'nameDialog';
-    alert(data.dialogId);
-    div.id = 'dialogInLeft' + data.dialogId;
+    div.id = 'dialogInLeft' + data.id;
     div.textContent = nameC;
     windowNameChat.prepend(div);
     div.addEventListener('click', (e) => {
         e.preventDefault();
-        if (dialogIdE === data.dialogId) {
-            return;
-        }
         nameChat.textContent = nameC;
-        topSetting.classList.remove('not_active');
         out.classList.remove('not_active')
         dialogUserInfo.classList.remove('not_active')
         chat.style.display = 'flex';
-        dialogIdE = data.dialogId;
+        dialogIdE = data.id;
         socket.emit('messages', {
             dialogId: dialogIdE
         });
     });
 });
 
+closeCreate.addEventListener('click', () => {
+    create.disabled = false;
+});
+
 function modalClose() {
     if (location.hash == '#openModal') {
         location.hash = '';
+        create.disabled = false;
     }
 }
 
@@ -219,7 +238,8 @@ dialogName.addEventListener('input', () => {
 
 messageText.addEventListener('keyup', (e) => {
     if (e.keyCode === 13) {
-        if (messageText.value == '') return
+        if (messageText.value === '' || messageText.value === '\n' || messageText.value === '\t')
+            return
         socket.emit('message', {
             dialogId: dialogIdE,
             message: messageText.value
@@ -246,7 +266,7 @@ socket.on('users', (data) => {
         });
     }
     if (data.users.length === 0) {
-        close.addEventListener('click', () => { 
+        close.addEventListener('click', () => {
             div.remove();
         })
     }
@@ -256,4 +276,58 @@ dialogUserInfo.addEventListener('click', () => {
     socket.emit('users', {
         dialogId: dialogIdE
     })
+});
+
+socket.on('add', (data) => {
+    addInform.style.color = 'green';
+    addInform.textContent = data.user + ' добавлен в чат';
+});
+
+add.addEventListener('click', () => {
+    add.disabled = true;
+    if (!addName.value) {
+        addName.classList.add("errorInput");
+        return;
+    }
+    socket.emit('add', {
+        dialogId: dialogIdE,
+        user: addName.value
+    })
+});
+
+deleteButton.addEventListener('click', () => {
+    deleteButton.disabled = true;
+    if (!deleteName.value) {
+        deleteName.classList.add("errorInput");
+        return;
+    }
+    socket.emit('rm', {
+        dialogId: dialogIdE,
+        user: deleteName.value
+    })
+});
+
+socket.on('rm', (data) => {
+    delInform.style.color = 'red';
+    delInform.textContent = data.user + ' удален из чата';
+});
+
+
+addName.addEventListener('input', () => {
+    addName.classList.remove("errorInput");
+    add.disabled = false;
+});
+
+deleteName.addEventListener('input', () => {
+    deleteName.classList.remove("errorInput");
+    deleteButton.disabled = false;
+});
+
+closeSetWindow.addEventListener('click', () => {
+    addName.value = '';
+    addInform.style.display = 'none';
+    deleteName.value = '';
+    delInform.style.display = 'none';
+    deleteButton.disabled = false;
+    add.disabled = false;
 });
