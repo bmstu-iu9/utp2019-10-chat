@@ -4,7 +4,7 @@ const core = require('../../scripts/core')
 const users = require('../../scripts/users')
 const mail = require('../../scripts/mail')
 const changeemail = require('../../scripts/changeemail')
-
+const unconfirmed = require('../../scripts/unconfirmed')
 
 exports.invoke = async (request, response, data) => {
 	try {
@@ -39,10 +39,32 @@ exports.invoke = async (request, response, data) => {
 			return
 		}
 
+		if (await changeemail.isNotApproved(username)) {
+			const hash = await changeemail.changeHashInUnconfirmed(username, args.newEmail)
+
+			if (hash) {
+				try {
+					await mail.sendMail(args.newEmail, 'QuickChat registration!',
+						'Please follow the link below \n\n'+"http://"+request.headers.host+"/approve?hash="+hash)
+				} catch (err) {
+					await changeemail.deleteHashFromUnconfirmed(hash)
+					core.sendJSON(response, {errcode: 'RCODE_FAILED_TO_SEND_EMAIL', errmessage: 'Failed to send email'})
+					return
+				}
+				await changeemail.deleteOldHashFromUnconfirmed(username, hash)
+				await changeemail.changeUnconfirmedMail(hash, args.newEmail)
+				core.sendJSON(response, {errcode: null})
+				return
+			} else {
+				core.sendJSON(response, {errcode: 'RCODE_EMAIL_ALREADY_EXISTS', errmessage: 'Email already exists'})
+				return
+			}
+		}
+
 		const hash = await changeemail.addUserInChangeEmailList(args.newEmail, email)
 		if (hash) {
 			try {
-				await mail.sendMail(args.newEmail, 'QuickChat password change!',
+				await mail.sendMail(args.newEmail, 'QuickChat email change!',
 					'Please follow the link below \n\n'+"http://"+request.headers.host+"/approvechange?hash="+hash)
 			} catch (err) {
 				await changeemail.deleteUserFromChangeEmailList(hash)
@@ -51,6 +73,7 @@ exports.invoke = async (request, response, data) => {
 			}
 		} else {
 			core.sendJSON(response, {errcode: 'RCODE_EMAIL_ALREADY_EXISTS', errmessage: 'Email already exists'})
+			return
 		}
 		core.sendJSON(response, {errcode: null})
 
