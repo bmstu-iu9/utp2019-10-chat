@@ -10,7 +10,7 @@ exports.rm = (filename) => {
 			else
 				resolve()
 		})
-	}
+	})
 }
 
 exports.read = (filename) => {

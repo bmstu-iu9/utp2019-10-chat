@@ -115,7 +115,7 @@ const userExitDialog = async (dialog, user,id) => {
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 	try {
 		if (dialog.brigadier === null && dialog.user.length === 0)
-			await jsonfile.rm(consts.DIALOGS_PATH, id + '.json'))
+			await jsonfile.rm(consts.DIALOGS_PATH, id + '.json')
 		else
 			await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
 	} catch (err) {
@@ -143,7 +143,7 @@ exports.deleteUserDialogOnly = async (user, id) => {
 	}
 		
 	if (dialog.brigadier === null && dialog.user.length === 0)
-		await jsonfile.rm(consts.DIALOGS_PATH, id + '.json'))
+		await jsonfile.rm(consts.DIALOGS_PATH, id + '.json')
 	else
 		await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
 }
