@@ -54,13 +54,13 @@ img {
 
 #changeMailErr {
 	display: none;
-	background-color: #ffffff;
+	background-color: #f6f5f7;
 	color: red;
 }
 
 #changePwdErr {
 	display: none;
-	background-color: #ffffff;
+	background-color: #f6f5f7;
 	color: red;
 }
 

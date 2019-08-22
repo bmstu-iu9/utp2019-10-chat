@@ -89,6 +89,7 @@ changePassBtn.addEventListener('click', (e) => {
 		oldPwdInput.classList.add("errorInput");
 		setTimeout(() => {
 			oldPwdInput.classList.remove("errorInput");
+			changePassBtn.disabled = false;
 		}, 1000);
 		return;
 	}
@@ -96,31 +97,41 @@ changePassBtn.addEventListener('click', (e) => {
 		newPwdInput.classList.add("errorInput");
 		setTimeout(() => {
 			newPwdInput.classList.remove("errorInput");
+			changePassBtn.disabled = false;
 		}, 1000);
 		return;
 	}
-	req.open('POST', '/req/changeemail.js', true)
+	req.open('POST', '/req/changepassword.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
 		if (req.status != 200) {
-			changeMailErr.textContent = req.status + " " + req.statusText;
+			changePwdErr.textContent = req.status + " " + req.statusText;
+			changePwdErr.style.display = "block";
+			changePwdErr.style.color = "red";
+			setTimeout(() => {
+				changePwdErr.style.display = "none";
+			}, 5000);
 			return;
 		}
 		data = JSON.parse(req.responseText);
 		if (data.errcode != null) {
-			changeMailErr.textContent = data.errmessage;
-			changeMailBtn.disabled = false;
+			changePwdErr.textContent = data.errmessage;
+			changePwdErr.style.display = "block";
+			changePwdErr.style.color = "red";
 			setTimeout (() => {
-				changeMailErr.style.display = "none";
-			});
+				changePwdErr.style.display = "none";
+			}, 5000);
 			return;
 		}
-		changeMailErr.textContent = data.errmessage;	
+		changePwdErr.textContent = "Success";
+		changePwdErr.style.display = "block";
+		changePwdErr.style.color = "green";
+		changePassBtn.disabled = false;
 		setTimeout (() => {
-			changeMailErr.style.display = "none";
-		});
+			changePwdErr.style.display = "none";
+		}, 5000);
 	}
-	req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
+	req.send(JSON.stringify({password: oldPwdInput.value, newPassword: newPwdInput.value}));
 });
 
 changeMailBtn.addEventListener('click', (e) => {
