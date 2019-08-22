@@ -19,6 +19,7 @@ const deleteAccBut = document.getElementById('deleteAcc');
 const changeMailBtn = document.getElementById('changeMailBtn');
 const yourPwdTxt = document.getElementById('yourPwd');
 const yourMailTxt = document.getElementById('yourMail');
+const changeMailErr = document.getElementById('changeMailErr');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -80,28 +81,83 @@ deleteAccBut.addEventListener('click', (e) => {
 	req.send();
 });
 
-changeMailBtn.addEventListener('click', (e) => {
+changePassBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 	const req = new XMLHttpRequest();
+	changePassBtn.disabled = true;
+	if (!oldPwdInput.value) {
+		oldPwdInput.classList.add("errorInput");
+		setTimeout(() => {
+			oldPwdInput.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+	if (!newPwdInput.value) {
+		newPwdInput.classList.add("errorInput");
+		setTimeout(() => {
+			newPwdInput.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
 	req.open('POST', '/req/changeemail.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
 		if (req.status != 200) {
+			changeMailErr.textContent = req.status + " " + req.statusText;
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode != null) {
+			changeMailErr.textContent = data.errmessage;
+			changeMailBtn.disabled = false;
+			setTimeout (() => {
+				changeMailErr.style.display = "none";
+			});
+			return;
+		}
+		changeMailErr.textContent = data.errmessage;	
+		setTimeout (() => {
+			changeMailErr.style.display = "none";
+		});
+	}
+	req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
+});
+
+changeMailBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	changeMailBtn.disabled = true;
+	if (!yourMailTxt.value) {
+		yourMailTxt.classList.add("errorInput");
+		setTimeout(() => {
+			yourMailTxt.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+	if (!yourPwdTxt.value) {
+		yourPwdTxt.classList.add("errorInput");
+		setTimeout(() => {
+			yourPwdTxt.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+	req.open('POST', '/req/changeemail.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
 		}
 		data = JSON.parse(req.responseText);
 		if (data.errcode != null) {
 			alert(data.errmessage);
+			changeMailBtn.disabled = false;
 			return;
 		}
 		alert("Changed successfully");
 	}
 	req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
 });
-
-// changePass.addEventListener('click', e => {
-// 	e.preventDefault();
-// 	changePassDiv.visibility = "visible";
-// })
 
 closeSessionsBtn.addEventListener('click', (e) => {
 	e.preventDefault();
@@ -200,10 +256,3 @@ document.addEventListener('keydown', function (e) {
 		modalClose();
 	}
 });
-
-// const socket = io();
-
-// socket.on('cur', (data) => {
-// 	setting.textContent = data.name;
-// 	nickname.textContent = data.name;
-// });
