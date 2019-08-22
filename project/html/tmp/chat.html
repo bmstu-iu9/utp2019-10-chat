@@ -231,5 +231,11 @@
 				req.send(JSON.stringify({password: oldPassword.value, newPassword: newPassword.value}))
 			}
 		</script>
+
+		<p>Сброс пароля</p>
+		<button id="resetPasswordButton">Reset password</button><br><br>
+		<div id="state"></div>
+		<div id="rcode"></div>
+		<script src='/req/resetpassword.js'></script>
 	</body>
 </html>
