@@ -30,7 +30,7 @@
                 </div>
                 <div class="changeDiv" id="changePassDiv">
                     <!-- <a href="#openModal">Сменить пароль</a> -->
-                    <a class="changeTextA" id="changePass" href="#changePass">Смена пароля</a> <!--Пока не работает-->
+                    <a class="changeTextA" id="changePass">Смена пароля</a> 
                     <div id="changePassFields" class="changePassFields">
                         <div><a>Введите старый пароль</a></div>
                         <div><input id="oldPwd" type="password" name="Old Password" placeholder="password" /></div>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="changeDiv" id="changeMailDiv">
                         <!-- <a href="#openModal">Сменить пароль</a> -->
-                        <a class="changeTextA" id="changeMail" href="#changeMail">Смена адреса почты</a>
+                        <a class="changeTextA" id="changeMail">Смена адреса почты</a>
                         <div id="changeMailFields" class="changeMailFields">
                             <div><a>Введите новую почту</a></div>
                             <div><input id="yourMail" type="email" name="Email" placeholder="email" /></div>
@@ -79,6 +79,7 @@
                 <a href="#close" title="Закрыть" class="close">X</a>
                 <!-- <div><a>Введите пароль</a></div>
                 <div><input id="passToCloseAll" type="password" placeholder="password" /></div> -->
+                <h2>Это разлогинит вас из всех активных сессий. Продолжить?</h2>
                 <p><button class="modalBtn" id="closeSessions">Выйти</button></p>
                 <span id="exitSesError"></span>
             </form>
@@ -95,7 +96,6 @@
             </div>
         </div>
 
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script src="/profile/script.js"></script>
 
 </body>
