@@ -25,5 +25,5 @@ exports.invoke = async (request, response, data) => {
 		return
 	}
 
-	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'reset.html'))
+	core.sendFullFile(response, pathModule.join(consts.DATA_PATH, 'approvereset/index.html'))
 }
