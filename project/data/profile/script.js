@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 			if (data.notapproved == undefined) {
 				nickname.style.color = "green";
 			} else {
+				nickname.textContent = data.user + "\nвы не подтвердили адрес электронной почты";
 				nickname.style.color = "red";
 			}
 		}else {
@@ -73,7 +74,7 @@ deleteAccBut.addEventListener('click', (e) => {
 		data = JSON.parse(req.responseText);
 		if (data.errcode == null) {
 			alert("Аккаунт удален");
-			window.location.href = "/auth/index.html";
+			window.location.href = "/auth";
 		} else {
 			alert(data.errcode);
 		}
@@ -203,7 +204,7 @@ closeSessionsBtn.addEventListener('click', (e) => {
 				setTimeout(() => {
 					exitSesErr.style.display = "none";
 				}, 1000);
-				window.location.href = "/auth/index.html";
+				window.location.href = "/auth";
 				break;
 		}
 	}
@@ -231,7 +232,7 @@ changePassBtn.addEventListener('click', (e) => {
 
 chats.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = "/chat.html";
+    window.location.href = "/";
 });
 
 exit.addEventListener('click', (e) => {
@@ -246,7 +247,7 @@ exit.addEventListener('click', (e) => {
         data = JSON.parse(req.responseText);
         switch (data.errcode) {
             case null:
-                window.location.href = "/auth/index.html";
+                window.location.href = "/auth";
                 break;
             case 'NOT_AUTHORIZED':
                 window.location.href = "/error.html";
