@@ -20,6 +20,8 @@ const changeMailBtn = document.getElementById('changeMailBtn');
 const yourPwdTxt = document.getElementById('yourPwd');
 const yourMailTxt = document.getElementById('yourMail');
 const changeMailErr = document.getElementById('changeMailErr');
+const verificationErr = document.getElementById('verificationErr');
+const resetPwdBtn = document.getElementById('resetPwd');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -48,12 +50,41 @@ document.addEventListener('DOMContentLoaded', (e) => {
 			nickname.textContent = data.user;
 			if (data.notapproved == undefined) {
 				nickname.style.color = "green";
+				verificationErr.style.display = "none";
 			} else {
-				nickname.textContent = data.user + "\nвы не подтвердили адрес электронной почты";
+				verificationErr.style.display = "block";
 				nickname.style.color = "red";
 			}
 		}else {
 			alert(data.errcode);
+		}
+	}
+	req.send();
+});
+
+resetPwdBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/resetpassword.js');
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		switch (data.errcode) {
+			case null :
+				alert("Успех! Проверьте почту");
+				break;
+			case "RCODE_NOT_AUTHORIZED" :
+				alert("Вы не авторизованы");
+				window.location.href = "/auth";
+				break;
+			default: 
+				alert(data.errmessage);
 		}
 	}
 	req.send();
@@ -76,7 +107,8 @@ deleteAccBut.addEventListener('click', (e) => {
 			alert("Аккаунт удален");
 			window.location.href = "/auth";
 		} else {
-			alert(data.errcode);
+			alert(data.errmessage);
+			window.location.href = "/auth";
 		}
 	}
 	req.send();
@@ -111,6 +143,7 @@ changePassBtn.addEventListener('click', (e) => {
 			changePwdErr.style.color = "red";
 			setTimeout(() => {
 				changePwdErr.style.display = "none";
+				changePassBtn.disabled = false;
 			}, 5000);
 			return;
 		}
@@ -121,6 +154,7 @@ changePassBtn.addEventListener('click', (e) => {
 			changePwdErr.style.color = "red";
 			setTimeout (() => {
 				changePwdErr.style.display = "none";
+				changePassBtn.disabled = false;
 			}, 5000);
 			return;
 		}

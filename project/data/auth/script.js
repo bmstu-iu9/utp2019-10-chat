@@ -200,7 +200,7 @@ loginButton.addEventListener('click', (e) => {
 				loginButton.disabled = false;
 				break;
 			case null:
-				window.location.href = "/chat.html"
+				window.location.href = "/";
 				break;
 			default:
 				loginError.textContent = 'Неизвестная ошибка: ' + data.errmesage;

@@ -27,6 +27,7 @@
                 <div class="nicknameField">
                     <p>Имя пользователя: </p>
                     <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
+                    <p id="verificationErr"><br>Вы не подтвердили адрес электронной почты</p>
                 </div>
                 <div class="changeDiv" id="changePassDiv">
                     <!-- <a href="#openModal">Сменить пароль</a> -->
@@ -52,6 +53,7 @@
                             <span id="changeMailErr"></span>
                         </div>
                     </div>
+                <div><a href="#openModal">Сбросить пароль</a></div> <!--Модальное окно на случай миссклика-->
                 <div><a href="#openModal3">Завершить все сессии</a></div> <!--Модальное окно на случай миссклика-->
                 <div><a href="#openModal4">Удалить аккаунт</a></div> <!--Модальное окно на случай миссклика-->
             </div>
@@ -73,6 +75,16 @@
         </div>
     </div> -->
 
+    <div id="openModal" class="modalDialog">
+            <div>
+                <form>
+                    <a href="#close" title="Закрыть" class="close">X</a>
+                    <h2>К вам на почту придет ссылки для смены пароля. Продолжить?</h2>
+                    <p><button class="modalBtn" id="resetPwd">Сбросить пароль</button></p>
+                </form>
+            </div>
+        </div>
+
     <div id="openModal3" class="modalDialog">
         <div>
             <form>
@@ -87,14 +99,14 @@
     </div>
 
     <div id="openModal4" class="modalDialog">
-            <div>
-                <form>
-                    <a href="#close" title="Закрыть" class="close">X</a>
-                    <h2>Вы уверены?</h2>
-                    <p><button class="modalBtn" id="deleteAcc">Удалить</button></p>
-                </form>
-            </div>
+        <div>
+            <form>
+                <a href="#close" title="Закрыть" class="close">X</a>
+                <h2>Вы уверены?</h2>
+                <p><button class="modalBtn" id="deleteAcc">Удалить</button></p>
+            </form>
         </div>
+    </div>
 
     <script src="/profile/script.js"></script>
 

@@ -29,7 +29,7 @@ setting.addEventListener('click', (e) => {
 
 profile.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = "/profile/index.html";
+    window.location.href = "/profile";
 });
 
 exit.addEventListener('click', (e) => {
@@ -41,7 +41,7 @@ exit.addEventListener('click', (e) => {
         data = JSON.parse(ereq.responseText);
         switch (data.errcode) {
             case null:
-                window.location.href = "/auth/index.html";
+                window.location.href = "/auth";
                 break;
             case 'NOT_AUTHORIZED':
                 window.location.href = "/error.html";

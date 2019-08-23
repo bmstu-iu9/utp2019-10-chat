@@ -235,3 +235,8 @@ button:disabled {
 	background-color: #f6f5f7;
 	color: red;
 }
+
+#verificationErr {
+	display: none;
+	color: red;
+}
