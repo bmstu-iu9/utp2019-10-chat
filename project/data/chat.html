@@ -11,13 +11,21 @@
 
 <body>
     <div class="conteiner">
-        <div id="windowSet" class="window">
+        <!-- <div id="windowSet" class="window">
             <button id="profile" class="menuBut">Настройки профиля</button>
             <button id="exit" class="menuBut">Выйти</button>
-        </div>
+        </div> -->
         <div class="menu">
-            <span class="name">QuickChat</span>
-            <button id="setting" class="settings"></button>
+            <div class="name">QuickChat</div>
+            <!-- <span >QuickChat</span> -->
+            <div class="tmp">
+                <div id="setting" class="settings"></div>
+                <!-- <button id="setting" class="settings"></button> -->
+                <div id="windowSet" class="window">
+                    <button id="profile" class="menuBut">Настройки профиля</button>
+                    <button id="exit" class="menuBut">Выйти</button>
+                </div>
+            </div>
         </div>
         <div class="windowChat">
             <div id="leftWindow" class="leftWindow">
@@ -28,11 +36,11 @@
             </div>
             <div class="rightWindow">
                 <div class="topMenu">
-                    <a id="topSetting" class="link" href="#openWindow">Настройки чата</a>
-                    <a id="dialogUserInfo" class="link" href="#openModal2">Участники</a>
-                    <a id="out" class="link">Покинуть</a>
+                    <a id="topSetting" class="link1" href="#openWindow">Настройки чата</a>
+                    <a id="dialogUserInfo" href="#openModal2">Участники</a>
+                    <a id="out">Покинуть</a>
                 </div>
-                <div id="nameChat" class="nameChat"></div>
+                <div id="nameChat"></div>
                 <div class="chat">
                     <div id="chat" class="chatTable">
                         <div id="chatTable" class="wChat">

@@ -76,6 +76,8 @@ socket.on('connect', () => {
 socket.on('dialogs', (data) => {
     const prevDialog = dialogIdE;
     chat.style.display = 'none';
+    dialogUserInfo.classList.remove('color');
+    out.classList.remove('color');
     topSetting.classList.add('not_active');
     out.classList.add('not_active');
     dialogUserInfo.classList.add('not_active');
@@ -89,9 +91,18 @@ socket.on('dialogs', (data) => {
             if (dialogIdE === data.dialogs[i].id) {
                 return;
             }
+            if (div.textContent.length > 25) {
+                nameChat.classList.remove('nameChat');
+                nameChat.classList.add('longName');
+            } else {
+                nameChat.classList.remove('longName');
+                nameChat.classList.add('nameChat');
+            }
             nameChat.textContent = data.dialogs[i].name;
-            out.classList.remove('not_active')
-            dialogUserInfo.classList.remove('not_active')
+            out.classList.remove('not_active');
+            out.classList.add('color');
+            dialogUserInfo.classList.remove('not_active');
+            dialogUserInfo.classList.add('color');
             chat.style.display = 'flex';
             dialogIdE = data.dialogs[i].id;
             socket.emit('messages', {
@@ -170,9 +181,11 @@ socket.on('delete', (data) => {
         dialogIdE = null;
         nameChat.textContent = '';
         chat.style.display = 'none';
+        out.classList.remove('color');
         topSetting.classList.add('not_active');
         out.classList.add('not_active');
         dialogUserInfo.classList.add('not_active');
+        dialogUserInfo.classList.remove('color');
     }
 });
 
@@ -184,6 +197,8 @@ out.addEventListener('click', (e) => {
 });
 
 socket.on('dialog', (data) => {
+    out.classList.remove('color');
+    dialogUserInfo.classList.remove('color');
     let div = document.createElement('div');
     div.className = 'nameDialog';
     div.id = 'dialogInLeft' + data.id;
@@ -191,9 +206,18 @@ socket.on('dialog', (data) => {
     windowNameChat.prepend(div);
     div.addEventListener('click', (e) => {
         e.preventDefault();
-        nameChat.textContent = nameC;
-        out.classList.remove('not_active')
-        dialogUserInfo.classList.remove('not_active')
+        if (div.textContent.length > 25) {
+            nameChat.classList.remove('nameChat');
+            nameChat.classList.add('longName');
+        } else {
+            nameChat.classList.remove('longName');
+            nameChat.classList.add('nameChat');
+        }
+        nameChat.textContent = div.textContent;
+        out.classList.remove('not_active');
+        out.classList.add('color');
+        dialogUserInfo.classList.remove('not_active');
+        dialogUserInfo.classList.add('color');
         chat.style.display = 'flex';
         dialogIdE = data.id;
         socket.emit('messages', {
