@@ -1,3 +1,8 @@
+body {
+	margin: -8px;
+	font-family: 'Montserrat', sans-serif;
+}
+
 h1 {
 	font-weight: bold;
 	margin: 0;
@@ -5,7 +10,6 @@ h1 {
 
 h2 {
 	font-weight: bolder;
-	text-align: center;
 }
 
 a {
@@ -14,28 +18,17 @@ a {
 	margin: 15px 0;
 }
 
+p {
+	font-weight: 700;
+	font-size: 18px;
+}
+
 img {
     border: 2px solid #ddd;
     border-radius: 5%;
     padding: 3px;
 }
 
-.modalBtn {
-	border-radius: 20px;
-	border: 1px solid rgb(45, 129, 238);
-	background-color: rgb(45, 129, 238);
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
-}
-
-.errorInput {
-	border: 1.5px solid red
-}
 
 button:active {
 	transform: scale(0.95);
@@ -55,6 +48,56 @@ button:disabled {
 	border: 1px solid grey;
 }
 
+.changeTextA {
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	border-radius: 12px;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
+
+.container {
+    display: flex;
+	flex-direction: column;
+	vertical-align: middle;
+}
+
+.errorInput {
+	border: 1.5px solid red
+}
+
+.email {
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.modalBtn {
+	border-radius: 20px;
+	border: 1px solid rgb(45, 129, 238);
+	background-color: rgb(45, 129, 238);
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
 .menu {
     display: block;
     background-color: rgb(45, 129, 238);
@@ -67,19 +110,6 @@ button:disabled {
     padding: 5px;
 }
 
-.window {
-    display: none;
-    flex-direction: column;
-    color: black;
-    padding: 0;
-    position: absolute;
-    left: 1030px;
-    z-index: 1;
-    top: 42px;
-    height: 59px;
-   width: 160px;
-}
-
 .menuBut {
     border: 1px solid black;
     background-color: rgb(222, 225, 230);
@@ -88,71 +118,8 @@ button:disabled {
     padding: 5px;
 }
 
-.name {
-    margin: 1px 800px 1px 100px;
-    font-size: 30px;
-    outline: none;
-    background-color: rgb(45, 129, 238);
-}
-
-.settings {
-    border: rgb(45, 129, 238);
-    z-index: 100;
-    background-color: rgb(45, 129, 238);
-    color: white;
-    font-size: 30px;
-    margin: 6px -4px;
-}
-
-.container {
-    display: flex;
-	flex-direction: column;
-	vertical-align: middle;
-}
-
-.profile {
-	margin: 52px 213px 0px 213px;
-    background: #f6f5f7;
-    display: inline-flex;
-    height: 91.5vh;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
-        0 10px 10px rgba(0, 0, 0, 0.22);
-    justify-content: flex-start;
-	align-items: stretch;
-	border-style: solid;
-    border-color: cornflowerblue;
-	padding: 1px 5px;
-}
-
-.pfImg {
-	overflow-y: auto;
-	overflow-x: hidden;
-	width: 240px;
-}
-
-.right {
-    display: flex;
-    flex-direction: column;
-    width: 875px;
-}
-
-.nicknameField {
-	display: flex;
-}
-
 .mailField {
 	display: flex;
-}
-
-.nickname {
-	color: green;
-	font-weight: 700;
-	font-size: 18px;
-}
-
-.email {
-	font-weight: 700;
-	font-size: 18px;
 }
 
 .modalDialog {
@@ -190,19 +157,81 @@ button:disabled {
 	background: #fff;
 }
 
-.close {
-	background: #606061;
-	color: #FFFFFF;
-	line-height: 25px;
-	position: absolute;
-	right: -12px;
-	text-align: center;
-	top: -10px;
-	width: 24px;
-	text-decoration: none;
-	font-weight: bold;
-	border-radius: 12px;
-	box-shadow: 1px 1px 3px #000;
+
+.name {
+    margin: 1px 800px 1px 100px;
+    font-size: 30px;
+    outline: none;
+    background-color: rgb(45, 129, 238);
 }
 
-.close:hover { background: #00d9ff; }
+.nicknameField {
+	display: flex;
+}
+
+.nickname {
+	color: green;
+	font-weight: 700;
+	font-size: 18px;
+}
+
+.profile {
+	margin: 52px 213px 0px 213px;
+    background: #f6f5f7;
+    display: inline-flex;
+    height: 91.5vh;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+        0 10px 10px rgba(0, 0, 0, 0.22);
+    justify-content: flex-start;
+	align-items: stretch;
+	border-style: solid;
+    border-color: cornflowerblue;
+	padding: 1px 5px;
+}
+
+.pfImg {
+	position: relative;
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: 240px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    width: 875px;
+}
+
+.settings {
+    border: rgb(45, 129, 238);
+    z-index: 100;
+    background-color: rgb(45, 129, 238);
+    color: white;
+    font-size: 30px;
+    margin: 6px -4px;
+}
+
+.window {
+    display: none;
+    flex-direction: column;
+    color: black;
+    padding: 0;
+    position: absolute;
+    left: 1030px;
+    z-index: 1;
+    top: 42px;
+    height: 59px;
+    width: 160px;
+}
+
+#changeMailErr {
+	display: none;
+	background-color: #f6f5f7;
+	color: red;
+}
+
+#changePwdErr {
+	display: none;
+	background-color: #f6f5f7;
+	color: red;
+}

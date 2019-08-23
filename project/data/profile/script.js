@@ -2,18 +2,24 @@ const windowSet = document.getElementById('windowSet');
 const setting = document.getElementById('setting');
 const chats = document.getElementById('chats');
 const exit = document.getElementById('exit');
-const nickname = document.getElementById('nickname')
-const container=  document.getElementById('container')
-const profileImg = document.getElementById('profileImg')
-const resetPwdBtn = document.getElementById('resetPwd')
-const oldPwdInput = document.getElementById('oldPwd')
-const newPwdInput = document.getElementById('newPwd')
-const changePassBtn = document.getElementById('changePassBtn')
-const changePwdErr = document.getElementById('changePwdErr')
-const currentPwdInput = document.getElementById('currentPwd')
-const newMailInput = document.getElementById('newMail')
-const passToCloseAllInput = document.getElementById('passToCloseAll')
-const closeSessionsBtn = document.getElementById('closeSessions')
+const nickname = document.getElementById('nickname');
+const container=  document.getElementById('container');
+const profileImg = document.getElementById('profileImg');
+const changePass = document.getElementById('changePass');
+const oldPwdInput = document.getElementById('oldPwd');
+const newPwdInput = document.getElementById('newPwd');
+const changePassBtn = document.getElementById('changePassBtn');
+const changePwdErr = document.getElementById('changePwdErr');
+const currentPwdInput = document.getElementById('currentPwd');
+const newMailInput = document.getElementById('newMail');
+const changePassDiv = document.getElementById('changePassDiv');
+const closeSessionsBtn = document.getElementById('closeSessions');
+const exitSesErr = document.getElementById('exitSesError');
+const deleteAccBut = document.getElementById('deleteAcc');
+const changeMailBtn = document.getElementById('changeMailBtn');
+const yourPwdTxt = document.getElementById('yourPwd');
+const yourMailTxt = document.getElementById('yourMail');
+const changeMailErr = document.getElementById('changeMailErr');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -24,18 +30,187 @@ setting.addEventListener('click', (e) => {
     }
 });
 
-closeSessionsBtn.addEventListener('click', e => {
+document.addEventListener('DOMContentLoaded', (e) => {
 	e.preventDefault();
-	if (!passToCloseAllInput.value){
-		passToCloseAllInput.classList.add("errorInput");
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/curuser.js', true);
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode == null) {
+			setting.textContent = data.user;
+			nickname.textContent = data.user;
+			if (data.notapproved == undefined) {
+				nickname.style.color = "green";
+			} else {
+				nickname.style.color = "red";
+			}
+		}else {
+			alert(data.errcode);
+		}
+	}
+	req.send();
+});
+
+deleteAccBut.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/deleteuser.js', true);
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode == null) {
+			alert("Аккаунт удален");
+			window.location.href = "/auth/index.html";
+		} else {
+			alert(data.errcode);
+		}
+	}
+	req.send();
+});
+
+changePassBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	changePassBtn.disabled = true;
+	if (!oldPwdInput.value) {
+		oldPwdInput.classList.add("errorInput");
 		setTimeout(() => {
-			passToCloseAllInput.classList.remove("errorInput");
+			oldPwdInput.classList.remove("errorInput");
+			changePassBtn.disabled = false;
 		}, 1000);
 		return;
 	}
-})
+	if (!newPwdInput.value) {
+		newPwdInput.classList.add("errorInput");
+		setTimeout(() => {
+			newPwdInput.classList.remove("errorInput");
+			changePassBtn.disabled = false;
+		}, 1000);
+		return;
+	}
+	req.open('POST', '/req/changepassword.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			changePwdErr.textContent = req.status + " " + req.statusText;
+			changePwdErr.style.display = "block";
+			changePwdErr.style.color = "red";
+			setTimeout(() => {
+				changePwdErr.style.display = "none";
+			}, 5000);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode != null) {
+			changePwdErr.textContent = data.errmessage;
+			changePwdErr.style.display = "block";
+			changePwdErr.style.color = "red";
+			setTimeout (() => {
+				changePwdErr.style.display = "none";
+			}, 5000);
+			return;
+		}
+		changePwdErr.textContent = "Success";
+		changePwdErr.style.display = "block";
+		changePwdErr.style.color = "green";
+		changePassBtn.disabled = false;
+		setTimeout (() => {
+			changePwdErr.style.display = "none";
+		}, 5000);
+	}
+	req.send(JSON.stringify({password: oldPwdInput.value, newPassword: newPwdInput.value}));
+});
 
-changePassBtn.addEventListener('click', e => {
+changeMailBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	changeMailBtn.disabled = true;
+	if (!yourMailTxt.value) {
+		yourMailTxt.classList.add("errorInput");
+		setTimeout(() => {
+			yourMailTxt.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+	if (!yourPwdTxt.value) {
+		yourPwdTxt.classList.add("errorInput");
+		setTimeout(() => {
+			yourPwdTxt.classList.remove("errorInput");
+		}, 1000);
+		return;
+	}
+	req.open('POST', '/req/changeemail.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		if (req.status != 200) {
+			alert(req.status + " " + req.statusText);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		if (data.errcode != null) {
+			alert(data.errmessage);
+			changeMailBtn.disabled = false;
+			return;
+		}
+		alert("Changed successfully");
+	}
+	req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
+});
+
+closeSessionsBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/allsessionsexit.js', true);
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+		if (req.status != 200) {
+			exitSesErr.textContent = req.status + ' ' + req.statusText;
+			exitSesErr.style.display = "block"
+			closeSessionsBtn.disabed = false;
+			setTimeout(() => {
+				exitSesErr.style.display = "none";
+			}, 5000);
+			return;
+		}
+		data = JSON.parse(req.responseText);
+		switch (data.errcode) {
+			case 'RCODE_NOT_AUTHORIZED' :
+				exitSesErr.textContent = "Вы не авторизованы";
+				exitSesErr.style.display = "block";
+				setTimeout(() => {
+					exitSesErr.style.display = "none";
+				}, 1000);
+				alert("Not authorized");
+				break;
+			case null :
+				exitSesErr.style.color = "green"; 
+				exitSesErr.style.display = "block";
+				setTimeout(() => {
+					exitSesErr.style.display = "none";
+				}, 1000);
+				window.location.href = "/auth/index.html";
+				break;
+		}
+	}
+	req.send()
+});
+
+changePassBtn.addEventListener('click', (e) => {
 	e.preventDefault();
 	// changePassBtn.disabled = true;
 	if (!oldPwdInput.value) {
@@ -56,30 +231,19 @@ changePassBtn.addEventListener('click', e => {
 
 chats.addEventListener('click', (e) => {
     e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
-        switch (data.errcode) {
-            case null:
-                window.location.href = "./chat.html";
-                break;
-            case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
-                break;
-        }
-    }
-    ereq.send()
+    window.location.href = "/chat.html";
 });
 
 exit.addEventListener('click', (e) => {
     e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
+    const req = new XMLHttpRequest()
+    req.open('GET', '/req/exit.js', true)
+    req.onreadystatechange = () => {
+		if (req.readyState != 4) {
+			return;
+		}
+        if (req.readyState != 4) return;
+        data = JSON.parse(req.responseText);
         switch (data.errcode) {
             case null:
                 window.location.href = "/auth/index.html";
@@ -89,12 +253,8 @@ exit.addEventListener('click', (e) => {
                 break;
         }
     }
-    ereq.send()
+    req.send()
 });
-
-profileImg.addEventListener('click', () => {
-    //выбор нового изображения с диска
-})
 
 function modalClose() {
 	if (location.hash == '#openModal' || location.hash == '#openModal2' || location.hash == '#openModal3') {
@@ -106,11 +266,4 @@ document.addEventListener('keydown', function (e) {
 	if (e.keyCode == 27) {
 		modalClose();
 	}
-});
-
-const socket = io();
-
-socket.on('cur', (data) => {
-	setting.textContent = data.name;
-	nickname.textContent = data.name;
 });

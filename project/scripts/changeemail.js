@@ -46,6 +46,15 @@ exports.deleteUserFromChangeEmailList = async (hash) => {
 	await jsonfile.write(exports.CHANGE_PATH, changelist)
 }
 
+exports.deleteByEmail = async(email) => {
+	let changelist = await jsonfile.read(exports.CHANGE_PATH);
+	for (let i in changelist)
+		if (changelist[i].email === email) {
+			delete changelist[hash]
+			await jsonfile.write(exports.CHANGE_PATH, changelist)
+		}
+}
+
 exports.getUserAcceptEmail = async (username) => {
 	const useraccept = await jsonfile.read(users.USERACCEPT_PATH)
 	return useraccept[username].email

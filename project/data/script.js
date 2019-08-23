@@ -29,21 +29,7 @@ setting.addEventListener('click', (e) => {
 
 profile.addEventListener('click', (e) => {
     e.preventDefault();
-    const ereq = new XMLHttpRequest()
-    ereq.open('GET', '/req/exit.js', true)
-    ereq.onreadystatechange = () => {
-        if (ereq.readyState != 4) return;
-        data = JSON.parse(ereq.responseText);
-        switch (data.errcode) {
-            case null:
-                window.location.href = "/profile.html";
-                break;
-            case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
-                break;
-        }
-    }
-    ereq.send()
+    window.location.href = "/profile/index.html";
 });
 
 exit.addEventListener('click', (e) => {
