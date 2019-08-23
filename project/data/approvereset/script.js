@@ -17,7 +17,18 @@ saveBotton.addEventListener("click", (e) => {
 		message.textContent = "Пароль должен содержать минимум 6 символов";
 		return;
 	}
+	const req = new XMLHttpRequest()
+	req.open('POST', '/req/setnewpassword.js', true)
+	req.onreadystatechange = () => {
+		if (req.readyState != 4) return;
+		message.textContent = req.status + " " + req.responseText;
+	}
 	message.textContent = "Пароль успешно изменён";
+	let curURL = new URL(window.location.href)
+	req.send(JSON.stringify({
+		password: regPassword.value,
+		hash: curURL.searchParams.get("hash")
+	}))
 });
 
 inputPassword.addEventListener("input", () =>  {
