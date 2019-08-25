@@ -61,11 +61,16 @@ button:disabled {
 	font-size: 18px;
 }
 
-/* .changes {
-	width: 50%;
-	white-space: nowrap;
-	display: inline-block;
-} */
+.changes {
+	white-space:nowrap;
+}
+
+.changeDiv {
+	widows: 150%;
+	display:inline-block;
+	padding-right: 30px;
+	
+}
 
 .close {
 	background: #606061;
