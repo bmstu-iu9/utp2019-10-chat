@@ -4,7 +4,7 @@ const chats = document.getElementById('chats');
 const exit = document.getElementById('exit');
 const nickname = document.getElementById('nickname');
 const container=  document.getElementById('container');
-const profileImg = document.getElementById('profileImg');
+const welcomeText = document.getElementById('welcomeText');
 const changePass = document.getElementById('changePass');
 const oldPwdInput = document.getElementById('oldPwd');
 const newPwdInput = document.getElementById('newPwd');
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		if (data.errcode == null) {
 			setting.textContent = data.user;
 			nickname.textContent = data.user;
+			welcomeText.textContent = "Добро пожаловать, " + data.user;
 			if (data.notapproved == undefined) {
 				nickname.style.color = "green";
 				verificationErr.style.display = "none";
