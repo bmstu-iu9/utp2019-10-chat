@@ -61,6 +61,12 @@ button:disabled {
 	font-size: 18px;
 }
 
+/* .changes {
+	width: 50%;
+	white-space: nowrap;
+	display: inline-block;
+} */
+
 .close {
 	background: #606061;
 	color: #FFFFFF;
@@ -79,6 +85,8 @@ button:disabled {
 .close:hover { background: #00d9ff; }
 
 .container {
+	overflow: hidden;
+	width: 100%;
     display: flex;
 	flex-direction: column;
 	vertical-align: middle;
@@ -167,7 +175,9 @@ button:disabled {
 
 
 .name {
-    margin: 1px 800px 1px 100px;
+	font-weight: bold;
+	position: relative;
+	left: 10%;
     font-size: 30px;
     outline: none;
     background-color: rgb(45, 129, 238);
@@ -184,10 +194,11 @@ button:disabled {
 }
 
 .profile {
-	margin: 52px 213px 0px 213px;
+	margin: 52px 350px 0px 350px;
     background: #f6f5f7;
-    display: inline-flex;
-    height: 91.5vh;
+    display: flex;
+	height: 91.5vh;
+	width: 71,5%;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
         0 10px 10px rgba(0, 0, 0, 0.22);
     justify-content: flex-start;
@@ -215,8 +226,10 @@ button:disabled {
     z-index: 100;
     background-color: rgb(45, 129, 238);
     color: white;
-    font-size: 30px;
-    margin: 6px -4px;
+	font-size: 30px;
+	position: relative;
+	left: 63%;
+	padding-top: 6px;
 }
 
 .window {
@@ -225,11 +238,11 @@ button:disabled {
     color: black;
     padding: 0;
     position: absolute;
-    left: 1030px;
+    left: 73.5%;
     z-index: 1;
-    top: 42px;
-    height: 59px;
-    width: 160px;
+    top: 5%;
+    height: 17%;
+    width: 11%;
 }
 
 #changeMailErr {

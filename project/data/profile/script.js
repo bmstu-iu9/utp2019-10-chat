@@ -267,7 +267,7 @@ changePassBtn.addEventListener('click', (e) => {
 
 chats.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = "/";
+    window.location.href = "/chat.html";
 });
 
 exit.addEventListener('click', (e) => {
