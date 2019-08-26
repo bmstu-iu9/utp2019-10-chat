@@ -14,13 +14,14 @@ h2 {
 
 a {
 	color: #333;
-	font-size: 14px;
+	font-weight: 500;
+	font-size: 18px;
 	margin: 15px 0;
 }
 
 p {
 	font-weight: 700;
-	font-size: 18px;
+	font-size: 24px;
 }
 
 h3 {
@@ -194,15 +195,13 @@ button:disabled {
 
 .nickname {
 	color: green;
-	font-weight: 700;
-	font-size: 18px;
 }
 
 .profile {
-	margin: 52px 350px 0px 350px;
+	margin: 52px 22% 0px 22%;
     background: #f6f5f7;
     display: flex;
-	height: 91.5vh;
+	height: 75vh;
 	width: 71,5%;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
         0 10px 10px rgba(0, 0, 0, 0.22);
@@ -210,20 +209,20 @@ button:disabled {
 	align-items: stretch;
 	border-style: solid;
     border-color: cornflowerblue;
-	padding: 1px 5px;
+	padding: 10px 5px;
 }
 
 .pfImg {
 	position: relative;
 	overflow-y: auto;
 	overflow-x: hidden;
-	width: 240px;
+	width: 22%;
 }
 
 .right {
     display: flex;
     flex-direction: column;
-    width: 875px;
+	width: 78%;
 }
 
 .settings {

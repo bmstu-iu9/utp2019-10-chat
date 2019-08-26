@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		if (data.errcode == null) {
 			setting.textContent = data.user;
 			nickname.textContent = data.user;
-			welcomeText.textContent = "Добро пожаловать, " + data.user;
+			welcomeText.textContent = "Приятного общения, " + data.user;
 			if (data.notapproved == undefined) {
 				nickname.style.color = "green";
 				verificationErr.style.display = "none";
