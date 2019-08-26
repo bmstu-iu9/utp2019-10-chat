@@ -198,7 +198,7 @@ button:disabled {
 }
 
 .profile {
-	margin: 52px 22% 0px 22%;
+	margin: 52px 22% 40px 22%;
     background: #f6f5f7;
     display: flex;
 	height: 75vh;
@@ -221,7 +221,8 @@ button:disabled {
 
 .right {
     display: flex;
-    flex-direction: column;
+	flex-direction: column;
+	align-items: center;
 	width: 78%;
 }
 
