@@ -1,35 +1,35 @@
 body {
-	margin: -8px;
-	font-family: 'Montserrat', sans-serif;
+    margin: -8px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 h1 {
-	font-weight: bold;
-	margin: 0;
+    font-weight: bold;
+    margin: 0;
 }
 
 h2 {
-	font-weight: bolder;
+    font-weight: bolder;
 }
 
 a {
-	color: #333;
-	font-weight: 500;
-	font-size: 18px;
-	margin: 15px 0;
+    color: #333;
+    font-weight: 500;
+    font-size: 18px;
+    margin: 15px 0;
 }
 
 p {
-	font-weight: 700;
-	font-size: 24px;
+    font-weight: 700;
+    font-size: 24px;
 }
 
 h3 {
-	font-weight: 700;
-	font-size: 60px;
-	transform: rotate(-90deg);
-	margin-top: 100%;
-	text-align: center;
+    font-weight: 700;
+    font-size: 60px;
+    transform: rotate(-90deg);
+    margin-top: 100%;
+    text-align: center;
 }
 
 img {
@@ -40,84 +40,83 @@ img {
 
 
 button:active {
-	transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 button:focus {
-	outline: none;
+    outline: none;
 }
 
 button.ghost {
-	background-color: transparent;
-	border-color: #FFFFFF;
+    background-color: transparent;
+    border-color: #FFFFFF;
 }
 
 button:disabled {
-	background-color: grey; 
-	border: 1px solid grey;
+    background-color: grey; 
+    border: 1px solid grey;
 }
 
 .changeTextA {
-	font-weight: 700;
-	font-size: 18px;
+    font-weight: 700;
+    font-size: 18px;
 }
 
 .changes {
-	white-space:nowrap;
+    white-space:nowrap;
 }
 
 .changeDiv {
-	widows: 150%;
-	display:inline-block;
-	padding-right: 30px;
-	
+    widows: 150%;
+    display:inline-block;
+    padding-right: 30px;
 }
 
 .close {
-	background: #606061;
-	color: #FFFFFF;
-	line-height: 25px;
-	position: absolute;
-	right: -12px;
-	text-align: center;
-	top: -10px;
-	width: 24px;
-	text-decoration: none;
-	font-weight: bold;
-	border-radius: 12px;
-	box-shadow: 1px 1px 3px #000;
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: 1px 1px 3px #000;
 }
 
 .close:hover { background: #00d9ff; }
 
 .container {
-	overflow: hidden;
-	width: 100%;
+    overflow: hidden;
+    width: 100%;
     display: flex;
-	flex-direction: column;
-	vertical-align: middle;
+    flex-direction: column;
+    vertical-align: middle;
 }
 
 .errorInput {
-	border: 1.5px solid red
+    border: 1.5px solid red
 }
 
 .email {
-	font-weight: 700;
-	font-size: 18px;
+    font-weight: 700;
+    font-size: 18px;
 }
 
 .modalBtn {
-	border-radius: 20px;
-	border: 1px solid rgb(45, 129, 238);
-	background-color: rgb(45, 129, 238);
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
+    border-radius: 20px;
+    border: 1px solid rgb(45, 129, 238);
+    background-color: rgb(45, 129, 238);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
 }
 
 .menu {
@@ -141,89 +140,89 @@ button:disabled {
 }
 
 .mailField {
-	display: flex;
+    display: flex;
 }
 
 .modalDialog {
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	position: absolute;
-	font-family: Arial, Helvetica, sans-serif;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgba(0,0,0,0.8);
-	z-index: 100;
-	display: none;
-	pointer-events: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    display: none;
+    pointer-events: none;
 }
 
 .modalDialog:target {
-	display: flex;
-	pointer-events: auto;
+    display: flex;
+    pointer-events: auto;
 }
 
 .modalDialog > div {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	text-align: center;
-	width: 500px;
-	position: relative;
-	margin: 10% auto;
-	padding: 10px 20px 20px 20px;
-	border-radius: 30px;
-	background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 500px;
+    position: relative;
+    margin: 10% auto;
+    padding: 10px 20px 20px 20px;
+    border-radius: 30px;
+    background: #fff;
 }
 
 
 .name {
-	font-weight: bold;
-	position: relative;
-	left: 10%;
+    font-weight: bold;
+    position: relative;
+    left: 10%;
     font-size: 30px;
     outline: none;
     background-color: rgb(45, 129, 238);
 }
 
 .nicknameField {
-	display: flex;
+    display: flex;
 }
 
 .nickname {
-	color: green;
+    color: green;
 }
 
 .profile {
-	margin: 52px 22% 40px 22%;
+    margin: 52px 22% 10% 22%;
     background: #f6f5f7;
     display: flex;
-	height: 75vh;
-	width: 71,5%;
+    height: 75vh;
+    width: 71,5%;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
         0 10px 10px rgba(0, 0, 0, 0.22);
     justify-content: flex-start;
-	align-items: stretch;
-	border-style: solid;
+    align-items: stretch;
+    border-style: solid;
     border-color: cornflowerblue;
-	padding: 10px 5px;
+    padding: 10px 5px;
 }
 
 .pfImg {
-	position: relative;
-	overflow-y: auto;
-	overflow-x: hidden;
-	width: 22%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 22%;
 }
 
 .right {
     display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 78%;
+    flex-direction: column;
+    align-items: center;
+    width: 78%;
 }
 
 .settings {
@@ -231,10 +230,10 @@ button:disabled {
     z-index: 100;
     background-color: rgb(45, 129, 238);
     color: white;
-	font-size: 30px;
-	position: relative;
-	left: 63%;
-	padding-top: 6px;
+    font-size: 30px;
+    position: relative;
+    left: 63%;
+    padding-top: 6px;
 }
 
 .window {
@@ -251,18 +250,18 @@ button:disabled {
 }
 
 #changeMailErr {
-	display: none;
-	background-color: #f6f5f7;
-	color: red;
+    display: none;
+    background-color: #f6f5f7;
+    color: red;
 }
 
 #changePwdErr {
-	display: none;
-	background-color: #f6f5f7;
-	color: red;
+    display: none;
+    background-color: #f6f5f7;
+    color: red;
 }
 
 #verificationErr {
-	display: none;
-	color: red;
+    display: none;
+    color: red;
 }
