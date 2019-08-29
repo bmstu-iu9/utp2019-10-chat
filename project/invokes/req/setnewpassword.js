@@ -32,7 +32,7 @@ exports.invoke = async (request, response, data) => {
 
 		await passwordreset.setNewPassword(userEmail, args.hash, args.newPassword)
 
-		//core.sendJSON(response, {errcode: null})
+		core.sendJSON(response, {errcode: null})
 	} catch (err) {
 		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}

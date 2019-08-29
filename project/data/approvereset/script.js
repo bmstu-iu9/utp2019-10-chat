@@ -16,9 +16,19 @@ saveBotton.addEventListener("click", (e) => {
 	req.open('POST', '/req/setnewpassword.js', true)
 	req.onreadystatechange = () => {
 		if (req.readyState != 4) return;
-		message.textContent = req.status + " " + req.responseText;
+		if (req.status == 200) {
+        	if (JSON.parse(req.responseText).errcode === null) {
+        		message.textContent = "Пароль успешно изменён";
+        		setTimeout(() => {
+					window.location.href = "/";
+				}, 5000);
+        	} else {
+        		message.textContent = JSON.parse(req.responseText).errmessage
+     		}
+    	} else
+			message.textContent = req.status + " " + req.responseText;
 	}
-	message.textContent = "Пароль успешно изменён";
+	
 	let curURL = new URL(window.location.href)
 	req.send(JSON.stringify({
 		newPassword: inputPassword.value,
