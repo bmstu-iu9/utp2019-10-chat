@@ -1,5 +1,5 @@
 .menu {
-    display: block;
+    display: flex;
     background-color: rgb(45, 129, 238);
     position: fixed;
     left: 0;
@@ -10,8 +10,14 @@
     padding: 5px;
 }
 
+.tmp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 body {
-	font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -19,6 +25,8 @@ body {
 }
 
 .name {
+    margin: 0 60% 0 0;
+    padding-top: 7px;
     font-weight: bold;
     position: relative;
     left: 10%;
@@ -34,7 +42,6 @@ body {
     color: white;
     font-size: 30px;
     position: relative;
-    left: 63%;
     padding-top: 6px;
 }
 
@@ -43,12 +50,7 @@ body {
     display: none;
     flex-direction: column;
     color: black;
-    position: absolute;
-    left: 73.5%;
-    z-index: 1;
-    top: 5%;
-    height: 17%;
-    width: 11%;
+    width: 100%;
 }
 
 
@@ -219,6 +221,12 @@ body {
     color: black;
 }
 
+.link1 {
+    margin: 0 50% 0 0;
+    text-decoration: none;
+    color: black;
+}
+
 .not_active {
     pointer-events: none;
     cursor: default;
@@ -251,18 +259,21 @@ body {
     letter-spacing: 1px;
 }
 
+.color {
+    color: black;
+}
+
 #messageText {
     height: 80px;
 }
 
 #dialogUserInfo {
-    position: relative;
-    left: 53%;
+    margin: 0 5% 0 0;
+    text-decoration: none;
 }
 
 #out {
-    position: relative;
-    left: 56%;
+    text-decoration: none;
 }
 
 .wChat {
@@ -332,7 +343,7 @@ button:disabled {
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
-    height: 92%;
+    height: 95%;
 }
 
 .messageBlock {
@@ -359,14 +370,14 @@ button:disabled {
 }
 
 .createNewChatName {
-    border: 1px solid black;
+    text-align: center;
     padding: 2px;
-    background: rgb(217, 255, 3);
     border-radius: 9px;
     font-size: 19px;
     margin-bottom: 10px;
-    max-width: 70%;
+    width: 100%;
     word-break: break-word;
+    font-weight: bold;
 }
 
 .buttonWindowSettingChat1 {
@@ -395,8 +406,8 @@ button:disabled {
 }
 
 input:focus {
-	outline: none;
-	border: 1.5px solid #2d81ee
+    outline: none;
+    border: 1.5px solid #2d81ee
 }
 
 .windowDel {
@@ -405,4 +416,24 @@ input:focus {
 
 .windowAdd {
     padding-top: 20px;
+}
+
+.longName {
+    border-bottom-style: ridge;
+    width: 100%;
+    height: 54px;
+    max-width: 771px;
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#error {
+    border-style: inset;
+    width: 15%;
+    max-width: 209px;
+    background: black;
+    margin: -3% 0% 0% 0%;
 }
