@@ -227,6 +227,8 @@ socket.on('dialog', (data) => {
 
 closeCreate.addEventListener('click', () => {
     create.disabled = false;
+    dialogName.value = '';
+    users.value = '';
 });
 
 function modalClose() {
