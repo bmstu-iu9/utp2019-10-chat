@@ -200,7 +200,28 @@ loginButton.addEventListener('click', (e) => {
 				loginButton.disabled = false;
 				break;
 			case null:
-				window.location.href = "/";
+				const req = new XMLHttpRequest();
+				req.open('POST', '/req/curuser.js', true);
+				req.onreadystatechange = () => {
+					if (req.readyState != 4) {
+						return;
+					}
+					if (req.status != 200) {
+						alert(req.status + " " + req.statusText);
+						return;
+					}
+					data = JSON.parse(req.responseText);
+					if (data.errcode == null) {
+						if (data.notapproved == undefined) {
+							window.location.href = "/";
+						} else {
+							window.location.href = "/profile";
+						}
+					}else {
+						alert(data.errcode);
+					}
+				}
+				req.send();
 				break;
 			default:
 				loginError.textContent = 'Неизвестная ошибка: ' + data.errmesage;
