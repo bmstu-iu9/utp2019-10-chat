@@ -262,6 +262,15 @@ button:disabled {
 }
 
 #verificationErr {
-    display: none;
+    color: red;
+}
+
+#verErrDiv {
+	display: none;
+}
+
+#resendMailErr {
+	display: none;
+    background-color: #f6f5f7;
     color: red;
 }

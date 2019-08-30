@@ -20,8 +20,10 @@ const changeMailBtn = document.getElementById('changeMailBtn');
 const yourPwdTxt = document.getElementById('yourPwd');
 const yourMailTxt = document.getElementById('yourMail');
 const changeMailErr = document.getElementById('changeMailErr');
-const verificationErr = document.getElementById('verificationErr');
+const verErrDiv = document.getElementById('verErrDiv');
 const resetPwdBtn = document.getElementById('resetPwd');
+const resendMailBtn = document.getElementById('resendMailBtn');
+const resendMailErr = document.getElementById('resendMailErr');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -51,9 +53,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
             welcomeText.textContent = "Приятного общения, " + data.user;
             if (data.notapproved == undefined) {
                 nickname.style.color = "green";
-                verificationErr.style.display = "none";
+                verErrDiv.style.display = "none";
             } else {
-                verificationErr.style.display = "block";
+                verErrDiv.style.display = "block";
                 nickname.style.color = "red";
             }
         }else {
@@ -61,6 +63,46 @@ document.addEventListener('DOMContentLoaded', (e) => {
         }
     }
     req.send();
+});
+
+resendMailBtn.addEventListener('click', (e) => {
+	e.preventDefault();
+	const req = new XMLHttpRequest();
+	req.open('POST', '/req/resend.js', true);
+	req.onreadystatechange = () => {
+        if (req.readyState != 4) {
+            return;
+		}
+		if (req.status != 200) {
+			alert(req.status + ": " + req.statusText);
+			resendMailBtn.disabled = true;
+			return
+		}
+		data = JSON.parse(req.responseText);
+		switch (data.errcode) {
+			case 'RCODE_NOT_AUTHORIZED' :
+				alert("Вы не авторизованы");
+				window.location.href = "/auth";
+				break;
+			case null :
+				resendMailErr.style.display = "block"
+				resendMailErr.textContent = "Письмо выслано на вашу почту, указанную при регистрации";
+				resendMailErr.style.color = "green";
+				resendMailBtn.disabled = true;
+				break;
+			default:
+				resendMailErr.style.display = "block"
+				resendMailErr.textContent = data.errmessage;
+				resendMailErr.style.color = "red";
+				resendMailBtn.disabled = true;
+				setTimeout(() => {
+					resendMailBtn.style.display = "none"
+					resendMailBtn.disabled = false;
+				}, 5000);
+				break;
+		}
+	}
+	req.send();
 });
 
 resetPwdBtn.addEventListener('click', (e) => {
@@ -295,7 +337,7 @@ exit.addEventListener('click', (e) => {
 });
 
 function modalClose() {
-    if (location.hash == '#openModal' || location.hash == '#openModal2' || location.hash == '#openModal3') {
+    if (location.hash == '#openModal' || location.hash == '#openModal2' || location.hash == '#openModal3' || location.hash == '#openModalResend') {
         location.hash = '';
     }
 }

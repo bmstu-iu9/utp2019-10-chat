@@ -21,14 +21,16 @@
         </div>
         <div id="profile" class="profile">
             <div class="pfImg">
-                <!-- <img src="/profile/default.png" id="profileImg"> -->
                 <h3 id="welcomeText"></h3>
             </div>
             <div class="right">
                 <div class="nicknameField">
                     <p>Имя пользователя:&nbsp;</p>
                     <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
-                    <p id="verificationErr">&nbsp;(Вы не подтвердили адрес электронной почты)</p>
+                </div>
+                <div id="verErrDiv">
+                    <p id="verificationErr">Вы не подтвердили адрес электронной почты</p>
+                    <a href="#openModalResend" style="color: red">Отправить ссылку на подтверждение еще раз?</a>
                 </div>
                 <div class="changes">
                     <div class="changeDiv" id="changePassDiv">
@@ -92,6 +94,17 @@
                 <a href="" title="Закрыть" class="close">X</a>
                 <h2>Вы уверены?</h2>
                 <p><button class="modalBtn" id="deleteAcc">Удалить</button></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="openModalResend" class="modalDialog">
+        <div>
+            <form>
+                <a href="" title="Закрыть" class="close">X</a>
+                <h2>Мы отправим вам на почту ссылку на подтверждение</h2>
+                <p><button class="modalBtn" id="resendMailBtn">Ок</button></p>
+                <span id="resendMailErr"></span>
             </form>
         </div>
     </div>
