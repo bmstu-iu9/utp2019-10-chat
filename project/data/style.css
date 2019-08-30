@@ -430,3 +430,11 @@ input:focus {
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+#error {
+    border-style: inset;
+    width: 15%;
+    max-width: 209px;
+    background: black;
+    margin: -3% 0% 0% 0%;
+}
