@@ -23,6 +23,9 @@ signUpButton.addEventListener('click', () => {
 
 signInButton.addEventListener('click', () => {
 	container.classList.remove("right-panel-active");
+	regUserName.value = "";
+	regEmail.value = "";
+	regPassword.value = "";
 });
 
 
@@ -97,6 +100,9 @@ regButton.addEventListener('click', (e) => {
 				regUserName.addEventListener("input", () => {
 					regButton.disabled = true;
 				});
+				setTimeout(() => {
+					window.location.href = "/profile";
+				}, 6000);
 				break;
 			case 'RCODE_AUTHORIZED_ALREADY':
 				regError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";

@@ -24,6 +24,7 @@ const deleteName = document.getElementById('deleteName');
 const deleteButton = document.getElementById('deleteButton');
 const delInform = document.getElementById('delInform');
 const closeCreate = document.getElementById('closeCreate');
+const name = document.getElementById('name');
 let data = null;
 let dialogIdE = null;
 let nameC = null;
@@ -67,6 +68,11 @@ exit.addEventListener('click', (e) => {
 const socket = io();
 
 socket.on('cur', (data) => {
+    if (data.name.length > 17) {
+        name.classList.add('name2');
+    } else {
+        name.classList.add('name');
+    }
     setting.textContent = data.name;
 });
 
@@ -76,6 +82,7 @@ socket.on('connect', () => {
 
 socket.on('dialogs', (data) => {
     const prevDialog = dialogIdE;
+    windowNameChat.innerHTML = "";
     chat.style.display = 'none';
     dialogUserInfo.classList.remove('color');
     out.classList.remove('color');

@@ -198,6 +198,17 @@ button:disabled {
     background-color: rgb(45, 129, 238);
 }
 
+.name2 {
+    margin: 0 48% 0 0;
+    padding-top: 7px;
+    font-weight: bold;
+    position: relative;
+    left: 10%;
+    font-size: 30px;
+    outline: none;
+    background-color: rgb(45, 129, 238);
+}
+
 .nicknameField {
     display: flex;
 }
