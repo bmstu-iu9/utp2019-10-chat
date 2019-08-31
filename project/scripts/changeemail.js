@@ -35,7 +35,7 @@ exports.deleteByEmail = async(email) => {
 	let changelist = await jsonfile.read(exports.CHANGE_PATH);
 	for (let i in changelist)
 		if (changelist[i].email === email) {
-			delete changelist[hash]
+			delete changelist[i]
 			await jsonfile.write(exports.CHANGE_PATH, changelist)
 		}
 }

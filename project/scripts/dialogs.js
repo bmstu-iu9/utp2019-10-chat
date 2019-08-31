@@ -144,10 +144,13 @@ exports.deleteUserDialogOnly = async (user, id) => {
 		dialog.brigadier = null
 	}
 		
-	if (dialog.brigadier === null && dialog.users.length === 0)
+	if (dialog.brigadier === null && dialog.users.length === 0) {
 		await jsonfile.rm(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
-	else
+		return {brigadier: dialog.brigadier, deleting: false}
+	} else {
 		await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
+		return {brigadier: dialog.brigadier, deleting: true}
+	}
 }
 
 exports.rmUserFromDialog = async (src, dest, id) => {
