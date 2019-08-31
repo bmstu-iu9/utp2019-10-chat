@@ -4,7 +4,7 @@ const fs = require('fs')
 
 exports.rm = (filename) => {
 	return new Promise((resolve, reject) => {
-		fs.unlink(pathModule.join(consts.DIALOGS_PATH, id + '.json'), (err) => {
+		fs.unlink(filename, (err) => {
 			if (err)
 				reject(err)
 			else

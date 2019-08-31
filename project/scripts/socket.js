@@ -152,14 +152,17 @@ exports.init = () => {
 			
 			socket.on('delete', async (data) => {
 				try {
-					const brigadier = await dialogs.userDeleteDialog(curUser, data.dialogId)
+					const a = await dialogs.userDeleteDialog(curUser, data.dialogId)
 					socket.emit('delete', {dialogId: data.dialogId})
-					await sendInfoMessage(data.dialogId, curUser + ' удалил чат')
-					if (brigadier == null)
-						sendInfoMessage(data.dialogId, 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
+					if (a.deleting) {
+						await sendInfoMessage(data.dialogId, curUser + ' удалил чат')
+						if (a.brigadier == null)
+							sendInfoMessage(data.dialogId, 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
+					}
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'delete', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+						console.log(err)
 				}
 			})
 			
