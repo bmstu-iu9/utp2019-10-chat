@@ -122,21 +122,24 @@ socket.on('dialogs', (data) => {
 });
 
 socket.on('message', (data) => {
-    let messageBlock = document.createElement('div');
-    let div = document.createElement('div');
-    messageBlock.className = 'messageBlock';
-    if (data.name === setting.textContent) {
-        messageBlock.classList.add('myMessage')
+    if (dialogIdE === data.dialogId) {
+        let messageBlock = document.createElement('div');
+        let div = document.createElement('div');
+        messageBlock.className = 'messageBlock';
+        if (data.name === setting.textContent) {
+            messageBlock.classList.add('myMessage')
+        }
+        if (data.name === '') {
+            div.className = 'createNewChatName'
+            div.textContent = data.message;
+        } else {
+            div.className = 'messageContent';
+            div.textContent = data.name + ':\n' + data.message;
+        }
+        messageBlock.append(div);
+        chatTable.append(messageBlock);
+        chatTable.scrollTop = chatTable.scrollHeight;
     }
-    if (data.name === '') {
-        div.className = 'createNewChatName'
-        div.textContent = data.message;
-    } else {
-        div.className = 'messageContent';
-        div.textContent = data.name + ':\n' + data.message;
-    }
-    messageBlock.append(div);
-    chatTable.append(messageBlock);
 })
 
 socket.on('messages', (data) => {
@@ -160,6 +163,7 @@ socket.on('messages', (data) => {
         }
         messageBlock.append(div);
         chatTable.append(messageBlock);
+        chatTable.scrollTop = chatTable.scrollHeight;
     });
 });
 
@@ -316,8 +320,8 @@ add.addEventListener('click', () => {
     if (!addName.value || addName.value === setting.textContent) {
         addName.classList.add("errorInput");
         setTimeout(() => {
-			addName.classList.remove("errorInput");
-		}, 1000);
+            addName.classList.remove("errorInput");
+        }, 1000);
         return;
     }
     socket.emit('add', {
@@ -331,8 +335,8 @@ deleteButton.addEventListener('click', () => {
     if (!deleteName.value || deleteName.value === setting.textContent) {
         deleteName.classList.add("errorInput");
         setTimeout(() => {
-			deleteName.classList.remove("errorInput");
-		}, 1000);
+            deleteName.classList.remove("errorInput");
+        }, 1000);
         return;
     }
     socket.emit('rm', {

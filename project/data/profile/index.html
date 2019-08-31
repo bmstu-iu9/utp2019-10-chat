@@ -11,13 +11,15 @@
 
 <body>
     <div class="container">
-        <div id="windowSet" class="window">
-            <button id="chats" class="menuBut">Перейти к чатам</button>
-            <button id="exit" class="menuBut">Выйти</button>
-        </div>
         <div class="menu">
-            <span class="name">QuickChat</span>
-            <button id="setting" class="settings"></button> 
+            <div class="name">QuickChat</div>
+            <div class="tmp">
+                <div id="setting" class="settings"></div>
+                <div id="windowSet" class="window">
+                    <button id="chats" class="menuBut">Настройки профиля</button>
+                    <button id="exit" class="menuBut">Выйти</button>
+                </div>
+            </div>
         </div>
         <div id="profile" class="profile">
             <div class="pfImg">
@@ -26,7 +28,7 @@
             <div class="right">
                 <div class="nicknameField">
                     <p>Имя пользователя:&nbsp;</p>
-                    <p class="nickname" id="nickname"></p> <!--цвет отображает статус верификации (да или нет -- зеленый или красный)-->
+                    <p class="nickname" id="nickname"></p> 
                 </div>
                 <div id="verErrDiv">
                     <p id="verificationErr">Вы не подтвердили адрес электронной почты</p>
@@ -34,7 +36,6 @@
                 </div>
                 <div class="changes">
                     <div class="changeDiv" id="changePassDiv">
-                        <!-- <a href="#openModal">Сменить пароль</a> -->
                         <a class="changeTextA" id="changePass">Смена пароля</a> 
                         <div id="changePassFields" class="changePassFields">
                             <div><a>Введите старый пароль</a></div>
@@ -46,7 +47,6 @@
                         </div>
                     </div>
                     <div class="changeDiv" id="changeMailDiv">
-                        <!-- <a href="#openModal">Сменить пароль</a> -->
                         <a class="changeTextA" id="changeMail">Смена адреса почты</a>
                         <div id="changeMailFields" class="changeMailFields">
                             <div><a>Введите новую почту</a></div>
@@ -79,8 +79,6 @@
         <div>
             <form>
                 <a href="" title="Закрыть" class="close">X</a>
-                <!-- <div><a>Введите пароль</a></div>
-                <div><input id="passToCloseAll" type="password" placeholder="password" /></div> -->
                 <h2>Это разлогинит вас из всех активных сессий. Продолжить?</h2>
                 <p><button class="modalBtn" id="closeSessions">Выйти</button></p>
                 <span id="exitSesError"></span>
