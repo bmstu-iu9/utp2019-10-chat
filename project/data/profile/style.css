@@ -26,7 +26,7 @@ p {
 
 h3 {
     font-weight: 700;
-    font-size: 60px;
+    font-size: 50px;
     transform: rotate(-90deg);
     margin-top: 100%;
     text-align: center;
@@ -261,6 +261,10 @@ button:disabled {
     color: red;
 }
 
+#deleteAccErr {
+	display: none;
+}
+
 #verificationErr {
     color: red;
 }
@@ -270,6 +274,12 @@ button:disabled {
 }
 
 #resendMailErr {
+	display: none;
+    background-color: #f6f5f7;
+    color: red;
+}
+
+#resetPwdErr {
 	display: none;
     background-color: #f6f5f7;
     color: red;
