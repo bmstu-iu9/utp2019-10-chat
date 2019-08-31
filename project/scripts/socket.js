@@ -13,8 +13,24 @@ exports.exit = (request) => {
 	const sockets = exports.io.to('user ' + curUser).connected
 	for (let socketId in sockets) {
 		if (core.getCookies(sockets[socketId].request).sessionId == sessionId) {
+			sockets[socketId].emit('exit')
 			sockets[socketId].disconnect(true)
 		}
+	}
+}
+
+exports.exitByUser = (user) => {
+	const sockets = exports.io.to('user ' + user).emit('exit').connected
+	for (let socketId in sockets)
+		sockets[socketId].disconnect(true)
+}
+
+exports.deleteUserFromAllDialogs = async (curUser, dialogss) => {
+	for (let i = 0; i < dialogss.length; i++) {
+		const brigadier = await dialogs.deleteUserDialogOnly(curUser, dialogss[i])
+		await sendInfoMessage(dialogss[i], curUser + ' удалил чат')
+		if (brigadier == null)	
+			await sendInfoMessage(dialogss[i], 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
 	}
 }
 
@@ -151,7 +167,7 @@ exports.init = () => {
 				try {
 					await dialogs.rmUserFromDialog(curUser, data.user, data.dialogId)
 					socket.emit('rm', {user: data.user})
-					await sendInfoMessage(a.id, curUser + ' удалил ' + data.user + ' из чата')
+					await sendInfoMessage('', curUser + ' удалил ' + data.user + ' из чата')
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'rm', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})

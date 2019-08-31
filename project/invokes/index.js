@@ -6,8 +6,14 @@ const consts = require('../scripts/consts')
 
 exports.invoke = async (request, response, data) => {
 	const curUser = users.getCurrentUser(request)
+	
 	if (!curUser) {
 		core.redirect(response, '/auth')
+		return
+	}
+	
+	if ((await users.getUserAccept(curUser)).notApproved) {
+		core.redirect(response, '/profile')
 		return
 	}
 	

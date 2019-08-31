@@ -5,7 +5,10 @@ const users = require('../../scripts/users')
             
 exports.invoke = async (request, response) => {
 	try {
-		core.sendJSON(response, {errcode: null, user: users.getCurrentUser(request)})
+		const curUser = users.getCurrentUser(request)
+		const ua = await users.getUserAccept(curUser)
+		core.sendJSON(response, {errcode: null, user: curUser,
+			notapproved: ua ? ua.notApproved : undefined})
 	} catch (err) {
 		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	}

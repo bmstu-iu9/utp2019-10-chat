@@ -36,7 +36,7 @@ exports.deleteUserFromUnconfirmed = async (hash) => {
 	await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
 	
 	try {
-		await users.deleteUser(username)
+		await users.deleteUserReg(username)
 	} catch (err) {
 		newConfirmed[hash] = username
 		await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
@@ -44,6 +44,16 @@ exports.deleteUserFromUnconfirmed = async (hash) => {
 	}
 	
 	return true
+}
+
+exports.deleteByName = async (name) => {
+	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
+	for (let i in newConfirmed) {
+		if (newConfirmed[i] === name) {
+			delete newConfirmed[i]
+			await jsonfile.write(exports.UNCONFIRMED_PATH, newConfirmed)
+		}
+	}
 }
 
 exports.approveUnconfirmedUser = async (hash) => {
