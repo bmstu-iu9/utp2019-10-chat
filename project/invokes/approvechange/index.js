@@ -17,8 +17,8 @@ exports.invoke = async (request, response, data) => {
 	}
 
 	if (await changeemail.changeMail(hash)) {
-		core.sendJSON(response, {errcode: null})
+		core.redirect(response, '/profile')
 	} else {
-		core.sendJSON(response, {errcode: 'RCODE_INCORRECT_ARGUMENTS', errmessage: 'Incorrect arguments'})
+		core.notFound(response)
 	}
 }

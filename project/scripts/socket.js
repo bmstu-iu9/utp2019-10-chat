@@ -27,10 +27,12 @@ exports.exitByUser = (user) => {
 
 exports.deleteUserFromAllDialogs = async (curUser, dialogss) => {
 	for (let i = 0; i < dialogss.length; i++) {
-		const brigadier = await dialogs.deleteUserDialogOnly(curUser, dialogss[i])
-		await sendInfoMessage(dialogss[i], curUser + ' удалил чат')
-		if (brigadier == null)	
-			await sendInfoMessage(dialogss[i], 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
+		const a = await dialogs.deleteUserDialogOnly(curUser, dialogss[i])
+		if (a.deleting) {
+			await sendInfoMessage(dialogss[i], curUser + ' удалил чат')
+			if (a.brigadier == null)	
+				await sendInfoMessage(dialogss[i], 'Бригадир удалил чат, дальнейшая отправка сообщений запрещена')
+		}
 	}
 }
 
@@ -162,7 +164,6 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'delete', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
-						console.log(err)
 				}
 			})
 			
@@ -170,7 +171,7 @@ exports.init = () => {
 				try {
 					await dialogs.rmUserFromDialog(curUser, data.user, data.dialogId)
 					socket.emit('rm', {user: data.user})
-					await sendInfoMessage('', curUser + ' удалил ' + data.user + ' из чата')
+					await sendInfoMessage(data.dialogId, curUser + ' удалил ' + data.user + ' из чата')
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'rm', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})

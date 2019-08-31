@@ -24,6 +24,7 @@ exports.invoke = async (request, response, data) => {
 			await mail.sendMail(email, 'Password reset!',
 				'Please follow the link below \n\n'+"http://"+request.headers.host+"/approvereset?hash="+hash)
 		} catch (err) {
+			console.log(err)
 			await passwordreset.deleteUserFromResetList(hash)
 			core.sendJSON(response, {errcode: 'RCODE_FAILED_TO_SEND_EMAIL', errmessage: 'Failed to send email'})
 			return
