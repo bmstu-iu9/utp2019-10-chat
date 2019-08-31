@@ -189,14 +189,6 @@ deleteAccBut.addEventListener('click', (e) => {
             window.location.href = "/auth";
         } else {
 			alert(data.errmessage);
-			// deleteAccErr.style.display = "block";
-			// deleteAccErr.style.color = "red";
-			// deleteAccErr.textContent = req.status + " " + req.statusText;
-			// deleteAccBut.disabled = "true"
-			// setTimeout(() => {
-			// 	deleteAccBut.style.display = "none";
-			// 	deleteAccBut.disabled = "false";
-			// }, 1500);
             window.location.href = "/auth";
         }
     }
