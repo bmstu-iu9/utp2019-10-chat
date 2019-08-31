@@ -24,6 +24,8 @@ const verErrDiv = document.getElementById('verErrDiv');
 const resetPwdBtn = document.getElementById('resetPwd');
 const resendMailBtn = document.getElementById('resendMailBtn');
 const resendMailErr = document.getElementById('resendMailErr');
+const deleteAccErr = document.getElementById('deleteAccErr');
+const resetPwdErr = document.getElementById('resetPwdErr');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
@@ -74,7 +76,9 @@ resendMailBtn.addEventListener('click', (e) => {
             return;
 		}
 		if (req.status != 200) {
-			alert(req.status + ": " + req.statusText);
+			resendMailErr.style.display = "block"
+			resendMailErr.textContent = req.status + ": " + req.statusText;
+			resendMailErr.style.color = "green";
 			resendMailBtn.disabled = true;
 			return
 		}
@@ -114,20 +118,41 @@ resetPwdBtn.addEventListener('click', (e) => {
             return;
         }
         if (req.status != 200) {
-            alert(req.status + " " + req.statusText);
+			resetPwdErr.textContent = req.status + " " + req.statusText;
+			resetPwdErr.style.display = "block";
+			resetPwdErr.style.color = "red";
+			resetPwdBtn.disabled = true;
+			setTimeout(() => {
+				resetPwdErr.style.display = "none";
+				resetPwdBtn.disabled = false;
+			}, 2000);
             return;
         }
         data = JSON.parse(req.responseText);
         switch (data.errcode) {
             case null :
-                alert("Успех! Проверьте почту");
+				resetPwdErr.textContent = "Успех! Проверьте почту";
+				resetPwdErr.style.display = "block";
+				resetPwdErr.style.color = "green";
+				resetPwdBtn.disabled = true;
+				setTimeout(() => {
+					resetPwdErr.style.display = "none";
+					resetPwdBtn.disabled = false;
+				}, 200000);
                 break;
             case "RCODE_NOT_AUTHORIZED" :
                 alert("Вы не авторизованы");
                 window.location.href = "/auth";
                 break;
             default: 
-                alert(data.errmessage);
+				resetPwdErr.textContent = data.errmessage;
+				resetPwdErr.style.display = "block";
+				resetPwdErr.style.color = "red";
+				resetPwdBtn.disabled = true;
+				setTimeout(() => {
+					resetPwdErr.style.display = "none";
+					resetPwdBtn.disabled = false;
+				}, 2000);
         }
     }
     req.send();
@@ -142,7 +167,14 @@ deleteAccBut.addEventListener('click', (e) => {
             return;
         }
         if (req.status != 200) {
-            alert(req.status + " " + req.statusText);
+			deleteAccErr.style.display = "block";
+			deleteAccErr.style.color = "red";
+			deleteAccErr.textContent = req.status + " " + req.statusText;
+			deleteAccBut.disabled = "true"
+			setTimeout(() => {
+				deleteAccBut.style.display = "none";
+				deleteAccBut.disabled = "false";
+			}, 1500);
             return;
         }
         data = JSON.parse(req.responseText);
@@ -150,7 +182,15 @@ deleteAccBut.addEventListener('click', (e) => {
             alert("Аккаунт удален");
             window.location.href = "/auth";
         } else {
-            alert(data.errmessage);
+			alert(data.errmessage);
+			// deleteAccErr.style.display = "block";
+			// deleteAccErr.style.color = "red";
+			// deleteAccErr.textContent = req.status + " " + req.statusText;
+			// deleteAccBut.disabled = "true"
+			// setTimeout(() => {
+			// 	deleteAccBut.style.display = "none";
+			// 	deleteAccBut.disabled = "false";
+			// }, 1500);
             window.location.href = "/auth";
         }
     }
@@ -236,16 +276,29 @@ changeMailBtn.addEventListener('click', (e) => {
     req.onreadystatechange = () => {
         if (req.readyState != 4) return;
         if (req.status != 200) {
-            alert(req.status + " " + req.statusText);
+			changeMailErr.textContent = req.status + " " + req.statusText;
+			changeMailErr.style.display = "block";
+			changeMailErr.style.color = "red";
             return;
         }
         data = JSON.parse(req.responseText);
         if (data.errcode != null) {
-            alert(data.errmessage);
-            changeMailBtn.disabled = false;
+			changeMailErr.textContent = data.errmessage;
+			changeMailErr.style.display = "block";
+			changeMailErr.style.color = "red";
+			changeMailBtn.disabled = true;
+			setTimeout(() => {
+				changeMailErr.style.display = "none";
+				changeMailBtn.disabled = false;
+			}, 1500);
             return;
         }
-        alert("Changed successfully");
+        changeMailErr.textContent = "Changed successfully";
+		changeMailErr.style.display = "block";
+		changeMailErr.style.color = "green";
+		setTimeout(() => {
+			changeMailErr.style.display = "none";
+		}, 1500);
     }
     req.send(JSON.stringify({newEmail: yourMailTxt.value, password: yourPwdTxt.value}));
 });
@@ -275,7 +328,7 @@ closeSessionsBtn.addEventListener('click', (e) => {
                 setTimeout(() => {
                     exitSesErr.style.display = "none";
                 }, 1000);
-                alert("Not authorized");
+                window.location.href = "/auth";
                 break;
             case null :
                 exitSesErr.style.color = "green"; 
@@ -288,25 +341,6 @@ closeSessionsBtn.addEventListener('click', (e) => {
         }
     }
     req.send()
-});
-
-changePassBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    // changePassBtn.disabled = true;
-    if (!oldPwdInput.value) {
-        oldPwdInput.classList.add("errorInput");
-        setTimeout(() => {
-            oldPwdInput.classList.remove("errorInput")
-        }, 1000);
-        return;
-    }
-    if (!newPwdInput.value) {
-        newPwdInput.classList.add("errorInput")
-        setTimeout(() => {
-            newPwdInput.classList.remove("errorInput")
-        }, 1000);
-        return;
-    }
 });
 
 chats.addEventListener('click', (e) => {
@@ -329,7 +363,7 @@ exit.addEventListener('click', (e) => {
                 window.location.href = "/auth";
                 break;
             case 'NOT_AUTHORIZED':
-                window.location.href = "/error.html";
+                window.location.href = "/auth";
                 break;
         }
     }
