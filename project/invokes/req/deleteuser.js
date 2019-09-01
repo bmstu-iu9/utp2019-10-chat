@@ -19,8 +19,10 @@ exports.invoke = async (request, response, data) => {
 			await users.deleteUser(curUser)
 		} catch (err) {
 			if (err.rcode) {
-				console.log(err)
 				core.sendJSON(response, {errcode: err.rcode, errmessage: err.toString()})
+				console.log('delete profile error')
+				console.log(err)
+				console.log('\n\n')
 				return
 			}
 			else
@@ -28,6 +30,6 @@ exports.invoke = async (request, response, data) => {
 		}
 		core.sendJSON(response, {errcode: null})
 	} catch (err) {
-		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
+		core.jsonError(response, err)
 	}
 }	
