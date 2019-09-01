@@ -10,6 +10,6 @@ exports.invoke = async (request, response) => {
 		core.sendJSON(response, {errcode: null, user: curUser,
 			notapproved: ua ? ua.notApproved : undefined})
 	} catch (err) {
-		core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
+		core.jsonError(response, err)
 	}
 }
