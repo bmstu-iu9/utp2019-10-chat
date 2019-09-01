@@ -24,7 +24,6 @@ const verErrDiv = document.getElementById('verErrDiv');
 const resetPwdBtn = document.getElementById('resetPwd');
 const resendMailBtn = document.getElementById('resendMailBtn');
 const resendMailErr = document.getElementById('resendMailErr');
-const name = document.getElementById('name');
 const deleteAccErr = document.getElementById('deleteAccErr');
 const resetPwdErr = document.getElementById('resetPwdErr');
 
@@ -51,11 +50,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
         }
         data = JSON.parse(req.responseText);
         if (data.errcode == null) {
-            if (data.user.length > 17) {
-                name.classList.add('name2');
-            } else {
-                name.classList.add('name');
-            }
             setting.textContent = data.user;
             nickname.textContent = data.user;
             welcomeText.textContent = "Приятного общения, " + data.user;
@@ -189,6 +183,14 @@ deleteAccBut.addEventListener('click', (e) => {
             window.location.href = "/auth";
         } else {
 			alert(data.errmessage);
+			// deleteAccErr.style.display = "block";
+			// deleteAccErr.style.color = "red";
+			// deleteAccErr.textContent = req.status + " " + req.statusText;
+			// deleteAccBut.disabled = "true"
+			// setTimeout(() => {
+			// 	deleteAccBut.style.display = "none";
+			// 	deleteAccBut.disabled = "false";
+			// }, 1500);
             window.location.href = "/auth";
         }
     }

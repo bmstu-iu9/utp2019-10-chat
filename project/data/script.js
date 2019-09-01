@@ -89,6 +89,8 @@ socket.on('dialogs', (data) => {
     topSetting.classList.add('not_active');
     out.classList.add('not_active');
     dialogUserInfo.classList.add('not_active');
+    nameChat.textContent = '';
+    chatTable.innerHTML = '';
     dialogIdE = null;
     for (let i = data.dialogs.length - 1; i >= 0; i--) {
         let div = document.createElement('div');
@@ -113,14 +115,29 @@ socket.on('dialogs', (data) => {
             dialogUserInfo.classList.add('color');
             chat.style.display = 'flex';
             dialogIdE = data.dialogs[i].id;
+            chatTable.innerHTML = '';
             socket.emit('messages', {
                 dialogId: dialogIdE
             });
         });
         div.textContent = data.dialogs[i].name;
         windowNameChat.append(div);
-        if (prevDialog === data.dialogs[i].dialogId) {
+        if (prevDialog === data.dialogs[i].id) {
+        	if (div.textContent.length > 25) {
+                nameChat.classList.remove('nameChat');
+                nameChat.classList.add('longName');
+            } else {
+                nameChat.classList.remove('longName');
+                nameChat.classList.add('nameChat');
+            }
+            nameChat.textContent = data.dialogs[i].name;
+            out.classList.remove('not_active');
+            out.classList.add('color');
+            dialogUserInfo.classList.remove('not_active');
+            dialogUserInfo.classList.add('color');
+            chat.style.display = 'flex';
             dialogIdE = prevDialog;
+            chatTable.innerHTML = '';
             socket.emit('messages', {
                 dialogId: dialogIdE
             });
