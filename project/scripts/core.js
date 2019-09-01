@@ -25,6 +25,7 @@ exports.redirect = (response, url) => {
 	response.statusMessage = http.STATUS_CODES[response.statusCode];
 	response.setHeader('Location', url);
 	redirectNote(response, url)
+	response.end()
 }
 
 exports.redirectLikewise = (response, url) => {
@@ -32,6 +33,7 @@ exports.redirectLikewise = (response, url) => {
 	response.statusMessage = http.STATUS_CODES[response.statusCode];
 	response.setHeader('Location', url);
 	redirectNote(response, url)
+	response.end()
 }
 
 exports.forbidden = (response) => {
