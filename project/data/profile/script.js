@@ -1,6 +1,5 @@
 const windowSet = document.getElementById('windowSet');
 const setting = document.getElementById('setting');
-const chats = document.getElementById('chats');
 const exit = document.getElementById('exit');
 const nickname = document.getElementById('nickname');
 const container=  document.getElementById('container');
@@ -56,6 +55,17 @@ document.addEventListener('DOMContentLoaded', (e) => {
             if (data.notapproved == undefined) {
                 nickname.style.color = "green";
                 verErrDiv.style.display = "none";
+                
+                let chats = document.createElement('button');
+                chats.className = 'menuBut';
+                chats.id = 'chats';
+                chats.textContent = "Перейти к чатам";
+                windowSet.prepend(chats)
+                
+                chats.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = "/";
+                });
             } else {
                 verErrDiv.style.display = "block";
                 nickname.style.color = "red";
@@ -341,11 +351,6 @@ closeSessionsBtn.addEventListener('click', (e) => {
         }
     }
     req.send()
-});
-
-chats.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = "/";
 });
 
 exit.addEventListener('click', (e) => {
