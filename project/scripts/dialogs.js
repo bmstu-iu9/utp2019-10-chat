@@ -114,10 +114,13 @@ const userExitDialog = async (dialog, user,id) => {
 	
 	await jsonfile.write(users.USERACCEPT_PATH, useraccept)
 	try {
-		if (dialog.brigadier === null && dialog.user.length === 0)
-			await jsonfile.rm(consts.DIALOGS_PATH, id + '.json')
-		else
+		if (dialog.brigadier === null && dialog.users.length === 0) {
+			await jsonfile.rm(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
+			return false
+		} else {
 			await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
+			return true
+		}
 	} catch (err) {
 		useraccept[user].dialogs.splice(i, 0, id)
 		await jsonfile.write(users.USERACCEPT_PATH, useraccept)
@@ -127,8 +130,7 @@ const userExitDialog = async (dialog, user,id) => {
 
 exports.userDeleteDialog = async (user, id) => {
 	let dialog = await jsonfile.read(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
-	await userExitDialog(dialog, user, id)
-	return dialog.brigadier
+	return {brigadier: dialog.brigadier, deleting: await userExitDialog(dialog, user, id)}
 }
 
 exports.deleteUserDialogOnly = async (user, id) => {
@@ -142,10 +144,13 @@ exports.deleteUserDialogOnly = async (user, id) => {
 		dialog.brigadier = null
 	}
 		
-	if (dialog.brigadier === null && dialog.user.length === 0)
-		await jsonfile.rm(consts.DIALOGS_PATH, id + '.json')
-	else
+	if (dialog.brigadier === null && dialog.users.length === 0) {
+		await jsonfile.rm(pathModule.join(consts.DIALOGS_PATH, id + '.json'))
+		return {brigadier: dialog.brigadier, deleting: false}
+	} else {
 		await jsonfile.write(pathModule.join(consts.DIALOGS_PATH, id + '.json'), dialog)
+		return {brigadier: dialog.brigadier, deleting: true}
+	}
 }
 
 exports.rmUserFromDialog = async (src, dest, id) => {

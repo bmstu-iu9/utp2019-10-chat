@@ -23,6 +23,9 @@ signUpButton.addEventListener('click', () => {
 
 signInButton.addEventListener('click', () => {
 	container.classList.remove("right-panel-active");
+	regUserName.value = "";
+	regEmail.value = "";
+	regPassword.value = "";
 });
 
 
@@ -97,6 +100,9 @@ regButton.addEventListener('click', (e) => {
 				regUserName.addEventListener("input", () => {
 					regButton.disabled = true;
 				});
+				setTimeout(() => {
+					window.location.href = "/profile";
+				}, 6000);
 				break;
 			case 'RCODE_AUTHORIZED_ALREADY':
 				regError.textContent = "Вы уже вошли в аккаунт, пожалуйста обновите страницу";
@@ -200,7 +206,28 @@ loginButton.addEventListener('click', (e) => {
 				loginButton.disabled = false;
 				break;
 			case null:
-				window.location.href = "/chat.html"
+				const req = new XMLHttpRequest();
+				req.open('POST', '/req/curuser.js', true);
+				req.onreadystatechange = () => {
+					if (req.readyState != 4) {
+						return;
+					}
+					if (req.status != 200) {
+						alert(req.status + " " + req.statusText);
+						return;
+					}
+					data = JSON.parse(req.responseText);
+					if (data.errcode == null) {
+						if (data.notapproved == undefined) {
+							window.location.href = "/";
+						} else {
+							window.location.href = "/profile";
+						}
+					}else {
+						alert(data.errcode);
+					}
+				}
+				req.send();
 				break;
 			default:
 				loginError.textContent = 'Неизвестная ошибка: ' + data.errmesage;

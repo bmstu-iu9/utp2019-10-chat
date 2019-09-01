@@ -56,6 +56,16 @@ exports.deleteByName = async (name) => {
 	}
 }
 
+exports.getHashByName = async (name) => {
+	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
+	for (let hash in newConfirmed) {
+		if (newConfirmed[hash] === name) {
+			return hash
+		}
+	}
+	return false;
+}
+
 exports.approveUnconfirmedUser = async (hash) => {
 	let newConfirmed = await jsonfile.read(exports.UNCONFIRMED_PATH)
 	const username = newConfirmed[hash]
