@@ -33,10 +33,10 @@ let nameC = null;
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
-    if (windowSet.style.display === "flex") {
+    if (windowSet.style.display === "block") {
         windowSet.style.display = "none";
     } else {
-        windowSet.style.display = "flex";
+        windowSet.style.display = "block";
     }
 });
 
