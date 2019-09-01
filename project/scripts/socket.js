@@ -10,19 +10,31 @@ const consts = require('./consts')
 exports.exit = (request) => {
 	const sessionId = core.getCookies(request).sessionId
 	const curUser = sessions.getUser(sessionId)
-	const sockets = exports.io.to('user ' + curUser).connected
-	for (let socketId in sockets) {
-		if (core.getCookies(sockets[socketId].request).sessionId == sessionId) {
-			sockets[socketId].emit('exit')
-			sockets[socketId].disconnect(true)
+	exports.io.to('user ' + curUser).clients((err, cl) => {
+		if (err) {
+			return
 		}
-	}
+		cl.forEach((socketId) => {
+			const socket = exports.io.sockets.connected[socketId]
+			if (core.getCookies(socket.request).sessionId == sessionId) {
+				socket.emit('exit')
+				socket.disconnect(true)
+			}
+		})
+	})
 }
 
 exports.exitByUser = (user) => {
-	const sockets = exports.io.to('user ' + user).emit('exit').connected
-	for (let socketId in sockets)
-		sockets[socketId].disconnect(true)
+	exports.io.to('user ' + curUser).clients((err, cl) => {
+		if (err) {
+			return
+		}
+		cl.forEach((socketId) => {
+			const socket = exports.io.sockets.connected[socketId]
+			socket.emit('exit')
+			socket.disconnect(true)
+		})
+	})
 }
 
 exports.deleteUserFromAllDialogs = async (curUser, dialogss) => {
@@ -97,10 +109,10 @@ exports.init = () => {
 					const date = new Date()
 					const users = await dialogs.addMessage(data.dialogId, curUser, data.message, date)
 					
-					users.forEach((u) => {
-						exports.io.to('user ' + u).emit('message', {dialogId: data.dialogId,
+					for (let i = 0; i < users.length; i++) {
+						exports.io.to('user ' + users[i]).emit('message', {dialogId: data.dialogId,
 							name: curUser, message: data.message, date: date})
-					})
+					}
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'message', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
