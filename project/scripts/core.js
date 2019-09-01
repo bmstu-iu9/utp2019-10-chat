@@ -89,6 +89,9 @@ exports.sendError = (response, err) => {
 	response.write('</h1>')
 	response.write(err.stack.replace(/\n/g, '<br>'))
 	response.end('</body></html>')
+	console.log("invoke error")
+	console.log(err)
+	console.log("\n\n")
 }
 
 exports.sendJSON = (response, object) => {
@@ -98,4 +101,11 @@ exports.sendJSON = (response, object) => {
 
 exports.getQueryParams = (data) => {
 	return querystring.parse(data)
+}
+
+exports.jsonError = (response, err) => {
+	core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
+	console.log("ajax error")
+	console.log(err)
+	console.log("\n\n")
 }
