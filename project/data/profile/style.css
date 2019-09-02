@@ -59,12 +59,14 @@ button:disabled {
 }
 
 .changes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     white-space:nowrap;
 }
 
 .changeDiv {
-    widows: 150%;
-    display:inline-block;
     padding-right: 30px;
 }
 
@@ -94,7 +96,8 @@ button:disabled {
 }
 
 .errorInput {
-    border: 1.5px solid red
+    border-style: solid;
+    border-color: red;
 }
 
 .email {
@@ -133,10 +136,6 @@ button:disabled {
     color: black;
     font-size: 15px;
     padding: 5px;
-}
-
-.mailField {
-    display: flex;
 }
 
 .modalDialog {
