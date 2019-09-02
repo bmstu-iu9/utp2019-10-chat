@@ -231,7 +231,7 @@ socket.on('dialog', (data) => {
     let div = document.createElement('div');
     div.className = 'nameDialog';
     div.id = 'dialogInLeft' + data.id;
-    div.textContent = nameC;
+    div.textContent = data.name;
     windowNameChat.prepend(div);
     div.addEventListener('click', (e) => {
         e.preventDefault();
@@ -279,7 +279,6 @@ create.addEventListener('click', (e) => {
         name: dialogName.value,
         users: users.value === '' ? [] : users.value.split('\n')
     });
-    nameC = dialogName.value;
     dialogName.value = '';
     users.value = '';
     modalClose();
