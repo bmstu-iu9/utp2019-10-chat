@@ -69,7 +69,7 @@ exports.clearExpired = async () => {
 
 exports.deleteSessionsByUser = async (user) => {
 	for (let sessionId in sessions)
-		if (sessions[sessionId].username = user)
+		if (sessions[sessionId].username === user)
 			delete sessions[sessionId]
 	await jsonfile.write(exports.SESSIONS_PATH, sessions)
 }
