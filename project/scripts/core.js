@@ -104,7 +104,7 @@ exports.getQueryParams = (data) => {
 }
 
 exports.jsonError = (response, err) => {
-	core.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
+	exports.sendJSON(response, {errcode: 'RCODE_UNEXPECTED', errmessage: err.toString()})
 	console.log("ajax error")
 	console.log(err)
 	console.log("\n\n")
