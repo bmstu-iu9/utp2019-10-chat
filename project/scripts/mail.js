@@ -2,9 +2,9 @@
 
 const nodemailer = require('nodemailer')
 
-exports.service = 'gmail'
-exports.user = 'QuickChatIU9@gmail.com'
-exports.password = 'BkwUJgLjEP8y2N2'
+exports.service = 'tutanota'
+exports.user = 'QuickChatIU9@tutanota.com'
+exports.password = '42m-EaW-xwf-2br'
 
 exports.sendMail = (email, subject, content) => {
 	return new Promise((resolve, reject) => {
