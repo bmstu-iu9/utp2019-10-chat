@@ -2,17 +2,18 @@
 
 const nodemailer = require('nodemailer')
 
-exports.service = 'gmail'
-exports.user = 'QuickChatIU9@gmail.com'
-exports.password = 'BkwUJgLjEP8y2N2'
-
 exports.sendMail = (email, subject, content) => {
 	return new Promise((resolve, reject) => {
 		let transporter = nodemailer.createTransport({
-			service: exports.service,
+			service: 'gmail',
 			auth: {
-				user: exports.user,
-	            pass: exports.password
+				type: "OAuth2",
+				user: 'QuickChatIU9@gmail.com',
+				clientId: "40794653725-4hp3j5meghoasrjarbosv3kdqdfkbu0u.apps.googleusercontent.com",
+				clientSecret: "y-Uc3QzX8IwZhCz0xILvlnKq",
+				refreshToken: "1/sFpo7144zkaEWRYS07_JgWf_futHq08mkhiAaWxvkdY",
+				accessToken: "ya29.Glt5B8z_R7jtx6IcBCNKo4pdQGTLj3UHFA52Fvzw57z3C2vH2kSFqbbsqDWw6ZwZ9eQWskf5wnVLvw5ENRceuKEetMtgtXgP01Ji5BEqVP4kWh1FcW_8cJ2RMmrr",
+				expires: 1567627710046
 	        }
 	    });
 	

@@ -7,6 +7,14 @@ const dialogs = require('./dialogs')
 const users = require('./users')
 const consts = require('./consts')
 
+const socketError = (err) => {
+	if (!(err instanceof dialogs.DialogError)) {
+		console.log("socket error")
+		console.log(err)
+		console.log("\n\n")
+	}
+}
+
 exports.exit = (request) => {
 	const sessionId = core.getCookies(request).sessionId
 	const curUser = sessions.getUser(sessionId)
@@ -25,7 +33,7 @@ exports.exit = (request) => {
 }
 
 exports.exitByUser = (user) => {
-	exports.io.to('user ' + curUser).clients((err, cl) => {
+	exports.io.to('user ' + user).clients((err, cl) => {
 		if (err) {
 			return
 		}
@@ -90,6 +98,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'dialog', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -101,6 +110,7 @@ exports.init = () => {
 					socket.emit('err', {errmessage: err.toString(), event: 'dialogs', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED',
 						users: err.code == 'RCODE_USERS_NOT_EXISTS' ? err.users : undefined})
+					socketError(err)
 				}
 			})
 			
@@ -116,6 +126,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'message', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -126,6 +137,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'messages', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -141,6 +153,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'user', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -150,6 +163,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'users', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -161,6 +175,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'add', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -176,6 +191,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'delete', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 			
@@ -187,6 +203,7 @@ exports.init = () => {
 				} catch (err) {
 					socket.emit('err', {errmessage: err.toString(), event: 'rm', data: data,
 						errcode: err instanceof dialogs.DialogError ? err.code : 'RCODE_UNEXPECTED'})
+					socketError(err)
 				}
 			})
 		})

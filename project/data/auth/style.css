@@ -89,11 +89,13 @@ input,#regError,#loginError,#forgotEr {
 
 input:focus {
 	outline: none;
-	border: 1.5px solid #2d81ee
+	border-style: solid;
+	border-color: #2d81ee;
 }
 
 .errorInput {
-	border: 1.5px solid red;
+	border-style: solid;
+	border-color: red;
 }
 
 #regError {

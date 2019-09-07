@@ -31,6 +31,9 @@ signInButton.addEventListener('click', () => {
 
 regButton.addEventListener('click', (e) => {
 	e.preventDefault();
+	regEmail.blur();
+	regPassword.blur();
+	regUserName.blur();
 	regButton.disabled = true;
 	if (!regUserName.value) {
 		regUserName.classList.add("errorInput");
@@ -152,6 +155,8 @@ regPassword.addEventListener("input", () => {
 
 loginButton.addEventListener('click', (e) => {
 	e.preventDefault();
+	loginEmail.blur();
+	loginPassword.blur();
 	loginButton.disabled = true;
 	if (!loginEmail.value) {
 		loginEmail.classList.add("errorInput");

@@ -25,13 +25,14 @@ const resendMailBtn = document.getElementById('resendMailBtn');
 const resendMailErr = document.getElementById('resendMailErr');
 const deleteAccErr = document.getElementById('deleteAccErr');
 const resetPwdErr = document.getElementById('resetPwdErr');
+const name = document.getElementById('name');
 
 setting.addEventListener('click', (e) => {
     e.preventDefault();
-    if (windowSet.style.display === "flex") {
+    if (windowSet.style.display === "block") {
         windowSet.style.display = "none";
     } else {
-        windowSet.style.display = "flex";
+        windowSet.style.display = "block";
     }
 });
 
@@ -49,6 +50,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
         }
         data = JSON.parse(req.responseText);
         if (data.errcode == null) {
+            if (data.user.length > 17) {
+                name.classList.add('name2');
+            } else {
+                name.classList.add('name');
+            }
             setting.textContent = data.user;
             nickname.textContent = data.user;
             welcomeText.textContent = "Приятного общения, " + data.user;

@@ -100,9 +100,11 @@ input {
 
 input:focus {
 	outline: none;
+	border-style: solid;
 	border-color: rgb(45, 129, 238);
 }
 
 .errorInput {
+	border-style: solid;
 	border-color: red;
 }
