@@ -5,7 +5,7 @@
   "main": "run.js",
   "private": true,
   "dependencies": {
-    "nodemailer": "^6.6.1",
+    "nodemailer": "^6.9.9",
     "socket.io": "^4.7.5"
   },
   "devDependencies": {},
